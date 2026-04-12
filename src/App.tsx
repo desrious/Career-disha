@@ -1,0 +1,555 @@
+import { useState } from 'react';
+import { 
+  ArrowRight, 
+  HelpCircle, 
+  Brain, 
+  Route, 
+  School, 
+  Code, 
+  TrendingUp, 
+  Award, 
+  Bot, 
+  ShieldCheck, 
+  Star, 
+  ChevronLeft, 
+  ChevronRight, 
+  Send, 
+  Globe, 
+  Users, 
+  Share2 
+} from 'lucide-react';
+import { motion } from 'motion/react';
+import Login from './components/Login';
+import Register from './components/Register';
+import ProfileSelection from './components/ProfileSelection';
+import StudentRegistration from './components/StudentRegistration';
+import RegistrationSuccess from './components/RegistrationSuccess';
+import UserDashboard from './components/UserDashboard';
+import ResultScreen from './components/ResultScreen';
+import RoadmapScreen from './components/RoadmapScreen';
+import About from './components/About';
+import Insights from './components/Insights';
+
+export default function App() {
+  const [view, setView] = useState<'landing' | 'login' | 'register' | 'profile-selection' | 'student-registration' | 'registration-success' | 'user-dashboard' | 'result-screen' | 'roadmap-screen' | 'about' | 'insights'>('landing');
+
+  const logoUrl = "https://lh3.googleusercontent.com/aida/ADBb0ugzZSaguePFRojyoy0_LCdEqum7gnG2tQ-k4pS5jxWATdQPiZIKEIJSYirhb_Njis6PhjMuh6DBsMIG7ZExcapPd5TsG4tkiZsV0T1FRJvNspOS58iifjbtlgCEeaDLgotTd8LiaXo8DzK4StNrj7RIv1s5ZDoF_2Fewb9woZ_7pYT6ywrFYyCLjvYmEuIcHmgTzFiJEgWaiNcV_mJQ3nU0IWzmomFRY65BOerkbx6sKIAzXp5dYrC2tq3iHs8ZR8cMn96kHipPuLM";
+  const heroImgUrl = "https://lh3.googleusercontent.com/aida-public/AB6AXuBILbGMXF7pnQcw4rfZtCsvSBUuU4l3DJA2Fk6nbdhh5exCN0h51h8ZFQQx6QGvWeOLUIJ2ZWQmVbcd3qzk9zo_9MQrsPqLfsNFeaQAXwRsnljGXLInA_nIKRE21J-ENWSktG3m1XMxdLGi7ViU-1OHfCsQpXwvppVK6C10vqOMNlNMUQnWDBlycRn9k6Y2lcKEYtO338CWin-5dcnOUSsBzDUAOC-oSG82a7QDhQ6lkZvlCHOKPZ8P8QBF0OzNK4dlVNg3hJwiiFPk";
+  const sarahImg = "https://lh3.googleusercontent.com/aida-public/AB6AXuDVeyWio2pNOejqEPAK_TS8F7OIFAHwg0xtTt4KMA8S5Sb7ok852t9qhPcqybzRV3UaMWqcjrWKEYuZrWpfheQAyHB8CDmWfUyXSx34IVg-kgjS4-f4VG95lMf1c_Vps_MyHKOgxLtzwaEOvRBqcvNd1FPVlEp625IvIhHYocf2x7oEwLWLqOp-QuowzOyvENU629eH3nJNw7QU4I61KDISzb6VL1rOsKqSj_9_xOHxDFpnc_HKe-fVBuGozQBUCTots0TE0H-t2i_M";
+  const rahulImg = "https://lh3.googleusercontent.com/aida-public/AB6AXuALOvZRGXBqLA1LNWl-Yy-hh7feizVUN8D0NXYrxF6ppKO-xGkNBQEKNqjHNleuDZJoT3JvluCqLhzhwbqkOEcyQEAOMinjEFJaLf82KBlOFo9AzDg4VBE8HsM_fX33BeSNZBTFIHJmvC7CkFqOtb-eyVlqhkBhcWYYldm8C5h-5ZAExEzz1c300cdTaFCRiTsR906wbFt9NZDK1MnG5HnaIBKT43--qMq9puLfuDuhgizkPnbvT3V7Lub4GYPShtSUo2LjMymTRO9V";
+
+  if (view === 'login') {
+    return (
+      <Login 
+        onBack={() => setView('landing')} 
+        onRegister={() => setView('register')}
+        onLogin={() => setView('user-dashboard')}
+      />
+    );
+  }
+
+  if (view === 'register') {
+    return (
+      <Register 
+        onClose={() => setView('landing')} 
+        onStart={() => setView('profile-selection')}
+      />
+    );
+  }
+
+  if (view === 'profile-selection') {
+    return (
+      <ProfileSelection 
+        onStartStudent={() => setView('student-registration')} 
+      />
+    );
+  }
+
+  if (view === 'student-registration') {
+    return (
+      <StudentRegistration 
+        onBack={() => setView('profile-selection')}
+        onComplete={() => setView('registration-success')}
+      />
+    );
+  }
+
+  if (view === 'registration-success') {
+    return (
+      <RegistrationSuccess 
+        onGoToDashboard={() => setView('user-dashboard')}
+      />
+    );
+  }
+
+  if (view === 'user-dashboard') {
+    return (
+      <UserDashboard 
+        onGoToResults={() => setView('result-screen')}
+        onGoToRoadmap={() => setView('roadmap-screen')}
+      />
+    );
+  }
+
+  if (view === 'result-screen') {
+    return (
+      <ResultScreen 
+        onGoToRoadmap={() => setView('roadmap-screen')}
+      />
+    );
+  }
+
+  if (view === 'roadmap-screen') {
+    return (
+      <RoadmapScreen 
+        onGoToDashboard={() => setView('user-dashboard')}
+        onGoToResults={() => setView('result-screen')}
+      />
+    );
+  }
+
+  if (view === 'about') {
+    return (
+      <About onBack={() => setView('landing')} />
+    );
+  }
+
+  if (view === 'insights') {
+    return (
+      <Insights onBack={() => setView('landing')} />
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-surface selection:bg-primary-fixed">
+      {/* TopAppBar */}
+      <header className="fixed top-0 w-full z-50 bg-slate-50/80 backdrop-blur-md border-b border-slate-100">
+        <nav className="flex justify-between items-center px-4 h-16 max-w-full">
+          <div className="flex items-center gap-2">
+            <img 
+              alt="CareerDisha Logo" 
+              className="h-8 w-auto" 
+              src={logoUrl}
+              referrerPolicy="no-referrer"
+            />
+            <span className="text-xl font-extrabold text-blue-700 tracking-tighter font-headline">Careerदिशा</span>
+          </div>
+          <div className="hidden md:flex items-center gap-8">
+            <a className="text-blue-700 border-b-2 border-blue-600 font-headline tracking-tight font-semibold hover:opacity-80 transition-opacity duration-300" href="#">Home</a>
+            <button 
+              onClick={() => setView('insights')}
+              className="text-slate-600 hover:text-blue-600 font-headline tracking-tight font-semibold hover:opacity-80 transition-opacity duration-300"
+            >
+              Insights
+            </button>
+            <button 
+              onClick={() => setView('about')}
+              className="text-slate-600 hover:text-blue-600 font-headline tracking-tight font-semibold hover:opacity-80 transition-opacity duration-300"
+            >
+              About
+            </button>
+            <a className="text-slate-600 hover:text-blue-600 font-headline tracking-tight font-semibold hover:opacity-80 transition-opacity duration-300" href="#testimonials">Testimonials</a>
+          </div>
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={() => setView('login')}
+              className="text-slate-600 font-semibold px-4 py-2 hover:opacity-80 transition-all"
+            >
+              Login
+            </button>
+            <button 
+              onClick={() => setView('login')}
+              className="bg-primary text-on-primary px-6 py-3 rounded-xl font-bold hover:opacity-90 transition-transform active:scale-95 ease-out"
+            >
+              Start Assessment
+            </button>
+          </div>
+        </nav>
+      </header>
+
+      <main className="pt-20">
+        {/* Hero Section */}
+        <section className="relative min-h-[700px] flex items-center overflow-hidden">
+          <div className="absolute inset-0 z-0">
+            <div className="absolute inset-0 hero-overlay z-10 backdrop-blur-[2px]"></div>
+            <img 
+              className="w-full h-full object-cover" 
+              src={heroImgUrl}
+              alt="Modern office space"
+              referrerPolicy="no-referrer"
+            />
+          </div>
+          <div className="relative z-20 max-w-7xl mx-auto px-8 w-full">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="max-w-2xl"
+            >
+              <h1 className="text-6xl md:text-7xl font-extrabold text-on-surface leading-tight mb-6 tracking-tight">
+                Find your direction. <br/>
+                <span className="bg-gradient-to-r from-primary to-primary-container bg-clip-text text-transparent">Build your future.</span>
+              </h1>
+              <p className="text-xl mb-10 leading-relaxed font-semibold text-white drop-shadow-md">
+                Move from confusion to clarity with AI-powered career guidance designed for the next generation of leaders.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <button 
+                  onClick={() => setView('login')}
+                  className="bg-tertiary-fixed text-on-tertiary-fixed font-bold text-lg px-8 py-4 rounded-3xl flex items-center justify-center gap-2 hover:shadow-xl transition-all hover:-translate-y-1"
+                >
+                  Start Free Assessment
+                  <ArrowRight className="w-5 h-5" />
+                </button>
+              </div>
+            </motion.div>
+          </div>
+          {/* Floating Decorative Element */}
+          <div className="absolute right-[-5%] bottom-[10%] hidden xl:block w-[40%] aspect-square rounded-full border-[32px] border-tertiary/10 opacity-50 pointer-events-none"></div>
+        </section>
+
+        {/* How it Works Section */}
+        <section className="py-24 bg-surface px-8 border-b border-slate-100" id="how-it-works">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-5xl font-extrabold text-on-surface mb-4">From Confusion to Clarity</h2>
+              <p className="text-on-surface-variant max-w-2xl mx-auto font-medium">Three simple steps to unlock your professional potential.</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
+              {/* Step 1 */}
+              <div className="relative text-center group">
+                <div className="w-20 h-20 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mx-auto mb-6 transition-all group-hover:bg-primary group-hover:text-white">
+                  <HelpCircle className="w-10 h-10" />
+                </div>
+                <h3 className="text-xl font-bold mb-3">Assessment</h3>
+                <p className="text-on-surface-variant leading-relaxed px-4">Take our gold-standard psychometric test to uncover your hidden strengths and interests.</p>
+              </div>
+              {/* Step 2 */}
+              <div className="relative text-center group">
+                <div className="w-20 h-20 bg-secondary/10 text-secondary rounded-2xl flex items-center justify-center mx-auto mb-6 transition-all group-hover:bg-secondary group-hover:text-white">
+                  <Brain className="w-10 h-10" />
+                </div>
+                <h3 className="text-xl font-bold mb-3">AI Analysis</h3>
+                <p className="text-on-surface-variant leading-relaxed px-4">Receive deep mentor insights as our AI maps your profile against 500+ modern career paths.</p>
+              </div>
+              {/* Step 3 */}
+              <div className="relative text-center group">
+                <div className="w-20 h-20 bg-accent/10 text-on-surface rounded-2xl flex items-center justify-center mx-auto mb-6 transition-all group-hover:bg-accent group-hover:text-on-surface">
+                  <Route className="w-10 h-10" />
+                </div>
+                <h3 className="text-xl font-bold mb-3">Roadmap</h3>
+                <p className="text-on-surface-variant leading-relaxed px-4">Get an actionable, step-by-step path including skill requirements and college recommendations.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Tailored Guidance For You */}
+        <section className="py-24 px-6 bg-surface-container-low" id="about">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-5xl font-extrabold text-on-surface mb-4">Tailored Guidance For You</h2>
+              <div className="h-1 w-20 bg-secondary mx-auto rounded-full mb-6"></div>
+              <p className="text-on-surface-variant max-w-2xl mx-auto font-medium">Whether you're starting out or scaling up, we provide the roadmap to your unique potential.</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* School */}
+              <div className="group bg-white p-8 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden transition-all hover:-translate-y-2 hover:shadow-xl">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full -mr-16 -mt-16 transition-transform group-hover:scale-110"></div>
+                <div className="w-14 h-14 bg-primary/10 text-primary rounded-xl flex items-center justify-center mb-8">
+                  <School className="w-8 h-8" />
+                </div>
+                <h3 className="text-2xl font-extrabold mb-4">School Students</h3>
+                <p className="text-slate-500 mb-8 leading-relaxed">Choosing a stream after 10th or 12th is the first big crossroads. We help you navigate Science, Commerce, and Arts with deep-dive personality insights.</p>
+                <ul className="space-y-3 mb-10">
+                  <li className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                    <ShieldCheck className="w-5 h-5 text-secondary" /> Stream Selection
+                  </li>
+                  <li className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                    <ShieldCheck className="w-5 h-5 text-secondary" /> Aptitude Analysis
+                  </li>
+                </ul>
+                <button 
+                  onClick={() => setView('login')}
+                  className="text-primary font-bold flex items-center gap-2 hover:gap-3 transition-all cursor-pointer"
+                >
+                  Start your Journey <ArrowRight className="w-5 h-5" />
+                </button>
+              </div>
+              {/* College */}
+              <div className="group bg-white p-8 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden transition-all hover:-translate-y-2 hover:shadow-xl">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-secondary/5 rounded-bl-full -mr-16 -mt-16 transition-transform group-hover:scale-110"></div>
+                <div className="w-14 h-14 bg-secondary/10 text-secondary rounded-xl flex items-center justify-center mb-8">
+                  <Code className="w-8 h-8" />
+                </div>
+                <h3 className="text-2xl font-extrabold mb-4">College Learners</h3>
+                <p className="text-slate-500 mb-8 leading-relaxed">Bridge the gap between your degree and the industry. We provide skill-specific roadmaps and internship strategies to get you job-ready.</p>
+                <ul className="space-y-3 mb-10">
+                  <li className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                    <ShieldCheck className="w-5 h-5 text-secondary" /> Internship Strategy
+                  </li>
+                  <li className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                    <ShieldCheck className="w-5 h-5 text-secondary" /> Skill Gap Mapping
+                  </li>
+                </ul>
+                <button 
+                  onClick={() => setView('login')}
+                  className="text-primary font-bold flex items-center gap-2 hover:gap-3 transition-all cursor-pointer"
+                >
+                  Start your Journey <ArrowRight className="w-5 h-5" />
+                </button>
+              </div>
+              {/* Professionals */}
+              <div className="group bg-white p-8 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden transition-all hover:-translate-y-2 hover:shadow-xl">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-warmth/5 rounded-bl-full -mr-16 -mt-16 transition-transform group-hover:scale-110"></div>
+                <div className="w-14 h-14 bg-warmth/10 text-warmth rounded-xl flex items-center justify-center mb-8">
+                  <TrendingUp className="w-8 h-8" />
+                </div>
+                <h3 className="text-2xl font-extrabold mb-4">Working Professionals</h3>
+                <p className="text-slate-500 mb-8 leading-relaxed">Ready for a change? We analyze your transferable skills and provide a step-by-step blueprint for a successful career pivot into tech, management, or design.</p>
+                <ul className="space-y-3 mb-10">
+                  <li className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                    <ShieldCheck className="w-5 h-5 text-secondary" /> Career Pivoting
+                  </li>
+                  <li className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                    <ShieldCheck className="w-5 h-5 text-secondary" /> Executive Mentorship
+                  </li>
+                </ul>
+                <button 
+                  onClick={() => setView('login')}
+                  className="text-primary font-bold flex items-center gap-2 hover:gap-3 transition-all cursor-pointer"
+                >
+                  Start your Journey <ArrowRight className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Methodology Section */}
+        <section className="py-24 bg-surface px-8">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-4">
+              <div className="max-w-xl">
+                <span className="text-primary font-bold tracking-widest uppercase text-xs mb-2 block">Our Methodology</span>
+                <h2 className="text-4xl md:text-5xl font-extrabold">The Psychological Journey</h2>
+              </div>
+              <p className="text-on-surface-variant max-w-sm font-medium mb-1">We move you from confusion to confidence through three core scientific stages.</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-16 relative">
+              {/* Step 1 Detail */}
+              <div className="relative text-center">
+                <div className="w-16 h-16 bg-primary text-white rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-xl shadow-primary/20 relative z-10">
+                  <HelpCircle className="w-8 h-8" />
+                </div>
+                <h3 className="text-xl font-bold mb-3">Assessment</h3>
+                <p className="text-on-surface-variant leading-relaxed px-4">Identify your core strengths, interests, and subconscious personality drivers via our gold-standard survey.</p>
+              </div>
+              {/* Step 2 Detail */}
+              <div className="relative text-center">
+                <div className="w-16 h-16 bg-secondary text-white rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-xl shadow-secondary/20 relative z-10">
+                  <Brain className="w-8 h-8" />
+                </div>
+                <h3 className="text-xl font-bold mb-3">AI Analysis</h3>
+                <p className="text-on-surface-variant leading-relaxed px-4">Our advanced models process 500+ data points to match your unique profile against global industry trends.</p>
+              </div>
+              {/* Step 3 Detail */}
+              <div className="relative text-center p-6 rounded-3xl bg-accent/5 border-2 border-accent/20 shadow-xl">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-accent text-on-surface text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-tighter shadow-sm">
+                  Core Platform Feature
+                </div>
+                <div className="w-16 h-16 bg-accent text-on-surface rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-xl shadow-accent/20 relative z-10">
+                  <Route className="w-8 h-8" />
+                </div>
+                <h3 className="text-xl font-bold mb-3">Personalized Actionable Roadmaps</h3>
+                <p className="text-on-surface-variant leading-relaxed px-2 text-sm font-medium">
+                  Receive a comprehensive, multi-year blueprint tailored to your psychology. Our roadmaps include specific skill acquisition paths, verified college recommendations, and direct connections to industry mentors to ensure your success is inevitable.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Why CareerDisha Bento Grid */}
+        <section className="py-32 bg-surface-container-low">
+          <div className="max-w-7xl mx-auto px-8">
+            <div className="text-center mb-20">
+              <h2 className="text-4xl md:text-5xl font-extrabold mb-6">Why Careerदिशा</h2>
+              <p className="max-w-2xl mx-auto text-on-surface-variant text-lg">We combine human psychology with advanced intelligence to provide guidance that actually works.</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 h-auto md:h-[600px]">
+              <div className="md:col-span-7 bg-primary-container p-12 rounded-[2rem] flex flex-col justify-between text-on-primary-container relative overflow-hidden group">
+                <div className="relative z-10">
+                  <Award className="w-12 h-12 mb-6" />
+                  <h3 className="text-3xl font-bold mb-4">Psychologically Grounded</h3>
+                  <p className="text-on-primary-container/80 text-lg max-w-md">Our assessments aren't just tests; they are deep-dives into personality frameworks used by top career psychologists globally.</p>
+                </div>
+                <div className="absolute right-[-50px] bottom-[-50px] opacity-10 group-hover:scale-110 transition-transform duration-700">
+                  <ShieldCheck className="w-[300px] h-[300px]" />
+                </div>
+              </div>
+              <div className="md:col-span-5 bg-secondary-container p-12 rounded-[2rem] flex flex-col justify-center text-on-secondary-container">
+                <div className="bg-white/20 p-4 rounded-2xl w-fit mb-6">
+                  <Bot className="w-10 h-10" />
+                </div>
+                <h3 className="text-3xl font-bold mb-4">AI Mentor</h3>
+                <p className="text-on-secondary-container/80 text-lg">24/7 access to an AI counselor that knows your profile inside out and provides instant advice on your career queries.</p>
+              </div>
+              <div className="md:col-span-5 bg-tertiary-fixed p-12 rounded-[2rem] flex flex-col justify-center text-on-tertiary-fixed">
+                <h3 className="text-3xl font-bold mb-4">Actionable Roadmaps</h3>
+                <p className="text-on-tertiary-fixed-variant text-lg">No generic advice. We give you dates, links to courses, and specific job titles to aim for.</p>
+              </div>
+              <div className="md:col-span-7 bg-surface-container-high p-12 rounded-[2rem] flex flex-col justify-center relative overflow-hidden">
+                <div className="flex items-center gap-6">
+                  <div className="flex -space-x-4">
+                    <div className="w-14 h-14 rounded-full border-4 border-white bg-slate-300"></div>
+                    <div className="w-14 h-14 rounded-full border-4 border-white bg-slate-400"></div>
+                    <div className="w-14 h-14 rounded-full border-4 border-white bg-slate-500"></div>
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold">15,000+</p>
+                    <p className="text-on-surface-variant font-medium">Careers transformed this year</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Testimonials Section */}
+        <section className="py-24 bg-surface px-8 overflow-hidden" id="testimonials">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex justify-between items-center mb-16">
+              <h2 className="text-3xl md:text-5xl font-extrabold">What our Lumineers say</h2>
+              <div className="flex gap-2">
+                <button className="w-12 h-12 rounded-full border border-slate-200 flex items-center justify-center hover:bg-white transition-colors">
+                  <ChevronLeft className="w-6 h-6 text-slate-600" />
+                </button>
+                <button className="w-12 h-12 rounded-full border border-slate-200 flex items-center justify-center hover:bg-white transition-colors">
+                  <ChevronRight className="w-6 h-6 text-slate-600" />
+                </button>
+              </div>
+            </div>
+            <div className="flex gap-8 overflow-x-auto pb-10 no-scrollbar snap-x">
+              {/* Testimonial 1 */}
+              <div className="min-w-[320px] md:min-w-[400px] bg-white p-10 rounded-3xl snap-center shadow-sm border border-slate-100">
+                <div className="flex gap-1 text-accent mb-6">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-5 h-5 fill-accent" />
+                  ))}
+                </div>
+                <p className="text-slate-600 text-lg italic mb-10 leading-relaxed">"The most clear roadmap I've ever seen. I knew exactly which course to take and which internships to apply for to transition into AI Research."</p>
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-slate-200 overflow-hidden">
+                    <img 
+                      alt="Sarah Johnson" 
+                      src={sarahImg}
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-on-surface">Sarah Johnson</h4>
+                    <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">College Student</p>
+                  </div>
+                </div>
+              </div>
+              {/* Testimonial 2 */}
+              <div className="min-w-[320px] md:min-w-[400px] bg-white p-10 rounded-3xl snap-center shadow-sm border border-slate-100">
+                <div className="flex gap-1 text-accent mb-6">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-5 h-5 fill-accent" />
+                  ))}
+                </div>
+                <p className="text-slate-600 text-lg italic mb-10 leading-relaxed">"Choosing a stream after 10th was a nightmare until I did the Careerदिशा assessment. It validated my love for design over medicine."</p>
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-slate-200 overflow-hidden">
+                    <img 
+                      alt="Rahul Kapoor" 
+                      src={rahulImg}
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-on-surface">Rahul Kapoor</h4>
+                    <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">High School Student</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Final CTA Section */}
+        <section className="py-24 px-8">
+          <div className="max-w-7xl mx-auto rounded-[3rem] bg-slate-900 overflow-hidden relative">
+            <div className="absolute inset-0 opacity-20">
+              <div className="absolute top-0 left-0 w-96 h-96 bg-primary blur-[120px] rounded-full -translate-x-1/2 -translate-y-1/2"></div>
+              <div className="absolute bottom-0 right-0 w-96 h-96 bg-accent blur-[120px] rounded-full translate-x-1/2 translate-y-1/2"></div>
+            </div>
+            <div className="relative z-10 px-8 py-20 text-center">
+              <h2 className="text-4xl md:text-6xl font-extrabold text-white mb-6">Ready to illuminate your path?</h2>
+              <p className="text-slate-400 text-xl max-w-2xl mx-auto mb-12">Join 15,000+ others who have found their calling with Careerदिशा's unique psychological approach.</p>
+              <button className="bg-accent hover:bg-accent/90 text-slate-900 font-extrabold text-lg px-12 py-5 rounded-2xl shadow-xl transition-all hover:scale-105 active:scale-95">
+                START ASSESSMENT NOW
+              </button>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-slate-100 w-full py-12 px-8">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="flex flex-col gap-4">
+            <span className="font-headline font-bold text-slate-800 text-xl flex items-center gap-2">
+              <img 
+                alt="CareerDisha Logo" 
+                className="h-8 w-auto" 
+                src={logoUrl}
+                referrerPolicy="no-referrer"
+              />
+              Careerदिशा
+            </span>
+            <p className="text-slate-500 text-sm leading-relaxed">Guiding the next generation through the maze of career choices with precision and empathy.</p>
+          </div>
+          <div className="flex flex-col gap-4">
+            <h4 className="text-xs uppercase tracking-widest font-bold text-slate-900">Explore</h4>
+            <ul className="space-y-2">
+              <li><a className="text-slate-500 text-sm hover:text-blue-500 transition-colors" href="#">Resources</a></li>
+              <li><a className="text-slate-500 text-sm hover:text-blue-500 transition-colors" href="#">Career Blog</a></li>
+              <li><a className="text-slate-500 text-sm hover:text-blue-500 transition-colors" href="#">Support</a></li>
+            </ul>
+          </div>
+          <div className="flex flex-col gap-4">
+            <h4 className="text-xs uppercase tracking-widest font-bold text-slate-900">Legal</h4>
+            <ul className="space-y-2">
+              <li><a className="text-slate-500 text-sm hover:text-blue-500 transition-colors" href="#">Privacy</a></li>
+              <li><a className="text-slate-500 text-sm hover:text-blue-500 transition-colors" href="#">Terms</a></li>
+            </ul>
+          </div>
+          <div className="flex flex-col gap-4">
+            <h4 className="text-xs uppercase tracking-widest font-bold text-slate-900">Newsletter</h4>
+            <div className="flex gap-2">
+              <input 
+                className="bg-white border-none rounded-lg p-2 text-sm w-full focus:ring-2 focus:ring-primary outline-none" 
+                placeholder="Email address" 
+                type="email"
+              />
+              <button className="bg-primary text-on-primary p-2 rounded-lg hover:opacity-90 transition-opacity">
+                <Send className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className="max-w-7xl mx-auto mt-12 pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-xs uppercase tracking-widest text-slate-500">© 2024 The Luminary Guide. All rights reserved.</p>
+          <div className="flex gap-6">
+            <Globe className="w-5 h-5 text-slate-400 hover:text-primary cursor-pointer transition-colors" />
+            <Users className="w-5 h-5 text-slate-400 hover:text-primary cursor-pointer transition-colors" />
+            <Share2 className="w-5 h-5 text-slate-400 hover:text-primary cursor-pointer transition-colors" />
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
