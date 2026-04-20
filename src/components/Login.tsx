@@ -1,9 +1,12 @@
+import { useState } from 'react';
 import { 
   Mail, 
   Lock, 
   Eye, 
+  EyeOff,
   ArrowRight, 
-  Smartphone 
+  Smartphone,
+  AlertCircle
 } from 'lucide-react';
 import { motion } from 'motion/react';
 
@@ -14,7 +17,22 @@ interface LoginProps {
 }
 
 export default function Login({ onBack, onRegister, onLogin }: LoginProps) {
-  const logoUrl = "https://lh3.googleusercontent.com/aida/ADBb0ujBNDrdlKyWEXRyOYjBQFelE82POn9IYKrMRGV5dMyymcC7rGylcaG1AbTkJM8FinkdXxOf6HEicc-0TBLtfFclDlc4mdgFD4wLacVgyI8CAiUbRJqfeZaMW0kznAXOFMyPiIca3be0o69SPtt_uZMOLh7qPrWmp7QmrwNhDggjKEO5MaE-nsQgO5jQC03qHvsid3f6x9x7xm-y32OlaxrNgOGsHeyhliP5RyZSvRubjjcj1vMNLxEtznCG1P6JAYAlUACJ6jncAw";
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  
+  const logoUrl = "/CareerDishaLogo.png";
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim() || !password.trim()) {
+      setError("Please fill in all required fields to continue.");
+      return;
+    }
+    setError("");
+    onLogin();
+  };
 
   return (
     <motion.main 
@@ -47,20 +65,26 @@ export default function Login({ onBack, onRegister, onLogin }: LoginProps) {
             <p className="text-on-surface-variant font-body">Sign in to continue your journey</p>
           </div>
           
-          <form className="space-y-6" onSubmit={(e) => {
-            e.preventDefault();
-            onLogin();
-          }}>
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            {error && (
+              <div className="flex items-center gap-2 p-3 text-red-600 bg-red-50 rounded-xl text-sm font-semibold border border-red-200">
+                <AlertCircle className="w-5 h-5 shrink-0" />
+                <p>{error}</p>
+              </div>
+            )}
+            
             {/* Email Field */}
             <div className="space-y-2">
-              <label className="text-xs font-body font-bold uppercase tracking-widest text-on-surface-variant block ml-1" htmlFor="email">Email Address</label>
+              <label className="text-xs font-body font-bold uppercase tracking-widest text-on-surface-variant block ml-1" htmlFor="email">Email Address <span className="text-red-500">*</span></label>
               <div className="relative group">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-on-surface-variant group-focus-within:text-primary transition-colors">
                   <Mail className="w-5 h-5" />
                 </div>
                 <input 
-                  className="block w-full pl-12 pr-4 py-4 bg-surface-container-high border-none rounded-xl focus:ring-0 focus:bg-surface-container-highest transition-all font-body text-on-surface placeholder:text-on-surface-variant/50 outline-none" 
+                  className={`block w-full pl-12 pr-4 py-4 border-none rounded-xl focus:ring-0 transition-all font-body text-on-surface placeholder:text-on-surface-variant/50 outline-none ${error && !email.trim() ? 'bg-red-50 focus:bg-red-100 ring-2 ring-red-300' : 'bg-surface-container-high focus:bg-surface-container-highest'}`}
                   id="email" 
+                  value={email}
+                  onChange={(e) => { setEmail(e.target.value); setError(""); }}
                   placeholder="Enter your email" 
                   type="email"
                 />
@@ -71,7 +95,7 @@ export default function Login({ onBack, onRegister, onLogin }: LoginProps) {
             {/* Password Field */}
             <div className="space-y-2">
               <div className="flex justify-between items-center px-1">
-                <label className="text-xs font-body font-bold uppercase tracking-widest text-on-surface-variant block" htmlFor="password">Password</label>
+                <label className="text-xs font-body font-bold uppercase tracking-widest text-on-surface-variant block" htmlFor="password">Password <span className="text-red-500">*</span></label>
                 <a className="text-xs font-body font-bold text-primary hover:text-primary-container transition-colors uppercase tracking-widest" href="#">Forgot?</a>
               </div>
               <div className="relative group">
@@ -79,13 +103,19 @@ export default function Login({ onBack, onRegister, onLogin }: LoginProps) {
                   <Lock className="w-5 h-5" />
                 </div>
                 <input 
-                  className="block w-full pl-12 pr-12 py-4 bg-surface-container-high border-none rounded-xl focus:ring-0 focus:bg-surface-container-highest transition-all font-body text-on-surface placeholder:text-on-surface-variant/50 outline-none" 
+                  className={`block w-full pl-12 pr-12 py-4 border-none rounded-xl focus:ring-0 transition-all font-body text-on-surface placeholder:text-on-surface-variant/50 outline-none ${error && !password.trim() ? 'bg-red-50 focus:bg-red-100 ring-2 ring-red-300' : 'bg-surface-container-high focus:bg-surface-container-highest'}`}
                   id="password" 
+                  value={password}
+                  onChange={(e) => { setPassword(e.target.value); setError(""); }}
                   placeholder="Your password" 
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                 />
-                <button className="absolute inset-y-0 right-0 pr-4 flex items-center text-on-surface-variant hover:text-on-surface transition-colors" type="button">
-                  <Eye className="w-5 h-5" />
+                <button 
+                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-on-surface-variant hover:text-on-surface transition-colors" 
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-primary transition-all duration-300 group-focus-within:w-full"></div>
               </div>
@@ -93,7 +123,7 @@ export default function Login({ onBack, onRegister, onLogin }: LoginProps) {
 
             {/* Submit Button */}
             <button 
-              className="w-full bg-primary hover:bg-primary/90 text-on-primary font-headline font-extrabold py-4 px-6 rounded-2xl flex items-center justify-center gap-2 group transition-all duration-300 shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98]" 
+              className="w-full bg-primary hover:bg-primary/90 text-white font-headline font-extrabold py-4 px-6 rounded-2xl flex items-center justify-center gap-2 group transition-all duration-300 shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98]" 
               type="submit"
             >
               Login

@@ -1,17 +1,13 @@
+import React, { useState } from 'react';
 import { 
-  LayoutDashboard, 
-  Map as MapIcon, 
-  BarChart3, 
-  User, 
-  Bot, 
-  FileText, 
-  Search, 
   ArrowRight, 
   CheckCircle2, 
   ExternalLink,
-  Zap
+  Zap,
+  FileText,
+  BarChart3
 } from 'lucide-react';
-import { motion } from 'motion/react';
+import { SidebarNavigation, MenuButton } from './SidebarNavigation';
 
 interface UserDashboardProps {
   onGoToResults: () => void;
@@ -19,119 +15,48 @@ interface UserDashboardProps {
 }
 
 export default function UserDashboard({ onGoToResults, onGoToRoadmap }: UserDashboardProps) {
-  const logoUrl = "https://lh3.googleusercontent.com/aida/ADBb0ugIHQH9KsYjSKy1yo34iJCmwhIw1ZXx3GPKOKKzjAsaRbYBMEG4kfTa2z-crvDJbhYdFL8AhCt2dFGAsep_YZMiJZ7MPIvfJk8icyV4fsoNbRyYgfVZEhFseLuEFTYV25zfhulbQnq1m8GD8MMigU-o-JxAdjEOdw8l5xhSuZ-WPqcXxPZMj__NpwW53-jqerHgTy0fh-enQv8RcFD1w6MciE4P2Jhl1tgJR8vW4XJFuk8Y4xe-eQg5_-KJ_8nwA8k74_7fG7Perg";
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  
+  const logoUrl = "/CareerDishaLogo.png";
   const avatarUrl = "https://lh3.googleusercontent.com/aida-public/AB6AXuAIzOqjcnqP--aMQz0kQC2LXF-AuSgPlTnz96QBZ4_qVnWSprPxEj932eIr999rzlGgMEJotG3S2f4hZrVRErOFtlDV364m8NsBdbJuR3e3-eqQX-sB9jNt0lsvUkosK0J1OJBy5qjYueLl2ol5kSutOu5C3hqNnOK9WG9uRMXZucflvwsSl80cukXdmy8_lBVv7exTDojGhStyepiAdFiZ80dHFpIv-Qb-YAyJ6TZNX6D5dw9NaOfhOCm9EM_c7-4jhSTcABI9BWTO";
 
   return (
     <div className="min-h-screen bg-surface flex font-body">
       {/* Sidebar */}
-      <aside className="w-64 border-r border-outline-variant/10 bg-white flex flex-col sticky top-0 h-screen">
-        <motion.div 
-          initial="hidden"
-          animate="visible"
-          variants={{
-            hidden: { opacity: 0 },
-            visible: {
-              opacity: 1,
-              transition: {
-                staggerChildren: 0.1
-              }
-            }
-          }}
-          className="flex flex-col h-full"
-        >
-          <motion.div 
-            variants={{
-              hidden: { opacity: 0, y: -10 },
-              visible: { opacity: 1, y: 0 }
-            }}
-            className="p-8"
-          >
-            <img src={logoUrl} alt="CareerDisha Logo" className="h-10 w-auto mb-2" referrerPolicy="no-referrer" />
-            <p className="text-[10px] font-bold text-outline tracking-widest uppercase">Dashboard</p>
-          </motion.div>
-          
-          <nav className="flex-1 px-4 space-y-2">
-            <motion.button 
-              variants={{
-                hidden: { opacity: 0, x: -20 },
-                visible: { opacity: 1, x: 0 }
-              }}
-              className="w-full flex items-center gap-3 px-4 py-3 bg-primary/5 text-primary rounded-xl font-bold"
-            >
-              <LayoutDashboard className="w-5 h-5" />
-              <span>Dashboard</span>
-            </motion.button>
-            <motion.button 
-              variants={{
-                hidden: { opacity: 0, x: -20 },
-                visible: { opacity: 1, x: 0 }
-              }}
-              onClick={onGoToRoadmap} 
-              className="w-full flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors rounded-xl font-medium"
-            >
-              <MapIcon className="w-5 h-5" />
-              <span>Roadmap</span>
-            </motion.button>
-            <motion.button 
-              variants={{
-                hidden: { opacity: 0, x: -20 },
-                visible: { opacity: 1, x: 0 }
-              }}
-              onClick={onGoToResults} 
-              className="w-full flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors rounded-xl font-medium"
-            >
-              <BarChart3 className="w-5 h-5" />
-              <span>Insights</span>
-            </motion.button>
-            <motion.button 
-              variants={{
-                hidden: { opacity: 0, x: -20 },
-                visible: { opacity: 1, x: 0 }
-              }}
-              className="w-full flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors rounded-xl font-medium"
-            >
-              <User className="w-5 h-5" />
-              <span>Profile</span>
-            </motion.button>
-          </nav>
-
-          <motion.div 
-            variants={{
-              hidden: { opacity: 0, y: 20 },
-              visible: { opacity: 1, y: 0 }
-            }}
-            className="p-6"
-          >
-            <button className="w-full py-4 bg-primary text-white rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-primary/20 hover:opacity-90 transition-all">
-              <Bot className="w-5 h-5" />
-              <span>AI Mentor</span>
-            </button>
-          </motion.div>
-        </motion.div>
-      </aside>
+      <SidebarNavigation 
+        isMenuOpen={isMenuOpen} 
+        setIsMenuOpen={setIsMenuOpen} 
+        onGoToDashboard={() => {}} 
+        onGoToRoadmap={onGoToRoadmap} 
+        onGoToResults={onGoToResults}
+        activeScreen="dashboard"
+      />
 
       {/* Main Content */}
-      <main className="flex-1 p-12 overflow-y-auto">
+      <main className="flex-1 p-12 overflow-y-auto w-full">
         <header className="mb-12">
-          <h1 className="text-5xl font-extrabold text-on-surface tracking-tight mb-4 font-headline">
-            Hello, <span className="text-primary">Aditi</span>! Your journey to <span className="text-primary">UX Architect</span> starts here.
-          </h1>
+          <div className="flex items-center gap-4 mb-4">
+            {!isMenuOpen && (
+              <MenuButton onClick={() => setIsMenuOpen(true)} />
+            )}
+            <h1 className="text-5xl font-extrabold text-on-surface tracking-tight font-headline m-0">
+              Hello, <span className="text-primary">Aditi</span>! Your journey to <span className="text-primary">UX Architect</span> starts here.
+            </h1>
+          </div>
           <p className="text-lg text-on-surface-variant leading-relaxed max-w-3xl">
             Based on your recent assessment, you're 65% aligned with your dream role. Let's bridge the remaining gap today.
           </p>
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* AI Mentor Insights */}
-          <div className="lg:col-span-2 bg-white rounded-[2.5rem] p-10 shadow-sm border border-outline-variant/10">
-            <div className="flex items-center gap-4 mb-8">
-              <div className="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center text-white">
-                <Zap className="w-6 h-6" />
-              </div>
-              <div>
-                <h3 className="font-bold text-xl">AI Mentor Insights</h3>
-                <p className="text-xs text-outline font-medium">Last updated: 2 hours ago</p>
+            {/* AI Mentor Guidance */}
+            <div className="lg:col-span-2 bg-white rounded-[2.5rem] p-10 shadow-sm border border-outline-variant/10">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center text-white">
+                  <Zap className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-xl">AI Mentor Guidance</h3>
               </div>
             </div>
 

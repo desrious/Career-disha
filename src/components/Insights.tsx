@@ -1,9 +1,13 @@
-import { useRef } from 'react';
-import { ArrowLeft, Play, Youtube, BookOpen, ExternalLink, ChevronLeft, ChevronRight, Phone, Mail, Globe } from 'lucide-react';
+import { useRef, useState } from 'react';
+import { ArrowLeft, Play, Youtube, BookOpen, ExternalLink, ChevronLeft, ChevronRight, Phone, Mail, Globe, Menu } from 'lucide-react';
 import { motion } from 'motion/react';
+import { SidebarNavigation } from './SidebarNavigation';
 
 interface InsightsProps {
   onBack: () => void;
+  onGoToDashboard?: () => void;
+  onGoToRoadmap?: () => void;
+  onGoToResults?: () => void;
 }
 
 const videos = [
@@ -29,7 +33,7 @@ const mockBlogs = [
     date: "7-Sep-2025",
     category: "Career Advice",
     image: "https://picsum.photos/seed/sap-career/800/600",
-    link: "https://zeopto.com/blog-details.php?slug=is-adopting-career-in-sap-is-viable-option-"
+    link: "https://ZeOpto.com/blog-details.php?slug=is-adopting-career-in-sap-is-viable-option-"
   },
   {
     title: "ZeOpto Workshop at Amrapali University -...",
@@ -37,7 +41,7 @@ const mockBlogs = [
     date: "30-Sep-2025",
     category: "Workshop",
     image: "https://picsum.photos/seed/workshop/800/600",
-    link: "https://zeopto.com/blog-details.php?slug=zeopto-workshop-at-amrapali-university---a-journey-of-learning-growth"
+    link: "https://ZeOpto.com/blog-details.php?slug=ZeOpto-workshop-at-amrapali-university---a-journey-of-learning-growth"
   },
   {
     title: "Best SAP FICO Training Institute | ZeOpt...",
@@ -45,7 +49,7 @@ const mockBlogs = [
     date: "6-Nov-2025",
     category: "Training",
     image: "https://picsum.photos/seed/fico/800/600",
-    link: "https://zeopto.com/blog-details.php?slug=best-sap-fico-training-institute-zeopto"
+    link: "https://ZeOpto.com/blog-details.php?slug=best-sap-fico-training-institute-ZeOpto"
   },
   {
     title: "Best SAP MM Training Institute in Noida ...",
@@ -53,7 +57,7 @@ const mockBlogs = [
     date: "16-Nov-2025",
     category: "Training",
     image: "https://picsum.photos/seed/mm/800/600",
-    link: "https://zeopto.com/blog-details.php?slug=best-sap-mm-training-institute-in-noida-zeopto"
+    link: "https://ZeOpto.com/blog-details.php?slug=best-sap-mm-training-institute-in-noida-ZeOpto"
   },
   {
     title: "Best SAP Training Institute in Noida | Z...",
@@ -61,7 +65,7 @@ const mockBlogs = [
     date: "15-Dec-2025",
     category: "Education",
     image: "https://picsum.photos/seed/noida/800/600",
-    link: "https://zeopto.com/blog-details.php?slug=best-sap-training-institute-in-noida-zeopto"
+    link: "https://ZeOpto.com/blog-details.php?slug=best-sap-training-institute-in-noida-ZeOpto"
   },
   {
     title: "ZeOpto Workshop at Graphic Era Universit...",
@@ -69,7 +73,7 @@ const mockBlogs = [
     date: "5-Feb-2026",
     category: "Workshop",
     image: "https://picsum.photos/seed/graphic-era/800/600",
-    link: "https://zeopto.com/blog-details.php?slug=zeopto-workshop-at-graphic-era-university-empowering-students-with-industry-ready-it-sap-skills"
+    link: "https://ZeOpto.com/blog-details.php?slug=ZeOpto-workshop-at-graphic-era-university-empowering-students-with-industry-ready-it-sap-skills"
   },
   {
     title: "SAP Classes in Noida...",
@@ -77,12 +81,13 @@ const mockBlogs = [
     date: "5-Feb-2026",
     category: "Training",
     image: "https://picsum.photos/seed/classes/800/600",
-    link: "https://zeopto.com/blog-details.php?slug=sap-classes-in-noida"
+    link: "https://ZeOpto.com/blog-details.php?slug=sap-classes-in-noida"
   }
 ];
 
-export default function Insights({ onBack }: InsightsProps) {
-  const logoUrl = "https://lh3.googleusercontent.com/aida/ADBb0ugzZSaguePFRojyoy0_LCdEqum7gnG2tQ-k4pS5jxWATdQPiZIKEIJSYirhb_Njis6PhjMuh6DBsMIG7ZExcapPd5TsG4tkiZsV0T1FRJvNspOS58iifjbtlgCEeaDLgotTd8LiaXo8DzK4StNrj7RIv1s5ZDoF_2Fewb9woZ_7pYT6ywrFYyCLjvYmEuIcHmgTzFiJEgWaiNcV_mJQ3nU0IWzmomFRY65BOerkbx6sKIAzXp5dYrC2tq3iHs8ZR8cMn96kHipPuLM";
+export default function Insights({ onBack, onGoToDashboard, onGoToRoadmap, onGoToResults }: InsightsProps) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const logoUrl = "/CareerDishaLogo.png";
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: 'left' | 'right') => {
@@ -94,14 +99,25 @@ export default function Insights({ onBack }: InsightsProps) {
   };
 
   return (
-    <div className="min-h-screen bg-surface font-body text-on-surface">
+    <div className="min-h-screen bg-surface font-body text-on-surface flex flex-col">
+      <SidebarNavigation 
+        isMenuOpen={isMenuOpen} 
+        setIsMenuOpen={setIsMenuOpen} 
+        onGoToDashboard={onGoToDashboard} 
+        onGoToRoadmap={onGoToRoadmap} 
+        onGoToResults={onGoToResults}
+        activeScreen="insights"
+      />
+
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-outline-variant/10">
-        <div className="flex justify-between items-center w-full px-8 py-4 max-w-7xl mx-auto">
-          <button onClick={onBack} className="flex items-center gap-2 group">
-            <img alt="CareerDisha Logo" className="h-10 w-auto object-contain" src={logoUrl} referrerPolicy="no-referrer" />
-            <span className="text-xl font-extrabold text-blue-700 tracking-tighter font-headline">Careerदिशा</span>
-          </button>
+      <nav className="fixed top-0 w-full z-[45] bg-white/80 backdrop-blur-md border-b border-outline-variant/10">
+        <div className="flex justify-between items-center w-full px-4 py-3">
+          <div className="flex items-center gap-4">
+            <button onClick={onBack} className="flex items-center gap-2 group">
+              <img alt="CareerDisha Logo" className="h-10 w-auto object-contain" src={logoUrl} referrerPolicy="no-referrer" />
+              <span className="text-xl font-extrabold text-blue-700 tracking-tighter font-headline">Careerदिशा</span>
+            </button>
+          </div>
           <button 
             onClick={onBack}
             className="flex items-center gap-2 text-on-surface-variant font-bold hover:text-primary transition-colors group"
@@ -136,52 +152,14 @@ export default function Insights({ onBack }: InsightsProps) {
               </div>
               <h2 className="text-3xl font-extrabold font-headline">YouTube Videos</h2>
             </div>
-            <div className="flex gap-2">
-              <button 
-                onClick={() => scroll('left')}
-                className="w-12 h-12 rounded-full border border-outline-variant/20 flex items-center justify-center hover:bg-white hover:shadow-md transition-all active:scale-90"
-              >
-                <ChevronLeft className="w-6 h-6" />
-              </button>
-              <button 
-                onClick={() => scroll('right')}
-                className="w-12 h-12 rounded-full border border-outline-variant/20 flex items-center justify-center hover:bg-white hover:shadow-md transition-all active:scale-90"
-              >
-                <ChevronRight className="w-6 h-6" />
-              </button>
-            </div>
           </div>
-
-          <div 
-            ref={scrollRef}
-            className="flex gap-8 overflow-x-auto pb-10 no-scrollbar snap-x snap-mandatory scroll-smooth"
-          >
-            {videos.map((video, index) => (
-              <motion.div 
-                key={video.id}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.05 }}
-                className="min-w-[300px] md:min-w-[400px] group bg-white rounded-[2rem] overflow-hidden shadow-sm border border-outline-variant/10 hover:shadow-xl transition-all snap-center"
-              >
-                <div className="aspect-video relative overflow-hidden bg-slate-100">
-                  <iframe 
-                    src={`https://www.youtube.com/embed/${video.id}`}
-                    title={video.title}
-                    className="w-full h-full border-0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
-                </div>
-                <div className="p-6 flex items-center justify-between">
-                  <h3 className="font-bold text-on-surface line-clamp-1">{video.title}</h3>
-                  <div className="text-red-600 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Play className="w-5 h-5 fill-current" />
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+          
+          <div className="bg-slate-50 border border-slate-200 rounded-[2rem] p-12 text-center flex flex-col items-center justify-center min-h-[300px]">
+            <div className="w-20 h-20 bg-slate-200 rounded-full flex items-center justify-center mb-6 animate-pulse">
+              <Youtube className="w-10 h-10 text-slate-400" />
+            </div>
+            <h3 className="text-2xl font-bold text-slate-700 mb-2">Coming Soon</h3>
+            <p className="text-slate-500 max-w-md">Our curated video insights and expert mentorship sessions will be available here shortly.</p>
           </div>
         </section>
 
@@ -250,11 +228,11 @@ export default function Insights({ onBack }: InsightsProps) {
               <Phone className="w-6 h-6 text-primary" />
               <span className="font-bold">+91-9953280036</span>
             </div>
-            <a href="mailto:hr@zeopto.com" className="flex items-center justify-center gap-4 bg-white/5 p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
+            <a href="mailto:hr@ZeOpto.com" className="flex items-center justify-center gap-4 bg-white/5 p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
               <Mail className="w-6 h-6 text-secondary" />
-              <span className="font-bold">hr@zeopto.com</span>
+              <span className="font-bold">hr@ZeOpto.com</span>
             </a>
-            <a href="https://zeopto.com/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-4 bg-white/5 p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors group">
+            <a href="https://ZeOpto.com/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-4 bg-white/5 p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors group">
               <Globe className="w-6 h-6 text-tertiary group-hover:rotate-12 transition-transform" />
               <span className="font-bold">Visit ZeOpto</span>
             </a>

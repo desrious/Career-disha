@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { 
   Map as MapIcon, 
   BarChart3, 
@@ -15,9 +16,11 @@ import {
   Share2,
   Globe,
   Mail,
-  TrendingUp
+  TrendingUp,
+  Menu
 } from 'lucide-react';
 import { motion } from 'motion/react';
+import { SidebarNavigation, MenuButton } from './SidebarNavigation';
 
 interface RoadmapScreenProps {
   onGoToDashboard: () => void;
@@ -25,14 +28,27 @@ interface RoadmapScreenProps {
 }
 
 export default function RoadmapScreen({ onGoToDashboard, onGoToResults }: RoadmapScreenProps) {
-  const logoUrl = "https://lh3.googleusercontent.com/aida/ADBb0ugzZSaguePFRojyoy0_LCdEqum7gnG2tQ-k4pS5jxWATdQPiZIKEIJSYirhb_Njis6PhjMuh6DBsMIG7ZExcapPd5TsG4tkiZsV0T1FRJvNspOS58iifjbtlgCEeaDLgotTd8LiaXo8DzK4StNrj7RIv1s5ZDoF_2Fewb9woZ_7pYT6ywrFYyCLjvYmEuIcHmgTzFiJEgWaiNcV_mJQ3nU0IWzmomFRY65BOerkbx6sKIAzXp5dYrC2tq3iHs8ZR8cMn96kHipPuLM";
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const logoUrl = "/CareerDishaLogo.png";
   const workspaceImg = "https://lh3.googleusercontent.com/aida-public/AB6AXuCXDwRm8pPA-qylIFXu-12K_Pz3FocFV7_Bk1a_SaJcB2f1VRJxxeM-yBnCY7jmY0gvgD0YZQGwdLuNwS_1wqZu8FYkKVnms1Yebt-l_wPT766DqL85mCsA9UgRMaZfDhbJq8LobsIkESAzHyuU9O6cZ3EvyAFnkK6iGz20xL3EcvgXTfhoKKA4EfsqFup15eq9505qPBKP1OrDq9e4hni8tn8Z4p7e6hpW_HShKTzQnBGPbNuzSdmY7E2wr2S0dn81RnC6BSmDXAOm";
 
   return (
     <div className="bg-surface font-body text-on-surface antialiased min-h-screen flex flex-col">
+      <SidebarNavigation 
+        isMenuOpen={isMenuOpen} 
+        setIsMenuOpen={setIsMenuOpen} 
+        onGoToDashboard={onGoToDashboard} 
+        onGoToRoadmap={() => {}} 
+        onGoToResults={onGoToResults}
+        activeScreen="roadmap"
+      />
+
       {/* TopAppBar */}
-      <header className="fixed top-0 w-full z-50 bg-slate-50/80 backdrop-blur-md flex justify-between items-center px-8 h-20 max-w-full border-b border-outline-variant/10">
-        <div className="flex items-center">
+      <header className="fixed top-0 w-full z-[45] bg-slate-50/80 backdrop-blur-md flex justify-between items-center px-8 h-20 max-w-full border-b border-outline-variant/10">
+        <div className="flex items-center gap-4">
+          {!isMenuOpen && (
+            <MenuButton onClick={() => setIsMenuOpen(true)} />
+          )}
           <img alt="CareerDisha Logo" className="h-12 w-auto object-contain" src={logoUrl} referrerPolicy="no-referrer" />
         </div>
         <nav className="hidden md:flex gap-8 items-center">
@@ -47,86 +63,6 @@ export default function RoadmapScreen({ onGoToDashboard, onGoToResults }: Roadma
       </header>
 
       <div className="flex flex-1 pt-20">
-        {/* SideNavBar */}
-        <aside className="w-64 border-r border-outline-variant/10 bg-slate-50 flex flex-col py-6 sticky top-20 h-[calc(100vh-80px)] hidden lg:flex">
-          <motion.div 
-            initial="hidden"
-            animate="visible"
-            variants={{
-              hidden: { opacity: 0 },
-              visible: {
-                opacity: 1,
-                transition: {
-                  staggerChildren: 0.1
-                }
-              }
-            }}
-            className="flex flex-col h-full"
-          >
-            <motion.div 
-              variants={{
-                hidden: { opacity: 0, y: -10 },
-                visible: { opacity: 1, y: 0 }
-              }}
-              className="px-6 mb-8"
-            >
-              <h2 onClick={onGoToDashboard} className="text-lg font-bold text-blue-700 font-headline cursor-pointer">Dashboard</h2>
-              <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Your Career Path</p>
-            </motion.div>
-            
-            <nav className="flex-1">
-              <ul className="space-y-1">
-                <motion.li
-                  variants={{
-                    hidden: { opacity: 0, x: -20 },
-                    visible: { opacity: 1, x: 0 }
-                  }}
-                >
-                  <button className="w-full flex items-center gap-3 px-6 py-3 text-blue-700 font-bold bg-blue-50 rounded-r-full">
-                    <MapIcon className="w-5 h-5" />
-                    <span className="text-sm font-medium">Roadmap</span>
-                  </button>
-                </motion.li>
-                <motion.li
-                  variants={{
-                    hidden: { opacity: 0, x: -20 },
-                    visible: { opacity: 1, x: 0 }
-                  }}
-                >
-                  <button onClick={onGoToResults} className="w-full flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-100 transition-all">
-                    <BarChart3 className="w-5 h-5" />
-                    <span className="text-sm font-medium">Insights</span>
-                  </button>
-                </motion.li>
-                <motion.li
-                  variants={{
-                    hidden: { opacity: 0, x: -20 },
-                    visible: { opacity: 1, x: 0 }
-                  }}
-                >
-                  <button className="w-full flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-100 transition-all">
-                    <Wrench className="w-5 h-5" />
-                    <span className="text-sm font-medium">Tools</span>
-                  </button>
-                </motion.li>
-              </ul>
-            </nav>
-
-            <motion.div 
-              variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: { opacity: 1, y: 0 }
-              }}
-              className="px-6 mt-auto"
-            >
-              <button className="w-full bg-primary-container text-on-primary-container py-3 rounded-xl font-semibold flex items-center justify-center gap-2 hover:opacity-90 transition-all">
-                <Bot className="w-4 h-4" />
-                <span>AI Mentor</span>
-              </button>
-            </motion.div>
-          </motion.div>
-        </aside>
-
         {/* Main Content Canvas */}
         <main className="flex-1 p-8 md:p-12 relative">
           {/* Dot Grid Background */}

@@ -14,7 +14,7 @@ interface RegisterProps {
 
 export default function Register({ onClose, onStart }: RegisterProps) {
   const [isFirstPlayDone, setIsFirstPlayDone] = useState(false);
-  const logoUrl = "https://lh3.googleusercontent.com/aida/ADBb0uhmr7ZEx-a80jvvjYW4Z1LiIgJ_bGKh1eI14EdmU9Z9vtee7_zdREWu16sn0flLT09pn1Spbsjds1AsoNdQ60XMh4YHz0TwRl3-McgTkdue1qJOpNwnQR-xxZ4Tsnxjbk37geqz9AYAwOAJYTjK06Dj27TKmmhfFtofvYCt6egx_JRkRUBW_U2D6UOFTHAuNKIdAvHSBKHT0MV71eZauUzIsjnWyhDyOu8cjB4Yna2UQY7J6BMUMcgXcaaQnyjcdMM_fxqpC2xsKg";
+  const logoUrl = "/CareerDishaLogo.png";
   const illustrationUrl = "https://lh3.googleusercontent.com/aida-public/AB6AXuBcf0cFwQMR8p9sFKPoRHw6YlO2pAeX8nkkLqKiPvNDKRTjpkQP600rC8aPJBDFrlzKPrmNW5DSpEOG1IsxR1MvMReZRCw289weqWLZoLW1PYsitZHakG1Pm3ZsOAPdJaU5O3KaAGq84jFb5oUwkEnZHEmvGN3ob017JYFZUCwnk0etHbJBqchlxAZaKXxXKwvGoQlDRokoN-lpPTmQnhYXTQx_hJU49Xf-pqAiX0al4-U2D-gEEX2x4iFObDQ_TDiDRF1B6Bmb-Dsz";
 
   return (
@@ -89,7 +89,7 @@ export default function Register({ onClose, onStart }: RegisterProps) {
                 autoplay
                 loop={isFirstPlayDone}
                 speed={0.5}
-                segment={isFirstPlayDone ? [30, 90] : [0, 100]}
+                // segment={isFirstPlayDone ? [30, 90] : [0, 100]}
                 onEvent={(event) => {
                   if (event === 'complete') {
                     setIsFirstPlayDone(true);

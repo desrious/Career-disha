@@ -8,10 +8,12 @@ import { motion } from 'motion/react';
 
 interface ProfileSelectionProps {
   onStartStudent: () => void;
+  onStartGraduate: () => void;
+  onStartProfessional: () => void;
 }
 
-export default function ProfileSelection({ onStartStudent }: ProfileSelectionProps) {
-  const logoUrl = "https://lh3.googleusercontent.com/aida/ADBb0ujb2thgymnscf1q_Oj5gbf5GeDWh0_HncmiUPwlzlrrLwSsyRAxmhC0XAtarBT9cFM0FWbAA3M9ON4bFgryosA2_zGeo97x7WjohexuesUhN9BVH4ObP2cTAhkxyjqoOK1c0hfkmuuJpagNL_J-OhRYoblJ3GvptZQ6pZA1wobQMS0LPzpODR7qZpW-frQoS5XUYtrqBmG7mXKmxZMkW6MzF3oqAdNTtV5nywFeF4fOUfcNzHO1IvFIXaavewdJHUc0oDva5J6U4dg";
+export default function ProfileSelection({ onStartStudent, onStartGraduate, onStartProfessional }: ProfileSelectionProps) {
+  const logoUrl = "/CareerDishaLogo.png";
 
   return (
     <div className="font-body text-on-surface min-h-screen flex flex-col bg-[#f8fafc]">
@@ -74,7 +76,10 @@ export default function ProfileSelection({ onStartStudent }: ProfileSelectionPro
             <p className="font-body text-on-surface-variant leading-relaxed flex-grow mb-10">
               Bridge the gap between education and employment. Tailor your skills for the modern job market with expert precision.
             </p>
-            <button className="bg-secondary text-white px-8 py-4 rounded-xl font-headline font-bold tracking-wide flex items-center justify-center gap-2 hover:bg-secondary/90 transition-colors duration-300 cursor-pointer">
+            <button 
+              onClick={onStartGraduate}
+              className="bg-secondary text-white px-8 py-4 rounded-xl font-headline font-bold tracking-wide flex items-center justify-center gap-2 hover:bg-secondary/90 transition-colors duration-300 cursor-pointer"
+            >
               Start your Journey <ArrowRight className="w-5 h-5" />
             </button>
           </motion.div>
@@ -93,7 +98,10 @@ export default function ProfileSelection({ onStartStudent }: ProfileSelectionPro
             <p className="font-body text-on-surface-variant leading-relaxed flex-grow mb-10">
               Manage career transitions or upskill for growth. Powerful dashboards to help you pivot with data-driven precision.
             </p>
-            <button className="bg-primary text-white px-8 py-4 rounded-xl font-headline font-bold tracking-wide flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors duration-300 cursor-pointer">
+            <button 
+              onClick={onStartProfessional}
+              className="bg-primary text-white px-8 py-4 rounded-xl font-headline font-bold tracking-wide flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors duration-300 cursor-pointer"
+            >
               Start your Journey <ArrowRight className="w-5 h-5" />
             </button>
           </motion.div>

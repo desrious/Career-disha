@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { 
   Bell, 
   User, 
@@ -8,21 +9,38 @@ import {
   BarChart3
 } from 'lucide-react';
 import { motion } from 'motion/react';
+import { SidebarNavigation, MenuButton } from './SidebarNavigation';
 
 interface ResultScreenProps {
   onGoToRoadmap: () => void;
+  onGoToDashboard?: () => void;
+  onGoToResults?: () => void;
 }
 
-export default function ResultScreen({ onGoToRoadmap }: ResultScreenProps) {
-  const logoUrl = "https://lh3.googleusercontent.com/aida/ADBb0ugIHQH9KsYjSKy1yo34iJCmwhIw1ZXx3GPKOKKzjAsaRbYBMEG4kfTa2z-crvDJbhYdFL8AhCt2dFGAsep_YZMiJZ7MPIvfJk8icyV4fsoNbRyYgfVZEhFseLuEFTYV25zfhulbQnq1m8GD8MMigU-o-JxAdjEOdw8l5xhSuZ-WPqcXxPZMj__NpwW53-jqerHgTy0fh-enQv8RcFD1w6MciE4P2Jhl1tgJR8vW4XJFuk8Y4xe-eQg5_-KJ_8nwA8k74_7fG7Perg";
+export default function ResultScreen({ onGoToRoadmap, onGoToDashboard, onGoToResults }: ResultScreenProps) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const logoUrl = "/CareerDishaLogo.png";
   const avatarUrl = "https://lh3.googleusercontent.com/aida-public/AB6AXuAIzOqjcnqP--aMQz0kQC2LXF-AuSgPlTnz96QBZ4_qVnWSprPxEj932eIr999rzlGgMEJotG3S2f4hZrVRErOFtlDV364m8NsBdbJuR3e3-eqQX-sB9jNt0lsvUkosK0J1OJBy5qjYueLl2ol5kSutOu5C3hqNnOK9WG9uRMXZucflvwsSl80cukXdmy8_lBVv7exTDojGhStyepiAdFiZ80dHFpIv-Qb-YAyJ6TZNX6D5dw9NaOfhOCm9EM_c7-4jhSTcABI9BWTO";
 
   return (
     <div className="min-h-screen bg-surface font-body text-on-surface">
+      <SidebarNavigation 
+        isMenuOpen={isMenuOpen}
+        setIsMenuOpen={setIsMenuOpen}
+        onGoToDashboard={onGoToDashboard}
+        onGoToRoadmap={onGoToRoadmap}
+        onGoToResults={onGoToResults}
+        activeScreen="profile"
+      />
+      
       {/* Top Navigation Bar */}
       <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-outline-variant/10">
         <div className="flex justify-between items-center w-full px-8 py-4 max-w-7xl mx-auto">
           <div className="flex items-center gap-8">
+            {!isMenuOpen && (
+              <MenuButton onClick={() => setIsMenuOpen(true)} />
+            )}
             <img alt="CareerDisha Logo" className="h-12 w-auto object-contain" src={logoUrl} referrerPolicy="no-referrer" />
             <div className="hidden md:flex gap-6 items-center">
               <button className="text-slate-500 font-medium text-xs tracking-widest uppercase hover:text-blue-600 transition-colors">Assessment</button>
@@ -45,7 +63,7 @@ export default function ResultScreen({ onGoToRoadmap }: ResultScreenProps) {
         {/* Header Section */}
         <header className="mb-12 max-w-3xl">
           <h1 className="text-4xl md:text-5xl font-extrabold font-headline text-on-surface tracking-tight mb-4 leading-tight">
-            RIASEC Profile Analysis
+            Profile Analysis
           </h1>
           <p className="text-lg text-on-surface-variant leading-relaxed">
             Your unique blend of <span className="text-primary font-semibold">Investigative</span> and <span className="text-secondary font-semibold">Artistic</span> traits suggests a high aptitude for roles that bridge technical precision with creative problem-solving.
@@ -145,7 +163,7 @@ export default function ResultScreen({ onGoToRoadmap }: ResultScreenProps) {
                   <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
                     <Zap className="w-5 h-5" />
                   </div>
-                  <span className="font-bold tracking-wide uppercase text-[10px]">AI Mentor Insight</span>
+                  <span className="font-bold tracking-wide uppercase text-[10px]">AI Mentor Guidance</span>
                 </div>
                 <blockquote className="text-xl font-headline font-medium italic leading-snug">
                   "Your aptitude for deep analysis paired with creative vision is a rare combination. You don't just solve problems—you rethink them entirely."

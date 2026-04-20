@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { 
   ArrowLeft, 
   Target, 
@@ -10,7 +11,11 @@ import {
   CheckCircle2,
   Award,
   TrendingUp,
-  Globe
+  Globe,
+  X,
+  User,
+  MessageSquare,
+  Send
 } from 'lucide-react';
 import { motion } from 'motion/react';
 
@@ -19,7 +24,8 @@ interface AboutProps {
 }
 
 export default function About({ onBack }: AboutProps) {
-  const logoUrl = "https://lh3.googleusercontent.com/aida/ADBb0ugzZSaguePFRojyoy0_LCdEqum7gnG2tQ-k4pS5jxWATdQPiZIKEIJSYirhb_Njis6PhjMuh6DBsMIG7ZExcapPd5TsG4tkiZsV0T1FRJvNspOS58iifjbtlgCEeaDLgotTd8LiaXo8DzK4StNrj7RIv1s5ZDoF_2Fewb9woZ_7pYT6ywrFYyCLjvYmEuIcHmgTzFiJEgWaiNcV_mJQ3nU0IWzmomFRY65BOerkbx6sKIAzXp5dYrC2tq3iHs8ZR8cMn96kHipPuLM";
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+  const logoUrl = "/CareerDishaLogo.png";
 
   return (
     <div className="min-h-screen bg-surface font-body text-on-surface">
@@ -190,33 +196,77 @@ export default function About({ onBack }: AboutProps) {
         <section className="mb-24">
           <h2 className="text-3xl font-extrabold font-headline mb-12 text-center">Meet the Visionaries Behind the Platform</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-white p-10 rounded-[2.5rem] border border-outline-variant/10 shadow-sm hover:shadow-md transition-all">
+            <div className="bg-white p-10 rounded-[2.5rem] border border-outline-variant/10 shadow-sm hover:shadow-md transition-all flex flex-col h-full">
               <div className="flex items-center gap-6 mb-8">
-                <div className="w-20 h-20 bg-primary/10 rounded-full overflow-hidden">
-                  <img src="https://picsum.photos/seed/founder1/200/200" alt="Mr. Gunjan Tewari" referrerPolicy="no-referrer" />
+                <div className="w-20 h-20 bg-primary/10 rounded-full overflow-hidden shrink-0">
+                  <img src="/GunjanTewari.png" alt="Mr. Gunjan Tewari" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                 </div>
                 <div>
                   <h4 className="text-2xl font-bold">Mr. Gunjan Tewari</h4>
-                  <p className="text-primary font-bold text-sm uppercase tracking-widest">Founder & CEO</p>
+                  <p className="text-primary font-bold text-sm uppercase tracking-widest">Founder & Director</p>
                 </div>
               </div>
-              <p className="text-on-surface-variant leading-relaxed">
-                A seasoned program manager and mentor with over two decades of experience in leading teams and driving impactful outcomes across industries. A Certified AI Generalist and SAP Certified Associate, he brings strategic vision and leadership to the platform.
-              </p>
+              <div className="flex flex-col flex-grow">
+                <p className="text-on-surface-variant leading-relaxed mb-6">
+                  A seasoned program manager and mentor with over two decades of experience in leading teams and driving impactful outcomes across industries. He brings strategic vision and leadership to the platform.
+                </p>
+                <ul className="space-y-3 my-auto">
+                  <li className="flex items-start gap-3 text-sm font-semibold text-slate-700">
+                    <CheckCircle2 className="w-5 h-5 text-primary shrink-0" />
+                    <span>Founder & Director</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-sm font-semibold text-slate-700">
+                    <CheckCircle2 className="w-5 h-5 text-primary shrink-0" />
+                    <span>Certified AI Generalist</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-sm font-semibold text-slate-700">
+                    <CheckCircle2 className="w-5 h-5 text-primary shrink-0" />
+                    <span>SAP Certified Associate</span>
+                  </li>
+                </ul>
+              </div>
+              <div className="flex gap-3 mt-8 pt-6 border-t border-outline-variant/10">
+                <button onClick={() => setIsContactModalOpen(true)} className="px-6 py-2 bg-primary text-white rounded-full font-bold hover:bg-opacity-90 transition-colors">Contact</button>
+                <a href="https://in.linkedin.com/in/gunjantewari" target="_blank" rel="noopener noreferrer" className="px-6 py-2 border-2 border-primary text-primary rounded-full font-bold hover:bg-primary/5 transition-colors">LinkedIn</a>
+              </div>
             </div>
-            <div className="bg-white p-10 rounded-[2.5rem] border border-outline-variant/10 shadow-sm hover:shadow-md transition-all">
+            <div className="bg-white p-10 rounded-[2.5rem] border border-outline-variant/10 shadow-sm hover:shadow-md transition-all flex flex-col h-full">
               <div className="flex items-center gap-6 mb-8">
-                <div className="w-20 h-20 bg-secondary/10 rounded-full overflow-hidden">
-                  <img src="https://picsum.photos/seed/founder2/200/200" alt="Mr. Abhijit Vyas" referrerPolicy="no-referrer" />
+                <div className="w-20 h-20 bg-secondary/10 rounded-full overflow-hidden shrink-0">
+                  <img src="/AbhijitVyas.png" alt="Mr. Abhijit Vyas" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                 </div>
                 <div>
                   <h4 className="text-2xl font-bold">Mr. Abhijit Vyas</h4>
-                  <p className="text-secondary font-bold text-sm uppercase tracking-widest">Founder & Managing Director</p>
+                  <p className="text-secondary font-bold text-sm uppercase tracking-widest">Co-founder & Director</p>
                 </div>
               </div>
-              <p className="text-on-surface-variant leading-relaxed">
-                With 18+ years of experience in SAP training and project management, he has mentored countless individuals toward industry success. As a Certified AI Generalist and SAP expert, he ensures Careerदिशा remains aligned with real-world industry needs.
-              </p>
+              <div className="flex flex-col flex-grow">
+                <p className="text-on-surface-variant leading-relaxed mb-6">
+                  With 18+ years of experience in SAP training and project management, he has mentored countless individuals toward industry success. He ensures Careerदिशा remains aligned with real-world industry needs.
+                </p>
+                <ul className="space-y-3 my-auto">
+                  <li className="flex items-start gap-3 text-sm font-semibold text-slate-700">
+                    <CheckCircle2 className="w-5 h-5 text-secondary shrink-0" />
+                    <span>Co-founder & Director</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-sm font-semibold text-slate-700">
+                    <CheckCircle2 className="w-5 h-5 text-secondary shrink-0" />
+                    <span>Certified AI Generalist</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-sm font-semibold text-slate-700">
+                    <CheckCircle2 className="w-5 h-5 text-secondary shrink-0" />
+                    <span>Technical Advisor - SAP Pre-Sales</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-sm font-semibold text-slate-700">
+                    <CheckCircle2 className="w-5 h-5 text-secondary shrink-0" />
+                    <span>Project Manager - SAP</span>
+                  </li>
+                </ul>
+              </div>
+              <div className="flex gap-3 mt-8 pt-6 border-t border-outline-variant/10">
+                <button onClick={() => setIsContactModalOpen(true)} className="px-6 py-2 bg-secondary text-white rounded-full font-bold hover:bg-opacity-90 transition-colors">Contact</button>
+                <a href="https://in.linkedin.com/in/abhijit-vyas-696640216" target="_blank" rel="noopener noreferrer" className="px-6 py-2 border-2 border-secondary text-secondary rounded-full font-bold hover:bg-secondary/5 transition-colors">LinkedIn</a>
+              </div>
             </div>
           </div>
         </section>
@@ -233,11 +283,11 @@ export default function About({ onBack }: AboutProps) {
               <Phone className="w-6 h-6 text-primary" />
               <span className="font-bold">+91-9953280036</span>
             </div>
-            <a href="mailto:hr@zeopto.com" className="flex items-center justify-center gap-4 bg-white/5 p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
+            <a href="mailto:hr@ZeOpto.com" className="flex items-center justify-center gap-4 bg-white/5 p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
               <Mail className="w-6 h-6 text-secondary" />
-              <span className="font-bold">hr@zeopto.com</span>
+              <span className="font-bold">hr@ZeOpto.com</span>
             </a>
-            <a href="https://zeopto.com/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-4 bg-white/5 p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors group">
+            <a href="https://ZeOpto.com/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-4 bg-white/5 p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors group">
               <Globe className="w-6 h-6 text-tertiary group-hover:rotate-12 transition-transform" />
               <span className="font-bold">Visit ZeOpto</span>
             </a>
@@ -256,6 +306,70 @@ export default function About({ onBack }: AboutProps) {
           </p>
         </div>
       </footer>
+
+      {/* Contact Form Modal */}
+      {isContactModalOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm shadow-2xl">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="bg-white rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl pb-6"
+          >
+            <div className="flex justify-between items-center p-6 border-b border-outline-variant/20">
+              <h3 className="text-2xl font-headline font-bold text-on-surface">Contact Form</h3>
+              <button 
+                onClick={() => setIsContactModalOpen(false)}
+                className="text-on-surface-variant hover:text-on-surface p-2 rounded-full hover:bg-surface transition-colors"
+                aria-label="Close modal"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            <div className="p-6 pb-2 space-y-4">
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none border-r border-outline-variant/20 pr-4 py-2 my-1">
+                  <User className="h-5 w-5 text-on-surface-variant" />
+                </div>
+                <input
+                  type="text"
+                  placeholder="Enter your name"
+                  className="w-full pl-16 pr-4 py-4 bg-transparent border border-outline-variant/30 rounded-xl focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+                />
+              </div>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none border-r border-outline-variant/20 pr-4 py-2 my-1">
+                  <Phone className="h-5 w-5 text-on-surface-variant" />
+                </div>
+                <input
+                  type="tel"
+                  placeholder="Enter your contact number"
+                  className="w-full pl-16 pr-4 py-4 bg-transparent border border-outline-variant/30 rounded-xl focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+                />
+              </div>
+              <div className="relative">
+                <div className="absolute top-4 left-0 pl-4 flex items-start pointer-events-none border-r border-outline-variant/20 pr-4 bottom-4">
+                  <MessageSquare className="h-5 w-5 text-on-surface-variant" />
+                </div>
+                <textarea
+                  placeholder="Enter your message"
+                  rows={4}
+                  className="w-full pl-16 pr-4 py-4 bg-transparent border border-outline-variant/30 rounded-xl focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+                ></textarea>
+              </div>
+            </div>
+            <div className="px-6">
+              <button 
+                className="w-full py-4 bg-[#1e8e52] hover:bg-[#167843] text-white rounded-xl font-bold transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-2 group"
+                onClick={() => setIsContactModalOpen(false)}
+              >
+                <Send className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                Submit
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 }

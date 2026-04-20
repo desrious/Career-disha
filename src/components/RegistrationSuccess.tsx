@@ -7,7 +7,7 @@ interface RegistrationSuccessProps {
 }
 
 export default function RegistrationSuccess({ onGoToDashboard }: RegistrationSuccessProps) {
-  const logoUrl = "https://lh3.googleusercontent.com/aida/ADBb0ujH1bZOsWRdIL3Tm_EEwzxLcS6FhGQT8sL7ecqJg97-NsxA0AzWfXD4fxPeM2BTDsCiPnpHVmhL7gIgxazKzCziH_AcwWaJjrJpXqve8BjhnCFX07Vk3dihbYUALXB36aj1wFofS0ihBWm3yufeNhDlPYS-d4Oh9ggf4OyRJhJkT6zyyu4Zj-JmdRk5xLrcR9tv1Yn10VMAZCIBUogQ0Ups7GCSgNXGqRVThjRmFqLjUYS8F372PImYzR-ST7Oo03MsSr4E1AVdsA";
+  const logoUrl = "/CareerDishaLogo.png";
 
   return (
     <div className="bg-surface text-on-surface min-h-screen flex flex-col font-body">

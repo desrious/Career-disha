@@ -24,7 +24,7 @@ interface StudentRegistrationProps {
 
 export default function StudentRegistration({ onBack, onComplete }: StudentRegistrationProps) {
   const [step, setStep] = useState(1);
-  const logoUrl = "https://lh3.googleusercontent.com/aida/ADBb0uiMNA3J-5q19EzlUlHOVd6hivYs4n8-gtjMDQGku4wOmShMYNNBIV4Z-3c4fHVjewMUjfZh7eYG8XaQ-lDdrH0mZwT4kcPl6nXCRRZuOQBUB-AJ-ZFEHBFwNUsWkh2nDWcnOAMI4-1y7dg8SYf_O7UMIus1_6i35ytZ6YHODXKznJfWZyflMhBU59RRj5sS_PknLL1Qg9Gsy_F4FuNzbsJhxLIrJ9PTkLXRBdBhSIWN21xKayN-6eoUdofVhjh377PPA7Qxg2b5vjU";
+  const logoUrl = "/CareerDishaLogo.png";
 
   const nextStep = () => setStep(prev => Math.min(prev + 1, 3));
   const prevStep = () => {
@@ -86,13 +86,13 @@ export default function StudentRegistration({ onBack, onComplete }: StudentRegis
                   <p className="text-on-surface-variant text-lg leading-relaxed max-w-md mx-auto">This helps us personalize your career recommendations.</p>
                 </div>
 
-                <form className="space-y-8">
+                <form className="space-y-8" onSubmit={(e) => { e.preventDefault(); nextStep(); }}>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                     <div className="space-y-2">
                       <label className="text-sm font-bold text-on-surface-variant tracking-wide px-1">Full Name</label>
                       <div className="relative group">
                         <User className="absolute left-4 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors w-5 h-5" />
-                        <input className="w-full pl-12 pr-4 py-4 bg-surface-container-high rounded-xl border-none focus:ring-0 focus:bg-surface-container-lowest transition-all placeholder:text-outline-variant text-on-surface" placeholder="e.g. Rahul Sharma" type="text"/>
+                        <input required className="w-full pl-12 pr-4 py-4 bg-surface-container-high rounded-xl border-none focus:ring-0 focus:bg-surface-container-lowest transition-all placeholder:text-outline-variant text-on-surface" placeholder="e.g. Rahul Sharma" type="text"/>
                         <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-focus-within:w-full transition-all duration-300"></div>
                       </div>
                     </div>
@@ -101,7 +101,7 @@ export default function StudentRegistration({ onBack, onComplete }: StudentRegis
                       <label className="text-sm font-bold text-on-surface-variant tracking-wide px-1">Age</label>
                       <div className="relative group">
                         <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors w-5 h-5" />
-                        <input className="w-full pl-12 pr-4 py-4 bg-surface-container-high rounded-xl border-none focus:ring-0 focus:bg-surface-container-lowest transition-all placeholder:text-outline-variant text-on-surface" placeholder="Enter your age" type="number"/>
+                        <input required min="1" max="99" className="w-full pl-12 pr-4 py-4 bg-surface-container-high rounded-xl border-none focus:ring-0 focus:bg-surface-container-lowest transition-all placeholder:text-outline-variant text-on-surface" placeholder="Enter your age" type="number"/>
                         <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-focus-within:w-full transition-all duration-300"></div>
                       </div>
                     </div>
@@ -110,7 +110,7 @@ export default function StudentRegistration({ onBack, onComplete }: StudentRegis
                       <label className="text-sm font-bold text-on-surface-variant tracking-wide px-1">Phone Number</label>
                       <div className="relative group">
                         <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors w-5 h-5" />
-                        <input className="w-full pl-12 pr-4 py-4 bg-surface-container-high rounded-xl border-none focus:ring-0 focus:bg-surface-container-lowest transition-all placeholder:text-outline-variant text-on-surface" placeholder="+91 00000 00000" type="tel"/>
+                        <input required className="w-full pl-12 pr-4 py-4 bg-surface-container-high rounded-xl border-none focus:ring-0 focus:bg-surface-container-lowest transition-all placeholder:text-outline-variant text-on-surface" placeholder="+91 00000 00000" type="tel"/>
                         <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-focus-within:w-full transition-all duration-300"></div>
                       </div>
                     </div>
@@ -119,12 +119,12 @@ export default function StudentRegistration({ onBack, onComplete }: StudentRegis
                       <label className="text-sm font-bold text-on-surface-variant tracking-wide px-1">Gender</label>
                       <div className="relative group">
                         <Users className="absolute left-4 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors w-5 h-5" />
-                        <select className="w-full pl-12 pr-10 py-4 bg-surface-container-high rounded-xl border-none focus:ring-0 focus:bg-surface-container-lowest appearance-none transition-all text-on-surface">
+                        <select required className="w-full pl-12 pr-10 py-4 bg-surface-container-high rounded-xl border-none focus:ring-0 focus:bg-surface-container-lowest appearance-none transition-all text-on-surface">
                           <option disabled selected value="">Select Gender</option>
-                          <option>Male</option>
-                          <option>Female</option>
-                          <option>Other</option>
-                          <option>Prefer not to say</option>
+                          <option value="Male">Male</option>
+                          <option value="Female">Female</option>
+                          <option value="Other">Other</option>
+                          <option value="Prefer not to say">Prefer not to say</option>
                         </select>
                         <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-outline pointer-events-none w-5 h-5" />
                         <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-focus-within:w-full transition-all duration-300"></div>
@@ -135,13 +135,13 @@ export default function StudentRegistration({ onBack, onComplete }: StudentRegis
                       <label className="text-sm font-bold text-on-surface-variant tracking-wide px-1">Class / Grade</label>
                       <div className="relative group">
                         <GraduationCap className="absolute left-4 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors w-5 h-5" />
-                        <select className="w-full pl-12 pr-10 py-4 bg-surface-container-high rounded-xl border-none focus:ring-0 focus:bg-surface-container-lowest appearance-none transition-all text-on-surface">
+                        <select required className="w-full pl-12 pr-10 py-4 bg-surface-container-high rounded-xl border-none focus:ring-0 focus:bg-surface-container-lowest appearance-none transition-all text-on-surface">
                           <option disabled selected value="">Select Class</option>
-                          <option>Class 10</option>
-                          <option>Class 11</option>
-                          <option>Class 12</option>
-                          <option>Undergraduate</option>
-                          <option>Postgraduate</option>
+                          <option value="Class 10">Class 10</option>
+                          <option value="Class 11">Class 11</option>
+                          <option value="Class 12">Class 12</option>
+                          <option value="Undergraduate">Undergraduate</option>
+                          <option value="Postgraduate">Postgraduate</option>
                         </select>
                         <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-outline pointer-events-none w-5 h-5" />
                         <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-focus-within:w-full transition-all duration-300"></div>
@@ -152,7 +152,7 @@ export default function StudentRegistration({ onBack, onComplete }: StudentRegis
                       <label className="text-sm font-bold text-on-surface-variant tracking-wide px-1">Location (City)</label>
                       <div className="relative group">
                         <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors w-5 h-5" />
-                        <input className="w-full pl-12 pr-4 py-4 bg-surface-container-high rounded-xl border-none focus:ring-0 focus:bg-surface-container-lowest transition-all placeholder:text-outline-variant text-on-surface" placeholder="e.g. Mumbai" type="text"/>
+                        <input required className="w-full pl-12 pr-4 py-4 bg-surface-container-high rounded-xl border-none focus:ring-0 focus:bg-surface-container-lowest transition-all placeholder:text-outline-variant text-on-surface" placeholder="e.g. Mumbai" type="text"/>
                         <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-focus-within:w-full transition-all duration-300"></div>
                       </div>
                     </div>
@@ -168,8 +168,7 @@ export default function StudentRegistration({ onBack, onComplete }: StudentRegis
                       Back
                     </button>
                     <button 
-                      type="button"
-                      onClick={nextStep}
+                      type="submit"
                       className="bg-tertiary-fixed text-on-tertiary-fixed px-10 py-4 rounded-xl font-bold flex items-center gap-3 hover:shadow-xl hover:shadow-tertiary/10 transition-all active:scale-95 group"
                     >
                       Continue
@@ -195,12 +194,12 @@ export default function StudentRegistration({ onBack, onComplete }: StudentRegis
               </div>
 
               <div className="bg-surface-container-lowest rounded-3xl p-8 md:p-10 shadow-[0_24px_40px_-4px_rgba(25,28,30,0.06)] border border-white/40">
-                <form className="space-y-8">
+                <form className="space-y-8" onSubmit={(e) => { e.preventDefault(); nextStep(); }}>
                   <div className="space-y-2">
                     <label className="block text-sm font-label font-bold text-on-surface tracking-wide">SCHOOL NAME</label>
                     <div className="relative group">
                       <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors w-5 h-5" />
-                      <input className="w-full bg-surface-container-low border-none rounded-xl py-4 pl-12 pr-4 focus:ring-0 focus:bg-white transition-all text-on-surface placeholder:text-outline shadow-sm" placeholder="Search for your school..." type="text"/>
+                      <input required className="w-full bg-surface-container-low border-none rounded-xl py-4 pl-12 pr-4 focus:ring-0 focus:bg-white transition-all text-on-surface placeholder:text-outline shadow-sm" placeholder="Search for your school..." type="text"/>
                       <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-focus-within:w-full"></div>
                     </div>
                   </div>
@@ -210,14 +209,14 @@ export default function StudentRegistration({ onBack, onComplete }: StudentRegis
                       <label className="block text-sm font-label font-bold text-on-surface tracking-wide">SCHOOL EMAIL ID</label>
                       <div className="relative group">
                         <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors w-5 h-5" />
-                        <input className="w-full bg-surface-container-low border-none rounded-xl py-4 pl-12 pr-4 focus:ring-0 focus:bg-white transition-all text-on-surface placeholder:text-outline shadow-sm" placeholder="admin@school.com" type="email"/>
+                        <input required className="w-full bg-surface-container-low border-none rounded-xl py-4 pl-12 pr-4 focus:ring-0 focus:bg-white transition-all text-on-surface placeholder:text-outline shadow-sm" placeholder="admin@school.com" type="email"/>
                         <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-focus-within:w-full"></div>
                       </div>
                     </div>
                     <div className="space-y-2">
                       <label className="block text-sm font-label font-bold text-on-surface tracking-wide">PINCODE</label>
                       <div className="relative group">
-                        <input className="w-full bg-surface-container-low border-none rounded-xl py-4 px-4 focus:ring-0 focus:bg-white transition-all text-on-surface placeholder:text-outline shadow-sm" placeholder="400001" type="text"/>
+                        <input required className="w-full bg-surface-container-low border-none rounded-xl py-4 px-4 focus:ring-0 focus:bg-white transition-all text-on-surface placeholder:text-outline shadow-sm" placeholder="400001" type="text"/>
                         <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-focus-within:w-full"></div>
                       </div>
                     </div>
@@ -226,7 +225,7 @@ export default function StudentRegistration({ onBack, onComplete }: StudentRegis
                   <div className="space-y-2">
                     <label className="block text-sm font-label font-bold text-on-surface tracking-wide">SCHOOL ADDRESS</label>
                     <div className="relative group">
-                      <textarea className="w-full bg-surface-container-low border-none rounded-xl py-4 px-4 focus:ring-0 focus:bg-white transition-all text-on-surface placeholder:text-outline shadow-sm resize-none" placeholder="Enter school address..." rows={3}></textarea>
+                      <textarea required className="w-full bg-surface-container-low border-none rounded-xl py-4 px-4 focus:ring-0 focus:bg-white transition-all text-on-surface placeholder:text-outline shadow-sm resize-none" placeholder="Enter school address..." rows={3}></textarea>
                       <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-focus-within:w-full"></div>
                     </div>
                   </div>
@@ -260,8 +259,7 @@ export default function StudentRegistration({ onBack, onComplete }: StudentRegis
                       Back
                     </button>
                     <button 
-                      type="button"
-                      onClick={nextStep}
+                      type="submit"
                       className="w-full sm:w-auto bg-gradient-to-r from-tertiary-container to-tertiary-fixed-dim text-on-tertiary-container px-10 py-4 rounded-xl font-label font-bold text-base shadow-lg shadow-tertiary/20 flex items-center justify-center gap-2 group transition-all hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 active:scale-95"
                     >
                       Continue
@@ -288,7 +286,7 @@ export default function StudentRegistration({ onBack, onComplete }: StudentRegis
                 </p>
               </div>
 
-              <div className="space-y-6">
+              <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); onComplete(); }}>
                 <section className="bg-surface-container-lowest p-6 rounded-3xl transition-all duration-300 hover:shadow-xl border border-transparent hover:border-outline-variant/10">
                   <div className="flex justify-between items-start mb-6">
                     <div className="flex items-center gap-4">
@@ -308,16 +306,16 @@ export default function StudentRegistration({ onBack, onComplete }: StudentRegis
                   <div className="grid grid-cols-1 gap-6">
                     <div className="relative">
                       <label className="block text-[10px] font-label font-bold text-outline uppercase tracking-widest mb-1 ml-1">Full Name</label>
-                      <input className="w-full bg-surface-container-high/50 p-4 rounded-xl font-body text-on-surface border-b-2 border-transparent focus:border-primary focus:outline-none transition-all" type="text" defaultValue="Robert Sterling"/>
+                      <input required className="w-full bg-surface-container-high/50 p-4 rounded-xl font-body text-on-surface border-b-2 border-transparent focus:border-primary focus:outline-none transition-all" type="text" defaultValue="Robert Sterling"/>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-[10px] font-label font-bold text-outline uppercase tracking-widest mb-1 ml-1">Email Address</label>
-                        <input className="w-full bg-surface-container-high/50 p-4 rounded-xl font-body text-on-surface border-b-2 border-transparent focus:border-primary focus:outline-none transition-all" type="email" defaultValue="r.sterling@outlook.com"/>
+                        <input required className="w-full bg-surface-container-high/50 p-4 rounded-xl font-body text-on-surface border-b-2 border-transparent focus:border-primary focus:outline-none transition-all" type="email" defaultValue="r.sterling@outlook.com"/>
                       </div>
                       <div>
                         <label className="block text-[10px] font-label font-bold text-outline uppercase tracking-widest mb-1 ml-1">Phone Number</label>
-                        <input className="w-full bg-surface-container-high/50 p-4 rounded-xl font-body text-on-surface border-b-2 border-transparent focus:border-primary focus:outline-none transition-all" type="tel" defaultValue="+1 (555) 012-3456"/>
+                        <input required className="w-full bg-surface-container-high/50 p-4 rounded-xl font-body text-on-surface border-b-2 border-transparent focus:border-primary focus:outline-none transition-all" type="tel" defaultValue="+1 (555) 012-3456"/>
                       </div>
                     </div>
                   </div>
@@ -351,30 +349,31 @@ export default function StudentRegistration({ onBack, onComplete }: StudentRegis
                   </div>
                 </section>
 
-                <button className="w-full py-8 border-2 border-dashed border-outline-variant rounded-3xl flex flex-col items-center justify-center gap-2 group transition-all hover:bg-surface-container hover:border-primary">
+                <button type="button" className="w-full py-8 border-2 border-dashed border-outline-variant rounded-3xl flex flex-col items-center justify-center gap-2 group transition-all hover:bg-surface-container hover:border-primary">
                   <div className="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center group-hover:bg-primary/10 transition-colors">
                     <Plus className="text-outline group-hover:text-primary w-6 h-6" />
                   </div>
                   <span className="font-label font-bold text-on-surface-variant group-hover:text-primary transition-colors">+ Add Another Guardian</span>
                 </button>
-              </div>
-
-              <div className="mt-12 flex items-center justify-between">
-                <button 
-                  onClick={prevStep}
-                  className="flex items-center gap-2 px-6 py-4 rounded-2xl hover:bg-surface-container-low transition-colors text-on-surface-variant font-bold"
-                >
-                  <ArrowLeft className="w-5 h-5" />
-                  <span>Back</span>
-                </button>
-                <button 
-                  onClick={onComplete}
-                  className="bg-gradient-to-r from-tertiary-container to-tertiary px-8 py-4 rounded-2xl flex items-center gap-3 text-on-tertiary font-headline font-bold shadow-lg shadow-tertiary/20 hover:scale-[0.98] transition-transform"
-                >
-                  <span>Complete Setup</span>
-                  <ArrowRight className="w-5 h-5" />
-                </button>
-              </div>
+              
+                <div className="mt-12 flex items-center justify-between">
+                  <button 
+                    type="button"
+                    onClick={prevStep}
+                    className="flex items-center gap-2 px-6 py-4 rounded-2xl hover:bg-surface-container-low transition-colors text-on-surface-variant font-bold"
+                  >
+                    <ArrowLeft className="w-5 h-5" />
+                    <span>Back</span>
+                  </button>
+                  <button 
+                    type="submit"
+                    className="bg-gradient-to-r from-tertiary-container to-tertiary px-8 py-4 rounded-2xl flex items-center gap-3 text-on-tertiary font-headline font-bold shadow-lg shadow-tertiary/20 hover:scale-[0.98] transition-transform"
+                  >
+                    <span>Complete Setup</span>
+                    <ArrowRight className="w-5 h-5" />
+                  </button>
+                </div>
+              </form>
             </motion.div>
           )}
         </AnimatePresence>
