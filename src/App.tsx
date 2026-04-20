@@ -20,7 +20,7 @@ import {
   Phone,
   Mail
 } from 'lucide-react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import Login from './components/Login';
 import Register from './components/Register';
 import ProfileSelection from './components/ProfileSelection';
@@ -52,6 +52,23 @@ function MainApp() {
   const heroImgUrl = "https://lh3.googleusercontent.com/aida-public/AB6AXuBILbGMXF7pnQcw4rfZtCsvSBUuU4l3DJA2Fk6nbdhh5exCN0h51h8ZFQQx6QGvWeOLUIJ2ZWQmVbcd3qzk9zo_9MQrsPqLfsNFeaQAXwRsnljGXLInA_nIKRE21J-ENWSktG3m1XMxdLGi7ViU-1OHfCsQpXwvppVK6C10vqOMNlNMUQnWDBlycRn9k6Y2lcKEYtO338CWin-5dcnOUSsBzDUAOC-oSG82a7QDhQ6lkZvlCHOKPZ8P8QBF0OzNK4dlVNg3hJwiiFPk";
   const sarahImg = "https://lh3.googleusercontent.com/aida-public/AB6AXuDVeyWio2pNOejqEPAK_TS8F7OIFAHwg0xtTt4KMA8S5Sb7ok852t9qhPcqybzRV3UaMWqcjrWKEYuZrWpfheQAyHB8CDmWfUyXSx34IVg-kgjS4-f4VG95lMf1c_Vps_MyHKOgxLtzwaEOvRBqcvNd1FPVlEp625IvIhHYocf2x7oEwLWLqOp-QuowzOyvENU629eH3nJNw7QU4I61KDISzb6VL1rOsKqSj_9_xOHxDFpnc_HKe-fVBuGozQBUCTots0TE0H-t2i_M";
   const rahulImg = "https://lh3.googleusercontent.com/aida-public/AB6AXuALOvZRGXBqLA1LNWl-Yy-hh7feizVUN8D0NXYrxF6ppKO-xGkNBQEKNqjHNleuDZJoT3JvluCqLhzhwbqkOEcyQEAOMinjEFJaLf82KBlOFo9AzDg4VBE8HsM_fX33BeSNZBTFIHJmvC7CkFqOtb-eyVlqhkBhcWYYldm8C5h-5ZAExEzz1c300cdTaFCRiTsR906wbFt9NZDK1MnG5HnaIBKT43--qMq9puLfuDuhgizkPnbvT3V7Lub4GYPShtSUo2LjMymTRO9V";
+
+  const heroPhrases = [
+    { line1: "Find your ", key1: "direction.", line2: "Build your ", key2: "future." },
+    { line1: "Unlock your ", key1: "potential.", line2: "Design your ", key2: "destiny." },
+    { line1: "Discover your ", key1: "spark.", line2: "Launch your ", key2: "career." },
+    { line1: "Map your ", key1: "path.", line2: "Own your ", key2: "success." },
+    { line1: "Define your ", key1: "purpose.", line2: "Elevate your ", key2: "journey." },
+  ];
+  const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
+
+  useEffect(() => {
+    if (view !== 'landing') return;
+    const interval = setInterval(() => {
+      setCurrentPhraseIndex((prev) => (prev + 1) % heroPhrases.length);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, [view]);
 
   if (view === 'login') {
     return (
@@ -221,25 +238,26 @@ function MainApp() {
       {/* TopAppBar */}
       <header className="fixed top-0 w-full z-50 flex flex-col bg-slate-50/80 backdrop-blur-md border-b border-slate-100">
         {/* Top Info Bar */}
-        <div className="w-full bg-slate-900 text-white py-1.5 px-6 flex justify-center md:justify-end gap-6 text-[10px] sm:text-xs font-semibold tracking-wider uppercase">
+        <div className="w-full bg-slate-900 text-white py-1.5 px-6 flex justify-center md:justify-end gap-6 text-[10px] sm:text-xs font-semibold tracking-wider">
            <a href="tel:+919953280036" className="flex items-center gap-2 hover:text-primary transition-colors">
               <Phone size={12} /> +91-9953280036
            </a>
-           <a href="mailto:hr@zeopto.com" className="flex items-center gap-2 hover:text-primary transition-colors">
-              <Mail size={12} /> hr@zeopto.com
+           <a href="mailto:hr@ZeOpto.com" className="flex items-center gap-2 hover:text-primary transition-colors">
+              <Mail size={12} /> hr@ZeOpto.com
            </a>
-           <a href="https://zeopto.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors">
+           <a href="https://ZeOpto.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors">
               <Globe size={12} /> Visit ZeOpto
            </a>
         </div>
-        <nav className="flex justify-between items-center px-4 h-16 max-w-full">
-          <div className="flex items-center gap-2">
-            <img 
-              alt="CareerDisha Logo" 
-              className="h-10 w-auto object-contain" 
+        <nav className="flex justify-between items-center px-4 h-24 max-w-full">
+            <div className="flex items-center gap-2">
+              <img 
+                alt="CareerDisha Logo" 
+                className="h-16 md:h-20 w-auto object-contain" 
               src={logoUrl} 
               referrerPolicy="no-referrer" 
             />
+            <span className="text-xl font-extrabold text-blue-700 tracking-tighter font-headline">Career Disha</span>
           </div>
           <div className="hidden md:flex items-center gap-8">
             <a className="text-primary border-b-2 border-primary font-headline tracking-tight font-semibold hover:opacity-80 transition-opacity duration-300" href="#">Home</a>
@@ -313,13 +331,35 @@ function MainApp() {
               }}
               className="max-w-2xl"
             >
-              <motion.h1 
-                variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } } }}
-                className="text-6xl md:text-7xl font-extrabold text-on-surface leading-tight mb-6 tracking-tight drop-shadow-lg"
-              >
-                Find your <span className="relative inline-block"><span className="relative z-10 text-white">direction.</span><motion.span initial={{ width: "0%" }} animate={{ width: "100%" }} transition={{ delay: 0.8, duration: 0.6, ease: "easeOut" }} className="absolute bottom-1 left-0 h-4 bg-primary/40 -rotate-2 z-0 origin-left"></motion.span></span> <br/>
-                <span className="bg-gradient-to-r from-primary via-blue-500 to-tertiary-fixed bg-clip-text text-transparent animate-gradient-x drop-shadow-md">Build your future.</span>
-              </motion.h1>
+              <div className="h-[240px] md:h-[190px] relative w-full overflow-visible">
+                <AnimatePresence mode="popLayout">
+                  <motion.h1 
+                    key={currentPhraseIndex}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -30 }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
+                    className="absolute top-0 left-0 w-full text-6xl md:text-7xl font-extrabold text-on-surface leading-tight mb-6 tracking-tight drop-shadow-lg"
+                  >
+                    <span className="whitespace-nowrap block mb-2">
+                      {heroPhrases[currentPhraseIndex].line1}
+                      <span className="relative inline-block ml-1">
+                        <span className="relative z-10 text-white">{heroPhrases[currentPhraseIndex].key1}</span>
+                        <motion.span initial={{ width: "0%" }} animate={{ width: "100%" }} transition={{ delay: 0.4, duration: 0.6, ease: "easeOut" }} className="absolute bottom-2 left-0 h-4 md:h-5 bg-primary/60 -rotate-2 z-0 origin-left rounded-md w-full"></motion.span>
+                      </span>
+                    </span>
+                    <span className="whitespace-nowrap block">
+                      <span className="bg-gradient-to-r from-primary via-blue-500 to-tertiary-fixed bg-clip-text text-transparent animate-gradient-x drop-shadow-md">
+                        {heroPhrases[currentPhraseIndex].line2}
+                      </span>
+                      <span className="relative inline-block ml-1">
+                        <span className="relative z-10 text-white drop-shadow-md">{heroPhrases[currentPhraseIndex].key2}</span>
+                        <motion.span initial={{ width: "0%" }} animate={{ width: "100%" }} transition={{ delay: 0.8, duration: 0.6, ease: "easeOut" }} className="absolute bottom-2 left-0 h-4 md:h-5 bg-blue-400/80 rotate-1 z-0 origin-left rounded-md w-full"></motion.span>
+                      </span>
+                    </span>
+                  </motion.h1>
+                </AnimatePresence>
+              </div>
               <motion.p 
                 variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } } }}
                 className="text-xl mb-10 leading-relaxed font-semibold text-white/90 drop-shadow-md"
@@ -330,20 +370,25 @@ function MainApp() {
                 variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } } }}
                 className="flex flex-col sm:flex-row gap-4"
               >
-                <motion.button 
-                  onClick={() => alert("Feature coming soon!")}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="group bg-tertiary-fixed text-on-tertiary-fixed font-bold text-lg px-8 py-4 rounded-3xl flex items-center justify-center gap-2 transition-shadow duration-300 hover:shadow-[0_0_30px_rgba(255,255,255,0.4)]"
+                <motion.div
+                  animate={{ y: [-8, 8, -8] }}
+                  transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
                 >
-                  Start Assessment
-                  <motion.div
-                    animate={{ x: [0, 6, 0] }}
-                    transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+                  <motion.button 
+                    onClick={() => alert("Feature coming soon!")}
+                    whileHover={{ x: 4, y: -4 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="group bg-yellow-400 text-black border-2 border-black rounded-full font-bold text-lg px-8 py-4 flex items-center justify-center gap-2 transition-all duration-300 hover:shadow-[-8px_8px_0_0_rgba(255,255,255,1)]"
                   >
-                    <ArrowRight className="w-5 h-5 transition-colors" />
-                  </motion.div>
-                </motion.button>
+                    START ASSESSMENT
+                    <motion.div
+                      animate={{ x: [0, 6, 0] }}
+                      transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+                    >
+                      <ArrowRight className="w-5 h-5 text-red-500 transition-colors" />
+                    </motion.div>
+                  </motion.button>
+                </motion.div>
               </motion.div>
             </motion.div>
           </div>
@@ -424,8 +469,36 @@ function MainApp() {
             </div>
           </div>
         </section>
-
-        {/* Tailored Guidance For You */}
+          <section className="relative h-[350px] md:h-[450px] bg-transparent overflow-hidden flex flex-col justify-center">
+              <div className="absolute inset-0 flex justify-center items-center mt-8">
+                
+                {/* Ribbon 1 - Criss Cross (Top Left to Bottom Right) */}
+                <div className="absolute w-[150vw] left-[-25vw] bg-white h-[4.5rem] md:h-[5.5rem] flex items-center border-y-[3px] border-black rotate-[6deg] z-10 shadow-[0_5px_15px_rgba(0,0,0,0.05)]">
+                  <div className="flex whitespace-nowrap animate-marquee items-center h-full">
+                    {[...Array(12)].map((_, i) => (
+                        <div className="flex items-center space-x-3 mx-4 shrink-0 h-full" key={i}>
+                          <img src={logoUrl} alt="Logo" className="h-7 md:h-9 w-auto object-contain brightness-0" referrerPolicy="no-referrer" />
+                          <span className="text-2xl md:text-[2rem] font-bold text-black tracking-tight font-sans uppercase mt-1">CAREER DISHA</span>
+                        </div>
+                      ))}
+                  </div>
+                </div>
+    
+                {/* Ribbon 2 - Criss Cross (Bottom Left to Top Right) */}
+                <div className="absolute w-[150vw] left-[-25vw] bg-white h-[4.5rem] md:h-[5.5rem] flex items-center border-y-[3px] border-black rotate-[-6deg] z-20 shadow-[0_5px_15px_rgba(0,0,0,0.1)]">
+                  <div className="flex whitespace-nowrap animate-marquee-reverse items-center h-full">
+                    {[...Array(12)].map((_, i) => (
+                      <div className="flex items-center space-x-3 mx-4 shrink-0 h-full" key={i}>
+                          <img src={logoUrl} alt="Logo" className="h-7 md:h-9 w-auto object-contain brightness-0" referrerPolicy="no-referrer" />
+                          <span className="text-2xl md:text-[2rem] font-bold text-black tracking-tight font-sans uppercase mt-1">CAREER DISHA</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+              </div>
+            </section>
+  
+            {/* Tailored Guidance For You */}
         <section className="py-24 px-6 bg-surface-container-low" id="about">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
@@ -600,7 +673,7 @@ function MainApp() {
         <section className="py-32 bg-surface-container-low">
           <div className="max-w-7xl mx-auto px-8">
             <div className="text-center mb-20">
-              <h2 className="text-4xl md:text-5xl font-extrabold mb-6">Why Career Saathi</h2>
+              <h2 className="text-4xl md:text-5xl font-extrabold mb-6">Why Career Disha</h2>
               <p className="max-w-2xl mx-auto text-on-surface-variant text-lg">We combine human psychology with advanced intelligence to provide guidance that actually works.</p>            </div>            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 h-auto md:h-[600px]">
               <motion.div 
                 initial={{ opacity: 0, scale: 0.95, y: 30 }}
@@ -714,7 +787,7 @@ function MainApp() {
                     <Star key={i} className="w-5 h-5 fill-accent" />
                   ))}
                 </div>
-                <p className="text-slate-600 text-lg italic mb-10 leading-relaxed">"Choosing a stream after 10th was a nightmare until I did the Career Saathi assessment. It validated my love for design over medicine."</p>
+                <p className="text-slate-600 text-lg italic mb-10 leading-relaxed">"Choosing a stream after 10th was a nightmare until I did the Career Disha assessment. It validated my love for design over medicine."</p>
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-full bg-slate-200 overflow-hidden">
                     <img 
@@ -742,13 +815,18 @@ function MainApp() {
             </div>
             <div className="relative z-10 px-8 py-20 text-center">
               <h2 className="text-4xl md:text-6xl font-extrabold text-white mb-6">Ready to illuminate your path?</h2>
-              <p className="text-slate-400 text-xl max-w-2xl mx-auto mb-12">Join 15,000+ others who have found their calling with Career Saathi's unique psychological approach.</p>
-              <button 
-                onClick={() => alert("Feature coming soon!")}
-                className="bg-accent hover:bg-accent/90 text-slate-900 font-extrabold text-lg px-12 py-5 rounded-2xl shadow-[0_0_30px_rgba(255,215,0,0.3)] transition-all hover:scale-105 active:scale-95 animate-pulse"
+              <p className="text-slate-400 text-xl max-w-2xl mx-auto mb-12">Join 15,000+ others who have found their calling with Career Disha's unique psychological approach.</p>
+              <motion.div
+                animate={{ y: [-8, 8, -8] }}
+                transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
               >
-                START ASSESSMENT NOW
-              </button>
+                <button 
+                  onClick={() => alert("Feature coming soon!")}
+                  className="bg-accent hover:bg-accent/90 text-slate-900 font-extrabold text-lg px-12 py-5 rounded-full shadow-[0_0_30px_rgba(255,215,0,0.3)] transition-all hover:scale-105 active:scale-95"
+                >
+                  START ASSESSMENT NOW
+                </button>
+              </motion.div>
             </div>
           </div>
         </section>
@@ -760,17 +838,35 @@ function MainApp() {
           <div className="flex flex-col gap-4">
             <span className="font-headline font-bold text-slate-800 text-xl flex items-center gap-2">
               <img 
-                alt="CareerDisha Logo" 
-                className="h-8 w-auto" 
+                  alt="CareerDisha Logo" 
+                  className="h-10 md:h-12 w-auto" 
                 src={logoUrl}
                 referrerPolicy="no-referrer"
               />
-              Career Saathi
-            </span>
-            <p className="text-slate-500 text-sm leading-relaxed">Guiding the next generation through the maze of career choices with precision and empathy.</p>
-          </div>
-          <div className="flex flex-col gap-4">
-            <h4 className="text-xs uppercase tracking-widest font-bold text-slate-900">Explore</h4>
+              Career Disha
+              </span>
+              <p className="text-slate-500 text-sm leading-relaxed">Guiding the next generation through the maze of career choices with precision and empathy.</p>
+              
+              <div className="flex items-center justify-start gap-3 pt-4 flex-wrap">
+                <a href="https://www.facebook.com/ZeOptoitservices" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="w-10 h-10 bg-white rounded-full shadow-sm border border-slate-100 flex items-center justify-center text-blue-600 hover:bg-blue-600 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-facebook w-5 h-5" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                </a>
+                <a href="https://www.instagram.com/ZeOptoitservices/?igsh=MTBkYThwNG8wY2F5ZA%3D%3D#" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="w-10 h-10 bg-white rounded-full shadow-sm border border-slate-100 flex items-center justify-center text-pink-600 hover:bg-pink-600 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-instagram w-5 h-5" aria-hidden="true"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg>
+                </a>
+                <a href="https://www.linkedin.com/company/ZeOpto-it-services/?viewAsMember=true" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="w-10 h-10 bg-white rounded-full shadow-sm border border-slate-100 flex items-center justify-center text-blue-700 hover:bg-blue-700 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-linkedin w-5 h-5" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                </a>
+                <a href="https://www.whatsapp.com/channel/0029Vb5aVHkDzgT8eqtO4p3n" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="w-10 h-10 bg-white rounded-full shadow-sm border border-slate-100 flex items-center justify-center text-green-500 hover:bg-green-500 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-message-circle w-5 h-5" aria-hidden="true"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"></path></svg>
+                </a>
+                <a href="https://youtube.com/@ZeOpto?si=k0Oijwu3wG1AhtNR" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="w-10 h-10 bg-white rounded-full shadow-sm border border-slate-100 flex items-center justify-center text-red-600 hover:bg-red-600 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-youtube w-5 h-5" aria-hidden="true"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"></path><path d="m10 15 5-3-5-3z"></path></svg>
+                </a>
+              </div>
+            </div>
+            <div className="flex flex-col gap-4">
+              <h4 className="text-xs uppercase tracking-widest font-bold text-slate-900">Explore</h4>
             <ul className="space-y-2">
               <li><button onClick={() => setView('insights')} className="text-slate-500 text-sm hover:text-primary transition-colors text-left w-full">Resources</button></li>
               <li><button onClick={() => setView('insights')} className="text-slate-500 text-sm hover:text-primary transition-colors text-left w-full">Career Blog</button></li>
@@ -864,4 +960,22 @@ export default function App() {
     </>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
