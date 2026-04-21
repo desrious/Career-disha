@@ -18,7 +18,8 @@ import {
   Users, 
   Share2,
   Phone,
-  Mail
+  Mail,
+  CheckCircle2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import Login from './components/Login';
@@ -42,6 +43,8 @@ import GraduateDashboard from './components/GraduateDashboard';
 import ProfessionalRegistration from './components/ProfessionalRegistration';
 import ProfessionalDashboard from './components/ProfessionalDashboard';
 import InquiryModal from './components/InquiryModal';
+import FollowCursor from './components/FollowCursor';
+import ComparisonSection from './components/ComparisonSection';
 
 function MainApp() {
   const [view, setView] = useState<'landing' | 'login' | 'register' | 'profile-selection' | 'student-registration' | 'graduate-registration' | 'professional-registration' | 'registration-success' | 'user-dashboard' | 'graduate-dashboard' | 'professional-dashboard' | 'result-screen' | 'roadmap-screen' | 'about' | 'insights' | 'contact-us' | 'high-school' | 'plus-two' | 'graduates' | 'working-professional'>('landing');
@@ -235,6 +238,7 @@ function MainApp() {
 
   return (
     <div className="min-h-screen bg-surface selection:bg-primary-fixed">
+      <FollowCursor color="#fba70c" zIndex={9999} />
       {/* TopAppBar */}
       <header className="fixed top-0 w-full z-50 flex flex-col bg-slate-50/80 backdrop-blur-md border-b border-slate-100">
         {/* Top Info Bar */}
@@ -297,10 +301,18 @@ function MainApp() {
           <div className="flex items-center gap-4">
             <button 
               onClick={() => setShowInquiryModal(true)}
-              className="text-white font-semibold px-6 py-2 rounded-full hover:shadow-lg hover:scale-105 transition-all font-headline"
-              style={{ backgroundColor: '#fba70c' }}
+              className="group relative flex h-12 items-center overflow-hidden rounded-full bg-yellow-300 pr-6 pl-1.5 font-headline font-bold text-slate-800 transition-all hover:scale-105 hover:shadow-lg"
             >
-              Inquiry
+              {/* Expanding Gold Dot */}
+              <div className="absolute left-1.5 top-1.5 h-9 w-9 rounded-full bg-[#fba70c] transition-all duration-500 ease-out group-hover:left-0 group-hover:top-0 group-hover:h-full group-hover:w-full z-0"></div>
+              
+              {/* Arrow Icon */}
+              <div className="relative z-10 flex h-9 w-9 items-center justify-center text-white">
+                <ArrowRight className="w-5 h-5 transition-transform duration-500 group-hover:translate-x-1" />
+              </div>
+              
+              {/* Text */}
+              <span className="relative z-10 ml-2 transition-colors duration-500 group-hover:text-white mb-[1px]">Inquiry</span>
             </button>
           </div>
         </nav>
@@ -329,7 +341,7 @@ function MainApp() {
                   transition: { staggerChildren: 0.2, delayChildren: 0.2 }
                 }
               }}
-              className="max-w-2xl"
+              className="max-w-2xl bg-white/10 backdrop-blur-md border border-white/20 p-8 md:p-10 rounded-3xl shadow-2xl"
             >
               <div className="h-[240px] md:h-[190px] relative w-full overflow-visible">
                 <AnimatePresence mode="popLayout">
@@ -420,9 +432,18 @@ function MainApp() {
         </section>
 
         {/* How it Works Section */}
-        <section className="py-24 bg-surface px-8 border-b border-slate-100" id="how-it-works">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16">
+        <section className="relative pt-16 pb-24 bg-surface px-8 border-b border-slate-100 overflow-hidden" id="how-it-works">
+          {/* Confusion to Clarity Background Image */}
+          <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none opacity-20">
+            <img 
+              src="/confusiontoclarity.png" 
+              alt="" 
+              className="w-full h-full object-cover"
+            />
+          </div>
+
+          <div className="max-w-7xl mx-auto relative z-10">
+            <div className="text-center mb-10">
               <h2 className="text-3xl md:text-5xl font-extrabold text-on-surface mb-4">From Confusion to Clarity</h2>
               <p className="text-on-surface-variant max-w-2xl mx-auto font-medium">Three simple steps to unlock your professional potential.</p>
             </div>
@@ -469,8 +490,9 @@ function MainApp() {
             </div>
           </div>
         </section>
-          <section className="relative h-[350px] md:h-[450px] bg-transparent overflow-hidden flex flex-col justify-center">
-              <div className="absolute inset-0 flex justify-center items-center mt-8">
+
+        <section className="relative h-[200px] md:h-[250px] bg-transparent overflow-hidden flex flex-col justify-center my-4 z-20">
+              <div className="absolute inset-0 flex justify-center items-center">
                 
                 {/* Ribbon 1 - Criss Cross (Top Left to Bottom Right) */}
                 <div className="absolute w-[150vw] left-[-25vw] bg-white h-[4.5rem] md:h-[5.5rem] flex items-center border-y-[3px] border-black rotate-[6deg] z-10 shadow-[0_5px_15px_rgba(0,0,0,0.05)]">
@@ -499,8 +521,22 @@ function MainApp() {
             </section>
   
             {/* Tailored Guidance For You */}
-        <section className="py-24 px-6 bg-surface-container-low" id="about">
-          <div className="max-w-7xl mx-auto">
+        <section className="py-24 px-6 relative overflow-hidden" id="about">
+          {/* Blurred Background Image Container */}
+          <div 
+            className="absolute inset-0 z-0 bg-center bg-cover bg-no-repeat"
+            style={{ 
+              backgroundImage: "url('/TailoredGuidance.png')",
+              maskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent), linear-gradient(to bottom, transparent, black 10%, black 75%, transparent)",
+              maskComposite: "intersect",
+              WebkitMaskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent), linear-gradient(to bottom, transparent, black 10%, black 75%, transparent)",
+              WebkitMaskComposite: "source-in"
+            }}
+          >
+            <div className="absolute inset-0 bg-surface-container-low/70 backdrop-blur-[2px]"></div>
+          </div>
+
+          <div className="max-w-7xl mx-auto relative z-10">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-5xl font-extrabold text-on-surface mb-4">Tailored Guidance For You</h2>
               <div className="h-1 w-20 bg-secondary mx-auto rounded-full mb-6"></div>
@@ -594,8 +630,22 @@ function MainApp() {
         </section>
 
         {/* Methodology Section */}
-        <section className="py-24 bg-surface px-8">
-          <div className="max-w-7xl mx-auto">
+        <section className="py-24 px-8 mt-12 relative overflow-hidden">
+          {/* Faded Background Image Container */}
+          <div 
+            className="absolute inset-0 z-0 bg-center bg-cover bg-no-repeat pointer-events-none"
+            style={{ 
+              backgroundImage: "url('/PsychologicalJourney.png')",
+              maskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent), linear-gradient(to bottom, transparent, black 10%, black 75%, transparent)",
+              maskComposite: "intersect",
+              WebkitMaskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent), linear-gradient(to bottom, transparent, black 10%, black 75%, transparent)",
+              WebkitMaskComposite: "source-in"
+            }}
+          >
+            <div className="absolute inset-0 bg-surface/40 backdrop-blur-[2px]"></div>
+          </div>
+          
+          <div className="max-w-7xl mx-auto relative z-10">
             <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-4">
               <div className="max-w-xl">
                 <span className="text-primary font-bold tracking-widest uppercase text-xs mb-2 block">Our Methodology</span>
@@ -672,7 +722,8 @@ function MainApp() {
         {/* Why CareerDisha Bento Grid */}
         <section className="py-32 bg-surface-container-low">
           <div className="max-w-7xl mx-auto px-8">
-            <div className="text-center mb-20">
+            <div className="text-center mb-20 flex flex-col items-center">
+              <img src={logoUrl} alt="Career Disha Logo" className="h-16 md:h-20 mb-6 object-contain" referrerPolicy="no-referrer" />
               <h2 className="text-4xl md:text-5xl font-extrabold mb-6">Why Career Disha</h2>
               <p className="max-w-2xl mx-auto text-on-surface-variant text-lg">We combine human psychology with advanced intelligence to provide guidance that actually works.</p>            </div>            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 h-auto md:h-[600px]">
               <motion.div 
@@ -806,6 +857,9 @@ function MainApp() {
           </div>
         </section>
 
+        {/* Comparison Section (CareerDisha vs Others) */}
+        <ComparisonSection />
+
         {/* Final CTA Section */}
         <section className="py-24 px-8">
           <div className="max-w-7xl mx-auto rounded-[3rem] bg-slate-900 overflow-hidden relative">
@@ -827,6 +881,95 @@ function MainApp() {
                   START ASSESSMENT NOW
                 </button>
               </motion.div>
+            </div>
+          </div>
+        </section>
+
+        {/* Visionaries / Founder Section */}
+        <section className="py-24 px-8 bg-surface">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-5xl font-extrabold text-on-surface mb-4">Meet the Visionaries Behind the Platform</h2>
+              <div className="h-1 w-20 bg-primary mx-auto rounded-full mb-6"></div>
+              <p className="text-on-surface-variant max-w-2xl mx-auto font-medium">The experts ensuring Career Disha delivers unmatched value and precise guidance.</p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="bg-white p-10 rounded-[2.5rem] border border-outline-variant/10 shadow-lg hover:shadow-xl transition-all flex flex-col h-full relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-[100px] -z-10 group-hover:scale-110 transition-transform"></div>
+                <div className="flex items-start md:items-center gap-6 mb-8 relative z-10">
+                  <div className="w-28 h-36 md:w-32 md:h-40 bg-primary/10 rounded-2xl overflow-hidden shrink-0 shadow-lg border border-primary/20">
+                    <img src="/GunjanSir.jpeg" alt="Mr. Gunjan Tewari" className="w-full h-full object-cover object-top" referrerPolicy="no-referrer" />
+                  </div>
+                  <div className="pt-2 md:pt-0">
+                    <h4 className="text-2xl font-bold text-slate-800">Mr. Gunjan Tewari</h4>
+                    <p className="text-primary font-bold text-sm uppercase tracking-widest mt-1">Founder & Director</p>
+                  </div>
+                </div>
+                <div className="flex flex-col flex-grow relative z-10">
+                  <p className="text-slate-600 leading-relaxed mb-8">
+                    A dedicated visionary and seasoned program manager with over two decades of profound experience in leading high-performing teams, executing complex global tech projects, and driving highly impactful outcomes across varied corporate industries. By leveraging his multifaceted expertise, he brings an unparalleled strategic roadmap and fundamental leadership capability to the platform, ensuring every student has reliable, industry-grade direction.
+                  </p>
+                  <ul className="space-y-4 my-auto">
+                    <li className="flex items-start gap-3 text-sm font-semibold text-slate-700">
+                      <CheckCircle2 className="w-5 h-5 text-primary shrink-0 drop-shadow-sm" />
+                      <span>Founder & Director</span>
+                    </li>
+                    <li className="flex items-start gap-3 text-sm font-semibold text-slate-700">
+                      <CheckCircle2 className="w-5 h-5 text-primary shrink-0 drop-shadow-sm" />
+                      <span>Certified AI Generalist</span>
+                    </li>
+                    <li className="flex items-start gap-3 text-sm font-semibold text-slate-700">
+                      <CheckCircle2 className="w-5 h-5 text-primary shrink-0 drop-shadow-sm" />
+                      <span>SAP Certified Associate</span>
+                    </li>
+                  </ul>
+                </div>
+                <div className="flex gap-4 mt-10 pt-6 border-t border-slate-100 relative z-10">
+                  <button onClick={() => setView('contact-us')} className="px-8 py-2.5 bg-primary text-white rounded-full font-bold hover:bg-primary/90 hover:shadow-lg transition-all active:scale-95">Contact</button>
+                  <a href="https://in.linkedin.com/in/gunjantewari" target="_blank" rel="noopener noreferrer" className="px-8 py-2.5 border-2 border-primary text-primary rounded-full font-bold hover:bg-primary hover:text-white hover:shadow-lg transition-all active:scale-95">LinkedIn</a>
+                </div>
+              </div>
+
+              <div className="bg-white p-10 rounded-[2.5rem] border border-outline-variant/10 shadow-lg hover:shadow-xl transition-all flex flex-col h-full relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-secondary/5 rounded-bl-[100px] -z-10 group-hover:scale-110 transition-transform"></div>
+                <div className="flex items-start md:items-center gap-6 mb-8 relative z-10">
+                  <div className="w-28 h-36 md:w-32 md:h-40 bg-secondary/10 rounded-2xl overflow-hidden shrink-0 shadow-lg border border-secondary/20">
+                    <img src="/AbhijeetSir.jpeg" alt="Mr. Abhijit Vyas" className="w-full h-full object-cover object-top" referrerPolicy="no-referrer" />
+                  </div>
+                  <div className="pt-2 md:pt-0">
+                    <h4 className="text-2xl font-bold text-slate-800">Mr. Abhijit Vyas</h4>
+                    <p className="text-secondary font-bold text-sm uppercase tracking-widest mt-1">Co-founder & Director</p>
+                  </div>
+                </div>
+                <div className="flex flex-col flex-grow relative z-10">
+                  <p className="text-slate-600 leading-relaxed mb-8">
+                    With over 18 years of deeply specialized experience in enterprise SAP training, solution architecture, and strategic project management, he has successfully mentored countless professionals toward rapidly accelerating their industry success. Through his deep-rooted ties to the corporate IT sector, he consistently ensures that the Career Disha framework remains intimately aligned with dynamic, real-world industry demands.
+                  </p>
+                  <ul className="space-y-4 my-auto">
+                    <li className="flex items-start gap-3 text-sm font-semibold text-slate-700">
+                      <CheckCircle2 className="w-5 h-5 text-secondary shrink-0 drop-shadow-sm" />
+                      <span>Co-founder & Director</span>
+                    </li>
+                    <li className="flex items-start gap-3 text-sm font-semibold text-slate-700">
+                      <CheckCircle2 className="w-5 h-5 text-secondary shrink-0 drop-shadow-sm" />
+                      <span>Certified AI Generalist</span>
+                    </li>
+                    <li className="flex items-start gap-3 text-sm font-semibold text-slate-700">
+                      <CheckCircle2 className="w-5 h-5 text-secondary shrink-0 drop-shadow-sm" />
+                      <span>Technical Advisor - SAP Pre-Sales</span>
+                    </li>
+                    <li className="flex items-start gap-3 text-sm font-semibold text-slate-700">
+                      <CheckCircle2 className="w-5 h-5 text-secondary shrink-0 drop-shadow-sm" />
+                      <span>Project Manager - SAP</span>
+                    </li>
+                  </ul>
+                </div>
+                <div className="flex gap-4 mt-10 pt-6 border-t border-slate-100 relative z-10">
+                  <button onClick={() => setView('contact-us')} className="px-8 py-2.5 bg-secondary text-white rounded-full font-bold hover:bg-secondary/90 hover:shadow-lg transition-all active:scale-95">Contact</button>
+                  <a href="https://in.linkedin.com/in/abhijit-vyas-696640216" target="_blank" rel="noopener noreferrer" className="px-8 py-2.5 border-2 border-secondary text-secondary rounded-full font-bold hover:bg-secondary hover:text-white hover:shadow-lg transition-all active:scale-95">LinkedIn</a>
+                </div>
+              </div>
             </div>
           </div>
         </section>
