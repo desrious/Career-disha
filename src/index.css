@@ -76,3 +76,12 @@
 .animate-marquee-reverse {
   animation: marquee-reverse 20s linear infinite;
 }
+
+@keyframes elegant-zoom {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+}
+.animate-elegant-zoom {
+  animation: elegant-zoom 2s ease-in-out infinite;
+}
+

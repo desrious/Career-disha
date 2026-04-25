@@ -45,6 +45,7 @@ import ProfessionalDashboard from './components/ProfessionalDashboard';
 import InquiryModal from './components/InquiryModal';
 import FollowCursor from './components/FollowCursor';
 import ComparisonSection from './components/ComparisonSection';
+import ProfileCard from './components/ProfileCard';
 
 function MainApp() {
   const [view, setView] = useState<'landing' | 'login' | 'register' | 'profile-selection' | 'student-registration' | 'graduate-registration' | 'professional-registration' | 'registration-success' | 'user-dashboard' | 'graduate-dashboard' | 'professional-dashboard' | 'result-screen' | 'roadmap-screen' | 'about' | 'insights' | 'contact-us' | 'high-school' | 'plus-two' | 'graduates' | 'working-professional'>('landing');
@@ -243,8 +244,8 @@ function MainApp() {
       <header className="fixed top-0 w-full z-50 flex flex-col bg-slate-50/80 backdrop-blur-md border-b border-slate-100">
         {/* Top Info Bar */}
         <div className="w-full bg-slate-900 text-white py-1.5 px-6 flex justify-center md:justify-end gap-6 text-[10px] sm:text-xs font-semibold tracking-wider">
-           <a href="tel:+919953280036" className="flex items-center gap-2 hover:text-primary transition-colors">
-              <Phone size={12} /> +91-9953280036
+           <a href="tel:+919289191164" className="flex items-center gap-2 hover:text-primary transition-colors">
+              <Phone size={12} /> +91-9289191164
            </a>
            <a href="mailto:hr@ZeOpto.com" className="flex items-center gap-2 hover:text-primary transition-colors">
               <Mail size={12} /> hr@ZeOpto.com
@@ -266,10 +267,10 @@ function MainApp() {
           <div className="hidden md:flex items-center gap-8">
             <a className="text-primary border-b-2 border-primary font-headline tracking-tight font-semibold hover:opacity-80 transition-opacity duration-300" href="#">Home</a>
             <button 
-              onClick={() => setView('insights')}
+              onClick={() => setView('about')}
               className="text-on-surface-variant hover:text-primary font-headline tracking-tight font-semibold hover:opacity-80 transition-opacity duration-300"
             >
-              Insights
+              About Us
             </button>
             <div className="relative group py-4">
               <span className="text-on-surface-variant hover:text-primary font-headline tracking-tight font-semibold hover:opacity-80 transition-opacity duration-300 cursor-pointer flex items-center gap-1">
@@ -285,12 +286,26 @@ function MainApp() {
               </div>
             </div>
             <button 
-              onClick={() => setView('about')}
+              onClick={() => setView('insights')}
               className="text-on-surface-variant hover:text-primary font-headline tracking-tight font-semibold hover:opacity-80 transition-opacity duration-300"
             >
-              About
+              Insights
             </button>
             <a className="text-on-surface-variant hover:text-primary font-headline tracking-tight font-semibold hover:opacity-80 transition-opacity duration-300" href="#testimonials">Testimonials</a>
+            <a 
+              className="text-on-surface-variant hover:text-primary font-headline tracking-tight font-semibold hover:opacity-80 transition-opacity duration-300" 
+              href="/brochure.pdf" 
+              target="_blank" 
+              rel="noopener noreferrer"
+            >
+              Download Brochure
+            </a>
+            <button 
+              onClick={() => setView('contact-us')}
+              className="text-on-surface-variant hover:text-primary font-headline tracking-tight font-semibold hover:opacity-80 transition-opacity duration-300"
+            >
+              Partner With Us
+            </button>
             <button 
               onClick={() => setView('contact-us')}
               className="text-on-surface-variant hover:text-primary font-headline tracking-tight font-semibold hover:opacity-80 transition-opacity duration-300"
@@ -301,18 +316,15 @@ function MainApp() {
           <div className="flex items-center gap-4">
             <button 
               onClick={() => setShowInquiryModal(true)}
-              className="group relative flex h-12 items-center overflow-hidden rounded-full bg-yellow-300 pr-6 pl-1.5 font-headline font-bold text-slate-800 transition-all hover:scale-105 hover:shadow-lg"
+              className="group flex h-10 items-center justify-center gap-2 rounded-full bg-[#fba70c] pl-3 pr-4 transition-all duration-300 ease-in-out hover:bg-[#d97706] hover:pl-2 text-white font-semibold font-headline animate-elegant-zoom shadow-md hover:shadow-lg active:bg-[#b45309]"
             >
-              {/* Expanding Gold Dot */}
-              <div className="absolute left-1.5 top-1.5 h-9 w-9 rounded-full bg-[#fba70c] transition-all duration-500 ease-out group-hover:left-0 group-hover:top-0 group-hover:h-full group-hover:w-full z-0"></div>
-              
-              {/* Arrow Icon */}
-              <div className="relative z-10 flex h-9 w-9 items-center justify-center text-white">
-                <ArrowRight className="w-5 h-5 transition-transform duration-500 group-hover:translate-x-1" />
-              </div>
-              
-              {/* Text */}
-              <span className="relative z-10 ml-2 transition-colors duration-500 group-hover:text-white mb-[1px]">Inquiry</span>
+              <span className="rounded-full bg-white p-1 text-sm transition-colors duration-300 group-hover:bg-white flex items-center justify-center">
+                <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="-translate-x-[200%] text-[0px] transition-all duration-300 group-hover:translate-x-0 group-hover:text-lg group-hover:text-[#d97706] group-active:-rotate-45" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </span>
+              <span>Expert Advice</span>
             </button>
           </div>
         </nav>
@@ -499,7 +511,7 @@ function MainApp() {
                   <div className="flex whitespace-nowrap animate-marquee items-center h-full">
                     {[...Array(12)].map((_, i) => (
                         <div className="flex items-center space-x-3 mx-4 shrink-0 h-full" key={i}>
-                          <img src={logoUrl} alt="Logo" className="h-7 md:h-9 w-auto object-contain brightness-0" referrerPolicy="no-referrer" />
+                          <img src="/CareerDishaLogo.png" alt="Logo" className="h-7 md:h-9 w-auto object-contain" />
                           <span className="text-2xl md:text-[2rem] font-bold text-black tracking-tight font-sans uppercase mt-1">CAREER DISHA</span>
                         </div>
                       ))}
@@ -511,7 +523,7 @@ function MainApp() {
                   <div className="flex whitespace-nowrap animate-marquee-reverse items-center h-full">
                     {[...Array(12)].map((_, i) => (
                       <div className="flex items-center space-x-3 mx-4 shrink-0 h-full" key={i}>
-                          <img src={logoUrl} alt="Logo" className="h-7 md:h-9 w-auto object-contain brightness-0" referrerPolicy="no-referrer" />
+                          <img src="/CareerDishaLogo.png" alt="Logo" className="h-7 md:h-9 w-auto object-contain" />
                           <span className="text-2xl md:text-[2rem] font-bold text-black tracking-tight font-sans uppercase mt-1">CAREER DISHA</span>
                         </div>
                       ))}
@@ -895,154 +907,110 @@ function MainApp() {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="bg-white p-10 rounded-[2.5rem] border border-outline-variant/10 shadow-lg hover:shadow-xl transition-all flex flex-col h-full relative overflow-hidden group">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-[100px] -z-10 group-hover:scale-110 transition-transform"></div>
-                <div className="flex items-start md:items-center gap-6 mb-8 relative z-10">
-                  <div className="w-28 h-36 md:w-32 md:h-40 bg-primary/10 rounded-2xl overflow-hidden shrink-0 shadow-lg border border-primary/20">
-                    <img src="/GunjanSir.jpeg" alt="Mr. Gunjan Tewari" className="w-full h-full object-cover object-top" referrerPolicy="no-referrer" />
-                  </div>
-                  <div className="pt-2 md:pt-0">
-                    <h4 className="text-2xl font-bold text-slate-800">Mr. Gunjan Tewari</h4>
-                    <p className="text-primary font-bold text-sm uppercase tracking-widest mt-1">Founder & Director</p>
-                  </div>
-                </div>
-                <div className="flex flex-col flex-grow relative z-10">
-                  <p className="text-slate-600 leading-relaxed mb-8">
-                    A dedicated visionary and seasoned program manager with over two decades of profound experience in leading high-performing teams, executing complex global tech projects, and driving highly impactful outcomes across varied corporate industries. By leveraging his multifaceted expertise, he brings an unparalleled strategic roadmap and fundamental leadership capability to the platform, ensuring every student has reliable, industry-grade direction.
-                  </p>
-                  <ul className="space-y-4 my-auto">
-                    <li className="flex items-start gap-3 text-sm font-semibold text-slate-700">
-                      <CheckCircle2 className="w-5 h-5 text-primary shrink-0 drop-shadow-sm" />
-                      <span>Founder & Director</span>
-                    </li>
-                    <li className="flex items-start gap-3 text-sm font-semibold text-slate-700">
-                      <CheckCircle2 className="w-5 h-5 text-primary shrink-0 drop-shadow-sm" />
-                      <span>Certified AI Generalist</span>
-                    </li>
-                    <li className="flex items-start gap-3 text-sm font-semibold text-slate-700">
-                      <CheckCircle2 className="w-5 h-5 text-primary shrink-0 drop-shadow-sm" />
-                      <span>SAP Certified Associate</span>
-                    </li>
-                  </ul>
-                </div>
-                <div className="flex gap-4 mt-10 pt-6 border-t border-slate-100 relative z-10">
-                  <button onClick={() => setView('contact-us')} className="px-8 py-2.5 bg-primary text-white rounded-full font-bold hover:bg-primary/90 hover:shadow-lg transition-all active:scale-95">Contact</button>
-                  <a href="https://in.linkedin.com/in/gunjantewari" target="_blank" rel="noopener noreferrer" className="px-8 py-2.5 border-2 border-primary text-primary rounded-full font-bold hover:bg-primary hover:text-white hover:shadow-lg transition-all active:scale-95">LinkedIn</a>
-                </div>
-              </div>
+              <ProfileCard
+                name="Mr. Gunjan Tewari"
+                title="Founder & Director"
+                image="/GunjanSir.jpeg"
+                color="primary"
+                description="A dedicated visionary and seasoned program manager with over two decades of profound experience in leading high-performing teams, executing complex global tech projects, and driving highly impactful outcomes across varied corporate industries. By leveraging his multifaceted expertise, he brings an unparalleled strategic roadmap and fundamental leadership capability to the platform, ensuring every student has reliable, industry-grade direction."
+                bullets={[
+                  "Founder & Director",
+                  "Certified AI Generalist",
+                  "SAP Certified Associate"
+                ]}
+                linkedinUrl="https://in.linkedin.com/in/gunjantewari"
+                onContactClick={() => setView('contact-us')}
+              />
 
-              <div className="bg-white p-10 rounded-[2.5rem] border border-outline-variant/10 shadow-lg hover:shadow-xl transition-all flex flex-col h-full relative overflow-hidden group">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-secondary/5 rounded-bl-[100px] -z-10 group-hover:scale-110 transition-transform"></div>
-                <div className="flex items-start md:items-center gap-6 mb-8 relative z-10">
-                  <div className="w-28 h-36 md:w-32 md:h-40 bg-secondary/10 rounded-2xl overflow-hidden shrink-0 shadow-lg border border-secondary/20">
-                    <img src="/AbhijeetSir.jpeg" alt="Mr. Abhijit Vyas" className="w-full h-full object-cover object-top" referrerPolicy="no-referrer" />
-                  </div>
-                  <div className="pt-2 md:pt-0">
-                    <h4 className="text-2xl font-bold text-slate-800">Mr. Abhijit Vyas</h4>
-                    <p className="text-secondary font-bold text-sm uppercase tracking-widest mt-1">Co-founder & Director</p>
-                  </div>
-                </div>
-                <div className="flex flex-col flex-grow relative z-10">
-                  <p className="text-slate-600 leading-relaxed mb-8">
-                    With over 18 years of deeply specialized experience in enterprise SAP training, solution architecture, and strategic project management, he has successfully mentored countless professionals toward rapidly accelerating their industry success. Through his deep-rooted ties to the corporate IT sector, he consistently ensures that the Career Disha framework remains intimately aligned with dynamic, real-world industry demands.
-                  </p>
-                  <ul className="space-y-4 my-auto">
-                    <li className="flex items-start gap-3 text-sm font-semibold text-slate-700">
-                      <CheckCircle2 className="w-5 h-5 text-secondary shrink-0 drop-shadow-sm" />
-                      <span>Co-founder & Director</span>
-                    </li>
-                    <li className="flex items-start gap-3 text-sm font-semibold text-slate-700">
-                      <CheckCircle2 className="w-5 h-5 text-secondary shrink-0 drop-shadow-sm" />
-                      <span>Certified AI Generalist</span>
-                    </li>
-                    <li className="flex items-start gap-3 text-sm font-semibold text-slate-700">
-                      <CheckCircle2 className="w-5 h-5 text-secondary shrink-0 drop-shadow-sm" />
-                      <span>Technical Advisor - SAP Pre-Sales</span>
-                    </li>
-                    <li className="flex items-start gap-3 text-sm font-semibold text-slate-700">
-                      <CheckCircle2 className="w-5 h-5 text-secondary shrink-0 drop-shadow-sm" />
-                      <span>Project Manager - SAP</span>
-                    </li>
-                  </ul>
-                </div>
-                <div className="flex gap-4 mt-10 pt-6 border-t border-slate-100 relative z-10">
-                  <button onClick={() => setView('contact-us')} className="px-8 py-2.5 bg-secondary text-white rounded-full font-bold hover:bg-secondary/90 hover:shadow-lg transition-all active:scale-95">Contact</button>
-                  <a href="https://in.linkedin.com/in/abhijit-vyas-696640216" target="_blank" rel="noopener noreferrer" className="px-8 py-2.5 border-2 border-secondary text-secondary rounded-full font-bold hover:bg-secondary hover:text-white hover:shadow-lg transition-all active:scale-95">LinkedIn</a>
-                </div>
-              </div>
+              <ProfileCard
+                name="Mr. Abhijit Vyas"
+                title="Co-founder & Director"
+                image="/AbhijeetSir.jpeg"
+                color="secondary"
+                description="With over 18 years of deeply specialized experience in enterprise SAP training, solution architecture, and strategic project management, he has successfully mentored countless professionals toward rapidly accelerating their industry success. Through his deep-rooted ties to the corporate IT sector, he consistently ensures that the Career Disha framework remains intimately aligned with dynamic, real-world industry demands."
+                bullets={[
+                  "Co-founder & Director",
+                  "Certified AI Generalist",
+                  "Technical Advisor - SAP Pre-Sales",
+                  "Project Manager - SAP"
+                ]}
+                linkedinUrl="https://in.linkedin.com/in/abhijit-vyas-696640216"
+                onContactClick={() => setView('contact-us')}
+              />
             </div>
           </div>
         </section>
       </main>
 
       {/* Footer */}
-      <footer className="bg-slate-100 w-full py-12 px-8">
+      <footer className="bg-slate-900 w-full py-12 px-8">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="flex flex-col gap-4">
-            <span className="font-headline font-bold text-slate-800 text-xl flex items-center gap-2">
+            <span className="font-headline font-bold text-white text-xl flex items-center gap-2">
               <img 
                   alt="CareerDisha Logo" 
-                  className="h-10 md:h-12 w-auto" 
+                  className="h-10 md:h-12 w-auto brightness-0 invert" 
                 src={logoUrl}
                 referrerPolicy="no-referrer"
               />
               Career Disha
               </span>
-              <p className="text-slate-500 text-sm leading-relaxed">Guiding the next generation through the maze of career choices with precision and empathy.</p>
+              <p className="text-slate-400 text-sm leading-relaxed mb-1">Offices B-02, A-28, Near Noida Sector 16 Metro Station, Block A, Sector 4, Noida, UP-201301</p>
+              <p className="text-slate-400 text-sm leading-relaxed">Guiding the next generation through the maze of career choices with precision and empathy.</p>
               
               <div className="flex items-center justify-start gap-3 pt-4 flex-wrap">
-                <a href="https://www.facebook.com/ZeOptoitservices" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="w-10 h-10 bg-white rounded-full shadow-sm border border-slate-100 flex items-center justify-center text-blue-600 hover:bg-blue-600 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
+                <a href="https://www.facebook.com/ZeOptoitservices" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="w-10 h-10 bg-slate-800 rounded-full shadow-sm border border-slate-700 flex items-center justify-center text-blue-400 hover:bg-blue-600 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-facebook w-5 h-5" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
                 </a>
-                <a href="https://www.instagram.com/ZeOptoitservices/?igsh=MTBkYThwNG8wY2F5ZA%3D%3D#" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="w-10 h-10 bg-white rounded-full shadow-sm border border-slate-100 flex items-center justify-center text-pink-600 hover:bg-pink-600 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
+                <a href="https://www.instagram.com/ZeOptoitservices/?igsh=MTBkYThwNG8wY2F5ZA%3D%3D#" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="w-10 h-10 bg-slate-800 rounded-full shadow-sm border border-slate-700 flex items-center justify-center text-pink-400 hover:bg-pink-600 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-instagram w-5 h-5" aria-hidden="true"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg>
                 </a>
-                <a href="https://www.linkedin.com/company/ZeOpto-it-services/?viewAsMember=true" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="w-10 h-10 bg-white rounded-full shadow-sm border border-slate-100 flex items-center justify-center text-blue-700 hover:bg-blue-700 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
+                <a href="https://www.linkedin.com/company/ZeOpto-it-services/?viewAsMember=true" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="w-10 h-10 bg-slate-800 rounded-full shadow-sm border border-slate-700 flex items-center justify-center text-blue-400 hover:bg-blue-700 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-linkedin w-5 h-5" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg>
                 </a>
-                <a href="https://www.whatsapp.com/channel/0029Vb5aVHkDzgT8eqtO4p3n" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="w-10 h-10 bg-white rounded-full shadow-sm border border-slate-100 flex items-center justify-center text-green-500 hover:bg-green-500 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
+                <a href="https://www.whatsapp.com/channel/0029Vb5aVHkDzgT8eqtO4p3n" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="w-10 h-10 bg-slate-800 rounded-full shadow-sm border border-slate-700 flex items-center justify-center text-green-400 hover:bg-green-500 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-message-circle w-5 h-5" aria-hidden="true"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"></path></svg>
                 </a>
-                <a href="https://youtube.com/@ZeOpto?si=k0Oijwu3wG1AhtNR" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="w-10 h-10 bg-white rounded-full shadow-sm border border-slate-100 flex items-center justify-center text-red-600 hover:bg-red-600 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
+                <a href="https://youtube.com/@ZeOpto?si=k0Oijwu3wG1AhtNR" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="w-10 h-10 bg-slate-800 rounded-full shadow-sm border border-slate-700 flex items-center justify-center text-red-500 hover:bg-red-600 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-youtube w-5 h-5" aria-hidden="true"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"></path><path d="m10 15 5-3-5-3z"></path></svg>
                 </a>
               </div>
             </div>
             <div className="flex flex-col gap-4">
-              <h4 className="text-xs uppercase tracking-widest font-bold text-slate-900">Explore</h4>
+              <h4 className="text-xs uppercase tracking-widest font-bold text-slate-100">Explore</h4>
             <ul className="space-y-2">
-              <li><button onClick={() => setView('insights')} className="text-slate-500 text-sm hover:text-primary transition-colors text-left w-full">Resources</button></li>
-              <li><button onClick={() => setView('insights')} className="text-slate-500 text-sm hover:text-primary transition-colors text-left w-full">Career Blog</button></li>
-              <li><button onClick={() => setView('contact-us')} className="text-slate-500 text-sm hover:text-primary transition-colors text-left w-full">Support</button></li>
+              <li><button onClick={() => setView('insights')} className="text-slate-400 text-sm hover:text-primary transition-colors text-left w-full">Resources</button></li>
+              <li><button onClick={() => setView('insights')} className="text-slate-400 text-sm hover:text-primary transition-colors text-left w-full">Career Blog</button></li>
+              <li><button onClick={() => setView('contact-us')} className="text-slate-400 text-sm hover:text-primary transition-colors text-left w-full">Support</button></li>
             </ul>
           </div>
           <div className="flex flex-col gap-4">
-            <h4 className="text-xs uppercase tracking-widest font-bold text-slate-900">Legal</h4>
+            <h4 className="text-xs uppercase tracking-widest font-bold text-slate-100">Legal</h4>
             <ul className="space-y-2">
-              <li><button onClick={() => setView('about')} className="text-slate-500 text-sm hover:text-primary transition-colors text-left w-full">Privacy</button></li>
-              <li><button onClick={() => setView('about')} className="text-slate-500 text-sm hover:text-primary transition-colors text-left w-full">Terms</button></li>
+              <li><button onClick={() => setView('about')} className="text-slate-400 text-sm hover:text-primary transition-colors text-left w-full">Privacy</button></li>
+              <li><button onClick={() => setView('about')} className="text-slate-400 text-sm hover:text-primary transition-colors text-left w-full">Terms</button></li>
             </ul>
           </div>
           <div className="flex flex-col gap-4">
-            <h4 className="text-xs uppercase tracking-widest font-bold text-slate-900">Newsletter</h4>
+            <h4 className="text-xs uppercase tracking-widest font-bold text-slate-100">Newsletter</h4>
             <div className="flex gap-2">
               <input 
-                className="bg-white border-none rounded-lg p-2 text-sm w-full focus:ring-2 focus:ring-primary outline-none" 
+                className="bg-slate-800 border-none rounded-lg p-2 text-sm w-full text-white placeholder-slate-400 focus:ring-2 focus:ring-primary outline-none" 
                 placeholder="Email address" 
                 type="email"
               />
-              <button className="bg-primary text-on-primary p-2 rounded-lg hover:opacity-90 transition-opacity">
+              <button className="bg-primary text-white p-2 rounded-lg hover:opacity-90 transition-opacity">
                 <Send className="w-5 h-5" />
               </button>
             </div>
           </div>
         </div>
-        <div className="max-w-7xl mx-auto mt-12 pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="max-w-7xl mx-auto mt-12 pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-xs uppercase tracking-widest text-slate-500">© The Luminary Guide. All rights reserved.</p>
           <div className="flex gap-6">
-            <Globe className="w-5 h-5 text-slate-400 hover:text-primary cursor-pointer transition-colors" onClick={() => window.open('https://zeopto.com/', '_blank')} />
-            <Users className="w-5 h-5 text-slate-400 hover:text-primary cursor-pointer transition-colors" onClick={() => window.open('https://linkedin.com/company/zeopto', '_blank')} />
-            <Share2 className="w-5 h-5 text-slate-400 hover:text-primary cursor-pointer transition-colors" onClick={() => {
+            <Globe className="w-5 h-5 text-slate-500 hover:text-white cursor-pointer transition-colors" onClick={() => window.open('https://zeopto.com/', '_blank')} />
+            <Users className="w-5 h-5 text-slate-500 hover:text-white cursor-pointer transition-colors" onClick={() => window.open('https://linkedin.com/company/zeopto', '_blank')} />
+            <Share2 className="w-5 h-5 text-slate-500 hover:text-white cursor-pointer transition-colors" onClick={() => {
               if (navigator.share) {
                 navigator.share({
                   title: 'Careerदिशा',

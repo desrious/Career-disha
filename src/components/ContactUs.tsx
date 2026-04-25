@@ -42,7 +42,10 @@ export default function ContactUs({ onBack }: { onBack: () => void }) {
                 </div>
                 <div>
                   <h3 className="font-bold text-slate-900 text-lg mb-1">Phone</h3>
-                  <a href="tel:+919953280036" className="text-slate-600 hover:text-green-600 transition-colors">+91-9953280036</a>
+                    <div className="flex flex-col gap-1">
+                      <a href="tel:+919289191164" className="text-slate-600 hover:text-green-600 transition-colors">+91-9289191164</a>
+                      <a href="tel:+919289191165" className="text-slate-600 hover:text-green-600 transition-colors">+91-9289191165</a>
+                    </div>
                 </div>
               </div>
 
