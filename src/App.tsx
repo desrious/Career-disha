@@ -81,6 +81,11 @@ function MainApp() {
     return () => clearInterval(imgInterval);
   }, [view]);
 
+  // Scroll to top when view changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [view]);
+
   // ─── Non-landing views ────────────────────────────────────
   if (view === 'about') return <About onBack={() => setView('landing')} />;
   if (view === 'insights') return <Insights onBack={() => setView('landing')} />;
@@ -392,6 +397,56 @@ function MainApp() {
               </div>
             </section>
   
+            {/* Early Bird Promo Section */}
+            <section className="py-12 px-6 relative z-10">
+              <motion.div 
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.8, type: "spring", bounce: 0.4 }}
+                className="max-w-5xl mx-auto rounded-[2.5rem] bg-gradient-to-br from-indigo-50/90 to-white/95 border border-indigo-100 shadow-[0_20px_60px_-15px_rgba(79,70,229,0.15)] overflow-hidden relative"
+              >
+                {/* Decorative blobs */}
+                <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-[#fba70c]/20 rounded-full blur-3xl mix-blend-multiply pointer-events-none"></div>
+                <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl mix-blend-multiply pointer-events-none"></div>
+                
+                <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 p-8 md:p-12">
+                  <div className="flex-1 text-center md:text-left">
+                    <div className="inline-flex items-center justify-center gap-1.5 px-3 py-1 bg-red-100 text-red-600 rounded-full text-xs font-bold uppercase tracking-widest mb-4">
+                      <Star size={14} className="fill-red-600" />
+                      Save ₹700
+                    </div>
+                    <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight font-headline mb-3">
+                      Limited Time Early Bird Offer 🎉
+                    </h2>
+                    <p className="text-lg text-slate-600 font-medium">
+                      Grab this exclusive deal before it’s gone! Give your career a head start at an unbeatable price.
+                    </p>
+                  </div>
+                  
+                  <div className="flex flex-col items-center md:items-end shrink-0">
+                    <div className="flex items-center gap-3 mb-5">
+                      <span className="text-2xl text-slate-400 font-bold line-through decoration-red-400/50 decoration-2">
+                        ₹1200
+                      </span>
+                      <span className="text-5xl font-black text-[#fba70c] drop-shadow-sm">
+                        ₹500
+                      </span>
+                    </div>
+                    <button 
+                      onClick={() => setShowInquiryModal(true)}
+                      className="w-full md:w-auto px-8 py-4 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold font-headline text-[1.1rem] shadow-xl hover:shadow-2xl transition-all hover:-translate-y-1"
+                    >
+                      Claim Offer Now
+                    </button>
+                    <p className="text-xs text-slate-400 font-medium mt-3 text-center md:text-right">
+                      * Offer valid for a limited time only
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+            </section>
+
             {/* Tailored Guidance For You */}
         <section className="py-24 px-6 relative overflow-hidden" id="about">
           {/* Blurred Background Image Container */}
@@ -592,7 +647,7 @@ function MainApp() {
         </section>
 
         {/* Why CareerDisha Bento Grid */}
-        <section className="py-32 bg-surface-container-low">
+        <section className="py-32 bg-slate-200">
           <div className="max-w-7xl mx-auto px-8">
             <div className="text-center mb-20 flex flex-col items-center">
               <img src={LOGO_URL} alt="Career Disha Logo" className="h-16 md:h-20 mb-6 object-contain" referrerPolicy="no-referrer" />
@@ -648,17 +703,17 @@ function MainApp() {
                 whileInView={{ opacity: 1, scale: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.5, delay: 0.4 }}
-                className="md:col-span-7 bg-surface-container-high p-12 rounded-[2rem] flex flex-col justify-center relative overflow-hidden"
+                className="md:col-span-7 bg-indigo-50 border border-indigo-100 p-12 rounded-[2rem] flex flex-col justify-center relative overflow-hidden"
               >
                 <div className="flex items-center gap-6">
                   <div className="flex -space-x-4">
-                    <motion.div animate={{ y: [0, -5, 0] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }} className="w-14 h-14 rounded-full border-4 border-white bg-slate-300"></motion.div>
-                    <motion.div animate={{ y: [0, -5, 0] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0.2 }} className="w-14 h-14 rounded-full border-4 border-white bg-slate-400"></motion.div>
-                    <motion.div animate={{ y: [0, -5, 0] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0.4 }} className="w-14 h-14 rounded-full border-4 border-white bg-slate-500"></motion.div>
+                    <motion.div animate={{ y: [0, -5, 0] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }} className="w-14 h-14 rounded-full border-4 border-white bg-indigo-200"></motion.div>
+                    <motion.div animate={{ y: [0, -5, 0] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0.2 }} className="w-14 h-14 rounded-full border-4 border-white bg-indigo-300"></motion.div>
+                    <motion.div animate={{ y: [0, -5, 0] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0.4 }} className="w-14 h-14 rounded-full border-4 border-white bg-indigo-400"></motion.div>
                   </div>
                   <div>
-                    <p className="text-2xl font-bold">15,000+</p>
-                    <p className="text-on-surface-variant font-medium">Careers transformed this year</p>
+                    <p className="text-3xl font-extrabold text-indigo-900">15,000+</p>
+                    <p className="text-indigo-700 text-lg font-semibold mt-1">Careers transformed this year</p>
                   </div>
                 </div>
               </motion.div>

@@ -19,6 +19,7 @@ import {
   Send
 } from 'lucide-react';
 import { motion } from 'motion/react';
+import ElectricBorder from './ElectricBorder';
 
 interface AboutProps {
   onBack: () => void;
@@ -52,19 +53,27 @@ export default function About({ onBack }: AboutProps) {
         <motion.section 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-20 text-center"
+          className="mb-20 text-center flex flex-col items-center"
         >
+          <img 
+            alt="Careerदिशा Logo" 
+            className="h-24 md:h-28 w-auto object-contain mb-6" 
+            src={logoUrl} 
+            referrerPolicy="no-referrer" 
+          />
           <h1 className="text-5xl md:text-7xl font-extrabold font-headline text-on-surface tracking-tight mb-8 leading-tight">
             About <span className="text-primary">Careerदिशा</span>
           </h1>
-          <div className="bg-surface-container-lowest rounded-[3rem] p-8 md:p-12 shadow-xl border border-outline-variant/10 text-left">
-            <p className="text-xl text-on-surface-variant leading-relaxed mb-8">
-              Careerदिशा, powered by <span className="font-bold text-primary">ZeOpto</span>, is built to bridge the gap between ambition and the right career path. Backed by ZeOpto’s strong foundation in SAP Consulting, IT Outsourcing, and Professional Training, Careerदिशा brings together technology, mentorship, and real-world insights to guide individuals toward meaningful careers.
-            </p>
-            <p className="text-lg text-on-surface-variant leading-relaxed">
-              ZeOpto has established itself as a trusted SAP services company, delivering high-performance solutions through consulting, implementation, and training. With a team of certified experts and a focus on innovation, efficiency, and quality, ZeOpto helps organizations streamline operations, reduce costs, and achieve sustainable growth. Careerदिशा extends this same expertise to students and professionals, making career guidance smarter, data-driven, and accessible.
-            </p>
-          </div>
+          <ElectricBorder color="#0057c2" speed={1} chaos={0.15} borderRadius={48} className="shadow-2xl">
+            <div className="bg-white rounded-[3rem] p-8 md:p-12 text-left z-10 w-full h-full">
+              <p className="text-xl text-on-surface-variant leading-relaxed mb-6">
+                Careerदिशा, powered by <span className="font-bold text-primary">ZeOpto</span>, is built to bridge the gap between ambition and the right career path. Backed by ZeOpto’s strong foundation in SAP Consulting, IT Outsourcing, and Professional Training, Careerदिशा brings together technology, mentorship, and real-world insights to guide individuals toward meaningful careers.
+              </p>
+              <p className="text-xl text-on-surface-variant leading-relaxed">
+                ZeOpto has established itself as a trusted SAP services company, delivering high-performance solutions through consulting, implementation, and training. With a team of certified experts and a focus on innovation, efficiency, and quality, ZeOpto helps organizations streamline operations, reduce costs, and achieve sustainable growth. Careerदिशा extends this same expertise to students and professionals, making career guidance smarter, data-driven, and accessible.
+              </p>
+            </div>
+          </ElectricBorder>
         </motion.section>
 
         {/* What We Bring */}
@@ -181,9 +190,9 @@ export default function About({ onBack }: AboutProps) {
           </div>
           <div className="relative">
             <img 
-              src="https://picsum.photos/seed/impact/800/600" 
-              alt="Vision into Impact" 
-              className="rounded-[2.5rem] shadow-2xl"
+              src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=800&h=600&q=80" 
+              alt="Team discussing career strategies and turning vision into impact" 
+              className="rounded-[2.5rem] shadow-2xl object-cover h-[450px] w-full"
               referrerPolicy="no-referrer"
             />
             <div className="absolute -bottom-6 -right-6 bg-white p-8 rounded-3xl shadow-xl hidden md:block border border-outline-variant/10">
