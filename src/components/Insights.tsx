@@ -32,7 +32,7 @@ const mockBlogs = [
     excerpt: "Is Adopting a Career in SAP for Fresher Graduates a Viable Option? In toda...",
     date: "7-Sep-2025",
     category: "Career Advice",
-    image: "https://picsum.photos/seed/sap-career/800/600",
+    image: "https://www.zeopto.com/img/ChatGPT%20Image%20Sep%207,%202025,%2012_54_10%20PM.png",
     link: "https://ZeOpto.com/blog-details.php?slug=is-adopting-career-in-sap-is-viable-option-"
   },
   {
@@ -40,7 +40,7 @@ const mockBlogs = [
     excerpt: "Learning is always special when it connects with real-world opportunities. Our recent SAP Worksho...",
     date: "30-Sep-2025",
     category: "Workshop",
-    image: "https://picsum.photos/seed/workshop/800/600",
+    image: "https://www.zeopto.com/img/Amrapali%20Workshop.png",
     link: "https://ZeOpto.com/blog-details.php?slug=ZeOpto-workshop-at-amrapali-university---a-journey-of-learning-growth"
   },
   {
@@ -48,7 +48,7 @@ const mockBlogs = [
     excerpt: "SAP FICO Training. Choosing the right SAP FICO training institute in Noida can shape your ca...",
     date: "6-Nov-2025",
     category: "Training",
-    image: "https://picsum.photos/seed/fico/800/600",
+    image: "https://www.zeopto.com/img/SAP%20FICO%20Training%20(1).png",
     link: "https://ZeOpto.com/blog-details.php?slug=best-sap-fico-training-institute-ZeOpto"
   },
   {
@@ -56,7 +56,7 @@ const mockBlogs = [
     excerpt: "SAP MM is one of the most important modules in the SAP system and is widely used in industries th...",
     date: "16-Nov-2025",
     category: "Training",
-    image: "https://picsum.photos/seed/mm/800/600",
+    image: "https://www.zeopto.com/img/SAP%20MM%20Training%20ZeOpto.png",
     link: "https://ZeOpto.com/blog-details.php?slug=best-sap-mm-training-institute-in-noida-ZeOpto"
   },
   {
@@ -64,7 +64,7 @@ const mockBlogs = [
     excerpt: "Best SAP Training Institute in Noida. SAP is one of the most widely used business software...",
     date: "15-Dec-2025",
     category: "Education",
-    image: "https://picsum.photos/seed/noida/800/600",
+    image: "https://www.zeopto.com/img/Thumbnail%20.png",
     link: "https://ZeOpto.com/blog-details.php?slug=best-sap-training-institute-in-noida-ZeOpto"
   },
   {
@@ -72,7 +72,7 @@ const mockBlogs = [
     excerpt: "ZeOpto Workshop at Graphic Era University – Industry-Focused Learning Experience...",
     date: "5-Feb-2026",
     category: "Workshop",
-    image: "https://picsum.photos/seed/graphic-era/800/600",
+    image: "https://www.zeopto.com/img/Untitled%20design%20(59).png",
     link: "https://ZeOpto.com/blog-details.php?slug=ZeOpto-workshop-at-graphic-era-university-empowering-students-with-industry-ready-it-sap-skills"
   },
   {
@@ -80,7 +80,7 @@ const mockBlogs = [
     excerpt: "SAP Classes in Noida: Learn SAP with Practical Training at ZeOpto. Today, com...",
     date: "5-Feb-2026",
     category: "Training",
-    image: "https://picsum.photos/seed/classes/800/600",
+    image: "https://www.zeopto.com/img/Best%20SAP%20CLasses%20in%20Noida.png",
     link: "https://ZeOpto.com/blog-details.php?slug=sap-classes-in-noida"
   }
 ];
@@ -226,7 +226,7 @@ export default function Insights({ onBack, onGoToDashboard, onGoToRoadmap, onGoT
           <div className="flex flex-col md:flex-row justify-center gap-8 relative z-10">
             <div className="flex items-center justify-center gap-4 bg-white/5 p-6 rounded-2xl border border-white/10">
               <Phone className="w-6 h-6 text-primary" />
-              <span className="font-bold">+91-9953280036</span>
+              <span className="font-bold">+91-9289191164</span>
             </div>
             <a href="mailto:hr@ZeOpto.com" className="flex items-center justify-center gap-4 bg-white/5 p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
               <Mail className="w-6 h-6 text-secondary" />

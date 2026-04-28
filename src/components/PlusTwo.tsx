@@ -38,14 +38,14 @@ const PlusTwo = ({ onBack }: PlusTwoProps) => {
               CareerDisha for Plus Two (11th & 12th)
             </span>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight mb-6 drop-shadow-sm">
-              Discover Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-600">Path Early</span>
+              Discover <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-600">Career Options After 12th</span>
             </h1>
             <p className="text-xl text-slate-600 mb-10 leading-relaxed">
-              Help students of class 11th and 12th understand their interests, strengths, and future possibilities. Make the right career path and entrance exams with confidence.
+              Facing career confusion after 12th? Help students of class 11th and 12th find out what career is right for me, and explore the best career choices for students before college.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <button className="px-8 py-4 text-base font-semibold rounded-full bg-gradient-to-r from-primary to-blue-600 text-white shadow-lg shadow-blue-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                Start Your Career Discovery
+                Explore Best Career Choices For Students
               </button>
             </div>
           </div>
@@ -61,9 +61,9 @@ const PlusTwo = ({ onBack }: PlusTwoProps) => {
       <section className="py-20 relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16 bg-white/70 p-6 rounded-2xl backdrop-blur-md shadow-sm border border-white max-w-2xl mx-auto">
-            <h2 className="text-3xl font-bold text-slate-900 mb-4">The Plus-Two (11th & 12th) Dilemma</h2>
+            <h2 className="text-3xl font-bold text-slate-900 mb-4">Career Confusion After 12th?</h2>
             <p className="text-lg text-slate-700">
-              Students at this stage often feel overwhelmed and confused. Does this sound familiar?
+              Students at this stage often don’t know what career to choose. Does this sound familiar? Let us help you eliminate the guesswork.
             </p>
           </div>
           
@@ -71,8 +71,8 @@ const PlusTwo = ({ onBack }: PlusTwoProps) => {
             {[
               {
                 icon: <Target className="w-8 h-8 text-rose-500" />,
-                title: "Choosing the Right Stream",
-                desc: "Engineering, Medical, Commerce, Humanities? Deciding the specialized path and targeting the right colleges takes planning.",
+                title: "Finding Your Ideal Pathway",
+                desc: "Which career options after 12th suit you? Choosing an Engineering, Medical, Commerce, or Humanities path takes structured planning.",
                 bgColor: "bg-rose-50"
               },
               {

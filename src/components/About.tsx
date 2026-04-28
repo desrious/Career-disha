@@ -198,8 +198,8 @@ export default function About({ onBack }: AboutProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-white p-10 rounded-[2.5rem] border border-outline-variant/10 shadow-sm hover:shadow-md transition-all flex flex-col h-full">
               <div className="flex items-center gap-6 mb-8">
-                <div className="w-20 h-20 bg-primary/10 rounded-full overflow-hidden shrink-0">
-                  <img src="/GunjanTewari.png" alt="Mr. Gunjan Tewari" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                <div className="w-20 h-20 bg-primary/10 rounded-xl overflow-hidden shrink-0">
+                  <img src="/GunjanSir.jpeg" alt="Mr. Gunjan Tewari" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                 </div>
                 <div>
                   <h4 className="text-2xl font-bold">Mr. Gunjan Tewari</h4>
@@ -208,7 +208,7 @@ export default function About({ onBack }: AboutProps) {
               </div>
               <div className="flex flex-col flex-grow">
                 <p className="text-on-surface-variant leading-relaxed mb-6">
-                  A seasoned program manager and mentor with over two decades of experience in leading teams and driving impactful outcomes across industries. He brings strategic vision and leadership to the platform.
+                  With over two decades of extensive experience in the IT sector, he has dedicated the last 8 years to comprehensive IT and career counselling. He brings a strategic vision to the platform, mentoring students and professionals to navigate their career paths efficiently.
                 </p>
                 <ul className="space-y-3 my-auto">
                   <li className="flex items-start gap-3 text-sm font-semibold text-slate-700">
@@ -221,7 +221,7 @@ export default function About({ onBack }: AboutProps) {
                   </li>
                   <li className="flex items-start gap-3 text-sm font-semibold text-slate-700">
                     <CheckCircle2 className="w-5 h-5 text-primary shrink-0" />
-                    <span>SAP Certified Associate</span>
+                    <span>IT Career Strategist & Mentor</span>
                   </li>
                 </ul>
               </div>
@@ -232,8 +232,8 @@ export default function About({ onBack }: AboutProps) {
             </div>
             <div className="bg-white p-10 rounded-[2.5rem] border border-outline-variant/10 shadow-sm hover:shadow-md transition-all flex flex-col h-full">
               <div className="flex items-center gap-6 mb-8">
-                <div className="w-20 h-20 bg-secondary/10 rounded-full overflow-hidden shrink-0">
-                  <img src="/AbhijitVyas.png" alt="Mr. Abhijit Vyas" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                <div className="w-20 h-20 bg-secondary/10 rounded-xl overflow-hidden shrink-0">
+                  <img src="/AbhijeetSir.jpeg" alt="Mr. Abhijit Vyas" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                 </div>
                 <div>
                   <h4 className="text-2xl font-bold">Mr. Abhijit Vyas</h4>
@@ -242,7 +242,7 @@ export default function About({ onBack }: AboutProps) {
               </div>
               <div className="flex flex-col flex-grow">
                 <p className="text-on-surface-variant leading-relaxed mb-6">
-                  With 18+ years of experience in SAP training and project management, he has mentored countless individuals toward industry success. He ensures Careerदिशा remains aligned with real-world industry needs.
+                  With 18+ years of dedicated expertise in the IT sector and training, he has spent the last 8 years actively mentoring and counselling individuals. He ensures Careerदिशा's guidance remains firmly aligned with the dynamic, real-world needs of the industry.
                 </p>
                 <ul className="space-y-3 my-auto">
                   <li className="flex items-start gap-3 text-sm font-semibold text-slate-700">
@@ -255,11 +255,11 @@ export default function About({ onBack }: AboutProps) {
                   </li>
                   <li className="flex items-start gap-3 text-sm font-semibold text-slate-700">
                     <CheckCircle2 className="w-5 h-5 text-secondary shrink-0" />
-                    <span>Technical Advisor - SAP Pre-Sales</span>
+                    <span>Technical Advisor & Mentor</span>
                   </li>
                   <li className="flex items-start gap-3 text-sm font-semibold text-slate-700">
                     <CheckCircle2 className="w-5 h-5 text-secondary shrink-0" />
-                    <span>Project Manager - SAP</span>
+                    <span>IT Project Manager</span>
                   </li>
                 </ul>
               </div>

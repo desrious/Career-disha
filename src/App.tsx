@@ -53,18 +53,31 @@ function MainApp() {
   const [showInquiryModal, setShowInquiryModal] = useState(false);
 
   const logoUrl = "/CareerDishaLogo.png";
-  const heroImgUrl = "https://lh3.googleusercontent.com/aida-public/AB6AXuBILbGMXF7pnQcw4rfZtCsvSBUuU4l3DJA2Fk6nbdhh5exCN0h51h8ZFQQx6QGvWeOLUIJ2ZWQmVbcd3qzk9zo_9MQrsPqLfsNFeaQAXwRsnljGXLInA_nIKRE21J-ENWSktG3m1XMxdLGi7ViU-1OHfCsQpXwvppVK6C10vqOMNlNMUQnWDBlycRn9k6Y2lcKEYtO338CWin-5dcnOUSsBzDUAOC-oSG82a7QDhQ6lkZvlCHOKPZ8P8QBF0OzNK4dlVNg3hJwiiFPk";
-  const sarahImg = "https://lh3.googleusercontent.com/aida-public/AB6AXuDVeyWio2pNOejqEPAK_TS8F7OIFAHwg0xtTt4KMA8S5Sb7ok852t9qhPcqybzRV3UaMWqcjrWKEYuZrWpfheQAyHB8CDmWfUyXSx34IVg-kgjS4-f4VG95lMf1c_Vps_MyHKOgxLtzwaEOvRBqcvNd1FPVlEp625IvIhHYocf2x7oEwLWLqOp-QuowzOyvENU629eH3nJNw7QU4I61KDISzb6VL1rOsKqSj_9_xOHxDFpnc_HKe-fVBuGozQBUCTots0TE0H-t2i_M";
-  const rahulImg = "https://lh3.googleusercontent.com/aida-public/AB6AXuALOvZRGXBqLA1LNWl-Yy-hh7feizVUN8D0NXYrxF6ppKO-xGkNBQEKNqjHNleuDZJoT3JvluCqLhzhwbqkOEcyQEAOMinjEFJaLf82KBlOFo9AzDg4VBE8HsM_fX33BeSNZBTFIHJmvC7CkFqOtb-eyVlqhkBhcWYYldm8C5h-5ZAExEzz1c300cdTaFCRiTsR906wbFt9NZDK1MnG5HnaIBKT43--qMq9puLfuDuhgizkPnbvT3V7Lub4GYPShtSUo2LjMymTRO9V";
+  const heroImages = [
+    "/landing_page_img1.png",
+    "/landing_page_img2.png",
+    "/landing_page_img3.png"
+  ];
+  const [currentHeroImageIndex, setCurrentHeroImageIndex] = useState(0);
+  const priyaImg = "https://randomuser.me/api/portraits/women/44.jpg";
+  const rohanImg = "https://randomuser.me/api/portraits/men/46.jpg";
 
   const heroPhrases = [
-    { line1: "Find your ", key1: "direction.", line2: "Build your ", key2: "future." },
-    { line1: "Unlock your ", key1: "potential.", line2: "Design your ", key2: "destiny." },
-    { line1: "Discover your ", key1: "spark.", line2: "Launch your ", key2: "career." },
-    { line1: "Map your ", key1: "path.", line2: "Own your ", key2: "success." },
+    { line1: "Find your career ", key1: "direction.", line2: "Build your ", key2: "career." },
+    { line1: "Choose the right ", key1: "career.", line2: "Design your ", key2: "destiny." },
+    { line1: "Discover your ", key1: "spark.", line2: "Launch your ", key2: "path." },
+    { line1: "Map your career ", key1: "path.", line2: "Own your ", key2: "success." },
     { line1: "Define your ", key1: "purpose.", line2: "Elevate your ", key2: "journey." },
   ];
   const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
+
+  useEffect(() => {
+    // Preload hero images for smooth transition
+    heroImages.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
 
   useEffect(() => {
     if (view !== 'landing') return;
@@ -72,6 +85,14 @@ function MainApp() {
       setCurrentPhraseIndex((prev) => (prev + 1) % heroPhrases.length);
     }, 6000);
     return () => clearInterval(interval);
+  }, [view]);
+
+  useEffect(() => {
+    if (view !== 'landing') return;
+    const imgInterval = setInterval(() => {
+      setCurrentHeroImageIndex((prev) => (prev + 1) % heroImages.length);
+    }, 40000);
+    return () => clearInterval(imgInterval);
   }, [view]);
 
   if (view === 'login') {
@@ -274,14 +295,14 @@ function MainApp() {
             </button>
             <div className="relative group py-4">
               <span className="text-on-surface-variant hover:text-primary font-headline tracking-tight font-semibold hover:opacity-80 transition-opacity duration-300 cursor-pointer flex items-center gap-1">
-                Services
+                Programs
               </span>
-              <div className="absolute left-0 top-full w-56 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 z-50">
+              <div className="absolute left-0 top-full w-80 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 z-50">
                 <div className="bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden flex flex-col py-2">
-                  <button onClick={() => setView('high-school')} className="text-left px-5 py-3 text-sm font-semibold text-slate-700 hover:text-primary hover:bg-slate-50 transition-colors">High School (9th & 10th)</button>
-                  <button onClick={() => setView('plus-two')} className="text-left px-5 py-3 text-sm font-semibold text-slate-700 hover:text-primary hover:bg-slate-50 transition-colors">Plus-two(11th & 12th)</button>
-                  <button onClick={() => setView('graduates')} className="text-left px-5 py-3 text-sm font-semibold text-slate-700 hover:text-primary hover:bg-slate-50 transition-colors">Graduates</button>
-                  <button onClick={() => setView('working-professional')} className="text-left px-5 py-3 text-sm font-semibold text-slate-700 hover:text-primary hover:bg-slate-50 transition-colors">Working Professional</button>
+                  <button onClick={() => setView('high-school')} className="text-left px-5 py-3 text-sm font-semibold text-slate-700 hover:text-primary hover:bg-slate-50 transition-colors">Career Counselling for High School (9th & 10th)</button>
+                  <button onClick={() => setView('plus-two')} className="text-left px-5 py-3 text-sm font-semibold text-slate-700 hover:text-primary hover:bg-slate-50 transition-colors">Career Counselling for Plus-two(11th & 12th)</button>
+                  <button onClick={() => setView('graduates')} className="text-left px-5 py-3 text-sm font-semibold text-slate-700 hover:text-primary hover:bg-slate-50 transition-colors">Career Counselling for Graduates</button>
+                  <button onClick={() => setView('working-professional')} className="text-left px-5 py-3 text-sm font-semibold text-slate-700 hover:text-primary hover:bg-slate-50 transition-colors">Career Counselling for Working Professional</button>
                 </div>
               </div>
             </div>
@@ -334,13 +355,19 @@ function MainApp() {
         {/* Hero Section */}
         <section className="relative min-h-[700px] flex items-center overflow-hidden">
           <div className="absolute inset-0 z-0">
-            <div className="absolute inset-0 hero-overlay z-10 backdrop-blur-[2px]"></div>
-            <img 
-              className="w-full h-full object-cover" 
-              src={heroImgUrl}
-              alt="Modern office space"
-              referrerPolicy="no-referrer"
-            />
+            <div className="absolute inset-0 hero-overlay z-10 backdrop-blur-[2px] bg-black/30"></div>
+            <AnimatePresence mode="popLayout">
+              <motion.img 
+                key={heroImages[currentHeroImageIndex]}
+                src={heroImages[currentHeroImageIndex]}
+                alt="Empowering Career Vision"
+                className="absolute inset-0 w-full h-full object-cover"
+                initial={{ opacity: 0, scale: 1.05 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 1.5, ease: "easeOut" }}
+              />
+            </AnimatePresence>
           </div>
           <div className="relative z-20 max-w-7xl mx-auto px-8 w-full">
             <motion.div 
@@ -353,7 +380,7 @@ function MainApp() {
                   transition: { staggerChildren: 0.2, delayChildren: 0.2 }
                 }
               }}
-              className="max-w-2xl bg-white/10 backdrop-blur-md border border-white/20 p-8 md:p-10 rounded-3xl shadow-2xl"
+              className="max-w-4xl bg-white/10 backdrop-blur-md border border-white/20 p-8 md:p-10 rounded-3xl shadow-2xl relative lg:-left-8 xl:-left-12"
             >
               <div className="h-[240px] md:h-[190px] relative w-full overflow-visible">
                 <AnimatePresence mode="popLayout">
@@ -386,9 +413,10 @@ function MainApp() {
               </div>
               <motion.p 
                 variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } } }}
-                className="text-xl mb-10 leading-relaxed font-semibold text-white/90 drop-shadow-md"
+                className="text-base md:text-lg mb-8 leading-relaxed font-medium text-white/90 drop-shadow-md w-full md:whitespace-nowrap"
               >
-                Move from confusion to clarity with AI-powered career guidance designed for the next generation of leaders.
+                Confused about your career? Get personalized professional career guidance <br className="hidden md:block" />
+                and career counselling designed for the next generation of leaders to choose the right career.
               </motion.p>
               <motion.div 
                 variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } } }}
@@ -456,8 +484,8 @@ function MainApp() {
 
           <div className="max-w-7xl mx-auto relative z-10">
             <div className="text-center mb-10">
-              <h2 className="text-3xl md:text-5xl font-extrabold text-on-surface mb-4">From Confusion to Clarity</h2>
-              <p className="text-on-surface-variant max-w-2xl mx-auto font-medium">Three simple steps to unlock your professional potential.</p>
+              <h2 className="text-3xl md:text-5xl font-extrabold text-on-surface mb-4">From Career Confusion to Clarity</h2>
+              <p className="text-on-surface-variant max-w-2xl mx-auto font-medium">Three simple steps of career planning to unlock your professional potential and choose the right career.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
               {[
@@ -736,8 +764,8 @@ function MainApp() {
           <div className="max-w-7xl mx-auto px-8">
             <div className="text-center mb-20 flex flex-col items-center">
               <img src={logoUrl} alt="Career Disha Logo" className="h-16 md:h-20 mb-6 object-contain" referrerPolicy="no-referrer" />
-              <h2 className="text-4xl md:text-5xl font-extrabold mb-6">Why Career Disha</h2>
-              <p className="max-w-2xl mx-auto text-on-surface-variant text-lg">We combine human psychology with advanced intelligence to provide guidance that actually works.</p>            </div>            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 h-auto md:h-[600px]">
+              <h2 className="text-4xl md:text-5xl font-extrabold mb-6">Why Choose Our Career Guidance</h2>
+              <p className="max-w-2xl mx-auto text-on-surface-variant text-lg">We combine human psychology with advanced intelligence to provide career counselling and professional career guidance that actually helps you choose the right career.</p>            </div>            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 h-auto md:h-[600px]">
               <motion.div 
                 initial={{ opacity: 0, scale: 0.95, y: 30 }}
                 whileInView={{ opacity: 1, scale: 1, y: 0 }}
@@ -766,8 +794,8 @@ function MainApp() {
                 <div className="bg-white/20 p-4 rounded-2xl w-fit mb-6 transition-transform group-hover:-rotate-6 group-hover:scale-110 duration-300">
                   <Bot className="w-10 h-10" />
                 </div>
-                <h3 className="text-3xl font-bold mb-4">AI Mentor <span className="text-sm font-normal opacity-75">(feature soon to get added)</span></h3>
-                <p className="text-on-secondary-container/80 text-lg">24/7 access to an AI counselor that knows your profile inside out and provides instant advice on your career queries.</p>
+                <h3 className="text-3xl font-bold mb-4">Expert Career Advice <span className="text-sm font-normal opacity-75">(features soon to expand)</span></h3>
+                <p className="text-on-secondary-container/80 text-lg">24/7 access to career advice for students that helps decode complex career path guidance based on your unique profile.</p>
               </motion.div>
               <motion.div 
                 initial={{ opacity: 0, scale: 0.95, y: 30 }}
@@ -778,10 +806,10 @@ function MainApp() {
                 className="md:col-span-5 bg-tertiary-fixed p-12 rounded-[2rem] flex flex-col justify-center text-on-tertiary-fixed group"
               >
                 <h3 className="text-3xl font-bold mb-4 flex items-center gap-3 flex-wrap">
-                  Actionable Roadmaps <span className="text-lg font-medium opacity-80">(feature unlocks soon)</span>
+                  Actionable Career Plans <span className="text-lg font-medium opacity-80">(soon to expand)</span>
                   <Route className="w-8 h-8 opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all duration-300" />
                 </h3>
-                <p className="text-on-tertiary-fixed-variant text-lg">No generic advice. We give you dates, links to courses, and specific job titles to aim for.</p>
+                <p className="text-on-tertiary-fixed-variant text-lg">No generic career advice. We provide structured career planning, targeted dates, links to courses, and specific jobs to aim for.</p>
               </motion.div>
               <motion.div 
                 initial={{ opacity: 0, scale: 0.95, y: 30 }}
@@ -807,64 +835,93 @@ function MainApp() {
         </section>
 
         {/* Testimonials Section */}
-        <section className="py-24 bg-surface px-8 overflow-hidden" id="testimonials">
-          <div className="max-w-7xl mx-auto">
-            <div className="flex justify-between items-center mb-16">
-              <h2 className="text-3xl md:text-5xl font-extrabold">What our Lumineers say</h2>
-              <div className="flex gap-2">
-                <button className="w-12 h-12 rounded-full border border-slate-200 flex items-center justify-center hover:bg-white transition-colors">
-                  <ChevronLeft className="w-6 h-6 text-slate-600" />
-                </button>
-                <button className="w-12 h-12 rounded-full border border-slate-200 flex items-center justify-center hover:bg-white transition-colors">
-                  <ChevronRight className="w-6 h-6 text-slate-600" />
-                </button>
-              </div>
+        <section className="relative py-24 px-8 overflow-hidden" id="testimonials">
+          {/* Decorative Gradients & Soft Fading Background */}
+          <div 
+            className="absolute inset-0 pointer-events-none shadow-inner"
+            style={{ 
+              maskImage: "linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)", 
+              WebkitMaskImage: "linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)" 
+            }}
+          >
+            <div className="absolute inset-0 bg-slate-50"></div>
+            <div className="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] rounded-full bg-blue-400/40 blur-[100px]"></div>
+            <div className="absolute bottom-[0%] -right-[10%] w-[60%] h-[60%] rounded-full bg-yellow-400/40 blur-[100px]"></div>
+          </div>
+          
+          <div className="max-w-7xl mx-auto relative z-10">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-5xl font-extrabold text-on-surface">What our Lumineers say</h2>
             </div>
-            <div className="flex gap-8 overflow-x-auto pb-10 no-scrollbar snap-x">
-              {/* Testimonial 1 */}
-              <div className="min-w-[320px] md:min-w-[400px] bg-white p-10 rounded-3xl snap-center shadow-sm border border-slate-100">
-                <div className="flex gap-1 text-accent mb-6">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 fill-accent" />
-                  ))}
-                </div>
-                <p className="text-slate-600 text-lg italic mb-10 leading-relaxed">"The most clear roadmap I've ever seen. I knew exactly which course to take and which internships to apply for to transition into AI Research."</p>
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-slate-200 overflow-hidden">
-                    <img 
-                      alt="Sarah Johnson" 
-                      src={sarahImg}
-                      referrerPolicy="no-referrer"
-                    />
+            <div className="relative group">
+              <button 
+                onClick={() => {
+                  const container = document.getElementById('testimonials-container');
+                  if (container) container.scrollBy({ left: -400, behavior: 'smooth' });
+                }}
+                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 sm:-translate-x-6 z-10 w-12 h-12 rounded-full border border-slate-200 bg-white shadow-md flex items-center justify-center hover:bg-slate-50 hover:scale-105 transition-all"
+                aria-label="Previous testimonial"
+              >
+                <ChevronLeft className="w-6 h-6 text-slate-600" />
+              </button>
+
+              <div id="testimonials-container" className="flex gap-8 overflow-x-auto pb-10 pt-4 no-scrollbar snap-x scroll-smooth px-4">
+                {/* Testimonial 1 */}
+                <div className="min-w-[320px] md:min-w-[400px] bg-white/60 backdrop-blur-lg p-10 rounded-3xl snap-center shadow-sm border border-white/50 hover:-translate-y-2 hover:shadow-xl transition-all duration-300">
+                  <div className="flex gap-1 text-accent mb-6">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-5 h-5 fill-accent" />
+                    ))}
                   </div>
-                  <div>
-                    <h4 className="font-bold text-on-surface">Sarah Johnson</h4>
-                    <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">College Student</p>
+                  <p className="text-slate-600 text-lg italic mb-10 leading-relaxed drop-shadow-sm">"The most clear career path guidance I've ever received. Their career planning helped me choose the right career by showing exact courses and internships needed to transition into AI Research."</p>
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-slate-200 overflow-hidden ring-2 ring-white">
+                      <img 
+                        alt="Priya Sharma" 
+                        src={priyaImg}
+                        referrerPolicy="no-referrer"
+                      />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-on-surface">Priya Sharma</h4>
+                      <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">College Student</p>
+                    </div>
+                  </div>
+                </div>
+                {/* Testimonial 2 */}
+                <div className="min-w-[320px] md:min-w-[400px] bg-white/60 backdrop-blur-lg p-10 rounded-3xl snap-center shadow-sm border border-white/50 hover:-translate-y-2 hover:shadow-xl transition-all duration-300">
+                  <div className="flex gap-1 text-accent mb-6">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-5 h-5 fill-accent" />
+                    ))}
+                  </div>
+                  <p className="text-slate-600 text-lg italic mb-10 leading-relaxed drop-shadow-sm">"Choosing a stream after 10th was a nightmare until I did the Career Disha assessment. It validated my love for design over medicine."</p>
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-slate-200 overflow-hidden ring-2 ring-white">
+                      <img 
+                        alt="Rohan Desai" 
+                        src={rohanImg}
+                        referrerPolicy="no-referrer"
+                      />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-on-surface">Rohan Desai</h4>
+                      <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">High School Student</p>
+                    </div>
                   </div>
                 </div>
               </div>
-              {/* Testimonial 2 */}
-              <div className="min-w-[320px] md:min-w-[400px] bg-white p-10 rounded-3xl snap-center shadow-sm border border-slate-100">
-                <div className="flex gap-1 text-accent mb-6">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 fill-accent" />
-                  ))}
-                </div>
-                <p className="text-slate-600 text-lg italic mb-10 leading-relaxed">"Choosing a stream after 10th was a nightmare until I did the Career Disha assessment. It validated my love for design over medicine."</p>
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-slate-200 overflow-hidden">
-                    <img 
-                      alt="Rahul Kapoor" 
-                      src={rahulImg}
-                      referrerPolicy="no-referrer"
-                    />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-on-surface">Rahul Kapoor</h4>
-                    <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">High School Student</p>
-                  </div>
-                </div>
-              </div>
+
+              <button 
+                onClick={() => {
+                  const container = document.getElementById('testimonials-container');
+                  if (container) container.scrollBy({ left: 400, behavior: 'smooth' });
+                }}
+                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 sm:translate-x-6 z-10 w-12 h-12 rounded-full border border-slate-200 bg-white shadow-md flex items-center justify-center hover:bg-slate-50 hover:scale-105 transition-all"
+                aria-label="Next testimonial"
+              >
+                <ChevronRight className="w-6 h-6 text-slate-600" />
+              </button>
             </div>
           </div>
         </section>
@@ -880,8 +937,8 @@ function MainApp() {
               <div className="absolute bottom-0 right-0 w-96 h-96 bg-accent blur-[120px] rounded-full translate-x-1/2 translate-y-1/2"></div>
             </div>
             <div className="relative z-10 px-8 py-20 text-center">
-              <h2 className="text-4xl md:text-6xl font-extrabold text-white mb-6">Ready to illuminate your path?</h2>
-              <p className="text-slate-400 text-xl max-w-2xl mx-auto mb-12">Join 15,000+ others who have found their calling with Career Disha's unique psychological approach.</p>
+              <h2 className="text-4xl md:text-6xl font-extrabold text-white mb-6">Ready to find your career direction?</h2>
+              <p className="text-slate-400 text-xl max-w-2xl mx-auto mb-12">Join 15,000+ others who have engaged with our professional career guidance and found their calling with Career Disha's unique psychological approach to career planning.</p>
               <motion.div
                 animate={{ y: [-8, 8, -8] }}
                 transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
@@ -898,12 +955,24 @@ function MainApp() {
         </section>
 
         {/* Visionaries / Founder Section */}
-        <section className="py-24 px-8 bg-surface">
-          <div className="max-w-7xl mx-auto">
+        <section className="relative py-24 px-8 bg-surface overflow-hidden">
+          {/* Background Image with fading edges and translucent effect */}
+          <div 
+            className="absolute inset-0 z-0 pointer-events-none"
+            style={{
+              backgroundImage: "url('/MeetTheVisionaries.png')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              opacity: 0.8,
+              maskImage: "radial-gradient(ellipse at center, black 50%, transparent 100%)",
+              WebkitMaskImage: "radial-gradient(ellipse at center, black 50%, transparent 100%)"
+            }}
+          ></div>
+          <div className="relative z-10 max-w-7xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-5xl font-extrabold text-on-surface mb-4">Meet the Visionaries Behind the Platform</h2>
               <div className="h-1 w-20 bg-primary mx-auto rounded-full mb-6"></div>
-              <p className="text-on-surface-variant max-w-2xl mx-auto font-medium">The experts ensuring Career Disha delivers unmatched value and precise guidance.</p>
+              <p className="text-on-surface-variant max-w-2xl mx-auto font-medium">The experts ensuring you receive unmatched value and professional career guidance.</p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -912,11 +981,11 @@ function MainApp() {
                 title="Founder & Director"
                 image="/GunjanSir.jpeg"
                 color="primary"
-                description="A dedicated visionary and seasoned program manager with over two decades of profound experience in leading high-performing teams, executing complex global tech projects, and driving highly impactful outcomes across varied corporate industries. By leveraging his multifaceted expertise, he brings an unparalleled strategic roadmap and fundamental leadership capability to the platform, ensuring every student has reliable, industry-grade direction."
+                description="With over two decades of extensive experience in the IT sector, he has dedicated the last 8 years to comprehensive IT and career counselling. He brings a strategic vision to the platform, mentoring students and professionals to navigate their career paths efficiently."
                 bullets={[
                   "Founder & Director",
                   "Certified AI Generalist",
-                  "SAP Certified Associate"
+                  "IT Career Strategist & Mentor"
                 ]}
                 linkedinUrl="https://in.linkedin.com/in/gunjantewari"
                 onContactClick={() => setView('contact-us')}
@@ -927,12 +996,12 @@ function MainApp() {
                 title="Co-founder & Director"
                 image="/AbhijeetSir.jpeg"
                 color="secondary"
-                description="With over 18 years of deeply specialized experience in enterprise SAP training, solution architecture, and strategic project management, he has successfully mentored countless professionals toward rapidly accelerating their industry success. Through his deep-rooted ties to the corporate IT sector, he consistently ensures that the Career Disha framework remains intimately aligned with dynamic, real-world industry demands."
+                description="With 18+ years of dedicated expertise in the IT sector and training, he has spent the last 8 years actively mentoring and counselling individuals. He ensures Careerदिशा's guidance remains firmly aligned with the dynamic, real-world needs of the industry."
                 bullets={[
                   "Co-founder & Director",
                   "Certified AI Generalist",
-                  "Technical Advisor - SAP Pre-Sales",
-                  "Project Manager - SAP"
+                  "Technical Advisor & Mentor",
+                  "IT Project Manager"
                 ]}
                 linkedinUrl="https://in.linkedin.com/in/abhijit-vyas-696640216"
                 onContactClick={() => setView('contact-us')}
@@ -956,7 +1025,7 @@ function MainApp() {
               Career Disha
               </span>
               <p className="text-slate-400 text-sm leading-relaxed mb-1">Offices B-02, A-28, Near Noida Sector 16 Metro Station, Block A, Sector 4, Noida, UP-201301</p>
-              <p className="text-slate-400 text-sm leading-relaxed">Guiding the next generation through the maze of career choices with precision and empathy.</p>
+              <p className="text-slate-400 text-sm leading-relaxed">Delivering expert career counselling and career planning to guide the next generation in choosing the right career.</p>
               
               <div className="flex items-center justify-start gap-3 pt-4 flex-wrap">
                 <a href="https://www.facebook.com/ZeOptoitservices" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="w-10 h-10 bg-slate-800 rounded-full shadow-sm border border-slate-700 flex items-center justify-center text-blue-400 hover:bg-blue-600 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
@@ -982,6 +1051,7 @@ function MainApp() {
               <li><button onClick={() => setView('insights')} className="text-slate-400 text-sm hover:text-primary transition-colors text-left w-full">Resources</button></li>
               <li><button onClick={() => setView('insights')} className="text-slate-400 text-sm hover:text-primary transition-colors text-left w-full">Career Blog</button></li>
               <li><button onClick={() => setView('contact-us')} className="text-slate-400 text-sm hover:text-primary transition-colors text-left w-full">Support</button></li>
+              <li><button onClick={() => setView('contact-us')} className="text-slate-400 text-sm hover:text-primary transition-colors text-left w-full">Contact Us</button></li>
             </ul>
           </div>
           <div className="flex flex-col gap-4">

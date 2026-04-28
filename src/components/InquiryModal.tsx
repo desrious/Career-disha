@@ -67,7 +67,7 @@ const InquiryModal: React.FC<InquiryModalProps> = ({ onClose }) => {
 
         {/* Right Form */}
         <div className="w-full md:w-1/2 p-8 overflow-y-auto max-h-[90vh]">
-          <h4 className="text-2xl font-bold mb-6 text-center text-slate-800">Quick Inquiry</h4>
+          <h4 className="text-2xl font-bold mb-6 text-center text-slate-800">Expert Advice</h4>
           
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="flex bg-slate-50 border border-slate-200 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-primary focus-within:border-primary">
@@ -127,9 +127,8 @@ const InquiryModal: React.FC<InquiryModalProps> = ({ onClose }) => {
                 required
               >
                 <option value="" disabled>Select a Service*</option>
-                <option value="SAP Training">SAP Training</option>
-                <option value="SAP Consulting">SAP Consulting</option>
-                <option value="Staff Augmentations">Staff Augmentations</option>
+                <option value="Career Counselling">Career Counselling</option>
+                <option value="Become a Partner">Become a Partner</option>
               </select>
             </div>
 

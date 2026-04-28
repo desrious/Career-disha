@@ -38,14 +38,14 @@ const GraduatesService = ({ onBack }: GraduatesServiceProps) => {
               CareerDisha for Graduates
             </span>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight mb-6 drop-shadow-sm">
-              Discover Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-600">Path Early</span>
+              Discover Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-600">Career Development Plan</span>
             </h1>
             <p className="text-xl text-slate-600 mb-10 leading-relaxed">
-              Help students of graduating or recently graduated understand their interests, strengths, and future possibilities. Make the right career direction with confidence.
+              Help graduating or recently graduated students gain clarity and build their career development plan. Stop feeling confused about career decisions and get proper job vs career guidance.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <button className="px-8 py-4 text-base font-semibold rounded-full bg-gradient-to-r from-primary to-blue-600 text-white shadow-lg shadow-blue-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                Start Your Career Discovery
+                Get Job Vs Career Guidance
               </button>
             </div>
           </div>

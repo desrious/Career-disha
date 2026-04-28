@@ -38,14 +38,14 @@ const HighSchool = ({ onBack }: HighSchoolProps) => {
               CareerDisha for High School
             </span>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight mb-6 drop-shadow-sm">
-              Discover Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-600">Path Early</span>
+              Explore <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-600">Career Options After 10th</span>
             </h1>
             <p className="text-xl text-slate-600 mb-10 leading-relaxed">
-              Help students of class 9th and 10th understand their interests, strengths, and future possibilities. Make the right stream choice with confidence.
+              Confused about your career? Help students of class 9th and 10th understand their interests and explore the best career choices for students. Get expert stream selection guidance with confidence.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <button className="px-8 py-4 text-base font-semibold rounded-full bg-gradient-to-r from-primary to-blue-600 text-white shadow-lg shadow-blue-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                Start Your Career Discovery
+                Get Stream Selection Guidance
               </button>
             </div>
           </div>
@@ -61,9 +61,9 @@ const HighSchool = ({ onBack }: HighSchoolProps) => {
       <section className="py-20 relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16 bg-white/70 p-6 rounded-2xl backdrop-blur-md shadow-sm border border-white max-w-2xl mx-auto">
-            <h2 className="text-3xl font-bold text-slate-900 mb-4">The High School Dilemma</h2>
+            <h2 className="text-3xl font-bold text-slate-900 mb-4">Don't Know What Career To Choose?</h2>
             <p className="text-lg text-slate-700">
-              Students at this stage often feel overwhelmed and confused. Does this sound familiar?
+              Students at this stage often feel overwhelmed and confused. If you have no clarity in career path, this is the first step.
             </p>
           </div>
           
@@ -71,8 +71,8 @@ const HighSchool = ({ onBack }: HighSchoolProps) => {
             {[
               {
                 icon: <Target className="w-8 h-8 text-rose-500" />,
-                title: "Choosing the Right Stream",
-                desc: "Science, Commerce, or Arts? It's a big decision that dictates future career paths, and guessing isn't a viable strategy.",
+                title: "Stream Selection Guidance",
+                desc: "Which science commerce arts career options fit you best? It's a big decision that dictates future career paths, and guessing isn't a viable strategy.",
                 bgColor: "bg-rose-50"
               },
               {
@@ -106,9 +106,9 @@ const HighSchool = ({ onBack }: HighSchoolProps) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex flex-col lg:flex-row items-center gap-12 bg-white/80 p-8 md:p-12 rounded-3xl shadow-xl border border-slate-100 backdrop-blur-lg">
             <div className="lg:w-1/2">
-              <h2 className="text-3xl font-bold text-slate-900 mb-6 drop-shadow-sm">What CareerDisha Offers</h2>
+              <h2 className="text-3xl font-bold text-slate-900 mb-6 drop-shadow-sm">How To Choose A Career</h2>
               <p className="text-lg text-slate-700 mb-8 font-medium">
-                A structured, scientific approach to help students navigate their first major academic crossroad.
+                A structured, scientific approach to help students discover the best career choices for students as they navigate their first major academic crossroad.
               </p>
               
               <div className="space-y-6">
