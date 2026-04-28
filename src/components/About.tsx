@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { COPYRIGHT_TEXT } from '../data/constants';
 import { 
   ArrowLeft, 
   Target, 
@@ -302,7 +303,7 @@ export default function About({ onBack }: AboutProps) {
       <footer className="bg-slate-100 py-12 px-8 w-full">
         <div className="max-w-7xl mx-auto text-center">
           <p className="text-slate-500 text-xs font-medium uppercase tracking-widest">
-            © 2024 The Luminary Guide — Powered by ZeOpto
+            {COPYRIGHT_TEXT}
           </p>
         </div>
       </footer>

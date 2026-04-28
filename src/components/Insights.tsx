@@ -1,13 +1,10 @@
-import { useRef, useState } from 'react';
-import { ArrowLeft, Play, Youtube, BookOpen, ExternalLink, ChevronLeft, ChevronRight, Phone, Mail, Globe, Menu } from 'lucide-react';
+import { useRef } from 'react';
+import { ArrowLeft, Play, Youtube, BookOpen, ExternalLink, ChevronLeft, ChevronRight, Phone, Mail, Globe } from 'lucide-react';
 import { motion } from 'motion/react';
-import { SidebarNavigation } from './SidebarNavigation';
+import { LOGO_URL, COPYRIGHT_TEXT } from '../data/constants';
 
 interface InsightsProps {
   onBack: () => void;
-  onGoToDashboard?: () => void;
-  onGoToRoadmap?: () => void;
-  onGoToResults?: () => void;
 }
 
 const videos = [
@@ -85,9 +82,7 @@ const mockBlogs = [
   }
 ];
 
-export default function Insights({ onBack, onGoToDashboard, onGoToRoadmap, onGoToResults }: InsightsProps) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const logoUrl = "/CareerDishaLogo.png";
+export default function Insights({ onBack }: InsightsProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: 'left' | 'right') => {
@@ -100,21 +95,13 @@ export default function Insights({ onBack, onGoToDashboard, onGoToRoadmap, onGoT
 
   return (
     <div className="min-h-screen bg-surface font-body text-on-surface flex flex-col">
-      <SidebarNavigation 
-        isMenuOpen={isMenuOpen} 
-        setIsMenuOpen={setIsMenuOpen} 
-        onGoToDashboard={onGoToDashboard} 
-        onGoToRoadmap={onGoToRoadmap} 
-        onGoToResults={onGoToResults}
-        activeScreen="insights"
-      />
 
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-[45] bg-white/80 backdrop-blur-md border-b border-outline-variant/10">
         <div className="flex justify-between items-center w-full px-4 py-3">
           <div className="flex items-center gap-4">
             <button onClick={onBack} className="flex items-center gap-2 group">
-              <img alt="CareerDisha Logo" className="h-10 w-auto object-contain" src={logoUrl} referrerPolicy="no-referrer" />
+              <img alt="CareerDisha Logo" className="h-10 w-auto object-contain" src={LOGO_URL} referrerPolicy="no-referrer" />
               <span className="text-xl font-extrabold text-blue-700 tracking-tighter font-headline">Careerदिशा</span>
             </button>
           </div>
@@ -247,7 +234,7 @@ export default function Insights({ onBack, onGoToDashboard, onGoToRoadmap, onGoT
       <footer className="bg-slate-100 py-12 px-8 w-full">
         <div className="max-w-7xl mx-auto text-center">
           <p className="text-slate-500 text-xs font-medium uppercase tracking-widest">
-            © 2024 Careerदिशा — Empowering Your Professional Future
+            {COPYRIGHT_TEXT}
           </p>
         </div>
       </footer>

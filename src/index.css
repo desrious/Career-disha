@@ -19,12 +19,12 @@
   --color-on-tertiary-fixed: #241a00;
   --color-on-tertiary-fixed-variant: #584400;
   
-  --color-surface: #f7f9fb;
-  --color-surface-container-low: #f2f4f6;
-  --color-surface-container: #eceef0;
-  --color-surface-container-high: #e6e8ea;
-  --color-surface-container-highest: #e0e3e5;
-  --color-surface-container-lowest: #ffffff;
+  --color-surface: #f8f7f4;
+  --color-surface-container-low: #f3f2ef;
+  --color-surface-container: #edece9;
+  --color-surface-container-high: #e7e6e3;
+  --color-surface-container-highest: #e1e0dd;
+  --color-surface-container-lowest: #fefdfb;
   
   --color-on-surface: #191c1e;
   --color-on-surface-variant: #424753;
@@ -85,3 +85,10 @@
   animation: elegant-zoom 2s ease-in-out infinite;
 }
 
+@keyframes scroll-cards {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+.animate-scroll-cards {
+  animation: scroll-cards 30s linear infinite;
+}

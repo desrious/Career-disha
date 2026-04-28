@@ -1,58 +1,44 @@
 import { useState, useEffect } from 'react';
-import { 
-  ArrowRight, 
-  HelpCircle, 
-  Brain, 
-  Route, 
-  School, 
-  Code, 
-  TrendingUp, 
-  Award, 
-  Bot, 
-  ShieldCheck, 
-  Star, 
-  ChevronLeft, 
-  ChevronRight, 
-  Send, 
-  Globe, 
-  Users, 
+import {
+  ArrowRight,
+  HelpCircle,
+  Brain,
+  Route,
+  School,
+  Code,
+  TrendingUp,
+  Award,
+  Bot,
+  ShieldCheck,
+  Star,
+  ChevronLeft,
+  ChevronRight,
+  Send,
+  Globe,
+  Users,
   Share2,
   Phone,
   Mail,
-  CheckCircle2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import Login from './components/Login';
-import Register from './components/Register';
-import ProfileSelection from './components/ProfileSelection';
-import StudentRegistration from './components/StudentRegistration';
-import RegistrationSuccess from './components/RegistrationSuccess';
-import UserDashboard from './components/UserDashboard';
-import ResultScreen from './components/ResultScreen';
-import HighSchool from './components/HighSchool';
-import PlusTwo from './components/PlusTwo';
-import GraduatesService from './components/GraduatesService';
-import WorkingProfessionalService from './components/WorkingProfessionalService';
-import RoadmapScreen from './components/RoadmapScreen';
 import About from './components/About';
 import Insights from './components/Insights';
 import SplashScreen from './components/SplashScreen';
 import ContactUs from './components/ContactUs';
-import GraduateRegistration from './components/GraduateRegistration';
-import GraduateDashboard from './components/GraduateDashboard';
-import ProfessionalRegistration from './components/ProfessionalRegistration';
-import ProfessionalDashboard from './components/ProfessionalDashboard';
+import ServicePage from './components/ServicePage';
 import InquiryModal from './components/InquiryModal';
 import FollowCursor from './components/FollowCursor';
 import ComparisonSection from './components/ComparisonSection';
 import ProfileCard from './components/ProfileCard';
+import { LOGO_URL, COPYRIGHT_TEXT, CONTACT, SOCIALS, FOUNDERS } from './data/constants';
+import { highSchoolData, plusTwoData, graduatesData, workingProfessionalData } from './data/servicePageData';
+
+type ViewType = 'landing' | 'about' | 'insights' | 'contact-us' | 'high-school' | 'plus-two' | 'graduates' | 'working-professional';
 
 function MainApp() {
-  const [view, setView] = useState<'landing' | 'login' | 'register' | 'profile-selection' | 'student-registration' | 'graduate-registration' | 'professional-registration' | 'registration-success' | 'user-dashboard' | 'graduate-dashboard' | 'professional-dashboard' | 'result-screen' | 'roadmap-screen' | 'about' | 'insights' | 'contact-us' | 'high-school' | 'plus-two' | 'graduates' | 'working-professional'>('landing');
-  const [registeredProfileType, setRegisteredProfileType] = useState<'student' | 'graduate' | 'professional'>('student');
+  const [view, setView] = useState<ViewType>('landing');
   const [showInquiryModal, setShowInquiryModal] = useState(false);
 
-  const logoUrl = "/CareerDishaLogo.png";
   const heroImages = [
     "/landing_page_img1.png",
     "/landing_page_img2.png",
@@ -95,168 +81,14 @@ function MainApp() {
     return () => clearInterval(imgInterval);
   }, [view]);
 
-  if (view === 'login') {
-    return (
-      <Login 
-        onBack={() => setView('landing')} 
-        onRegister={() => setView('register')}
-        onLogin={() => setView('user-dashboard')}
-      />
-    );
-  }
-
-  if (view === 'register') {
-    return (
-      <Register 
-        onClose={() => setView('landing')} 
-        onStart={() => setView('profile-selection')}
-      />
-    );
-  }
-
-  if (view === 'profile-selection') {
-    return (
-      <ProfileSelection 
-        onStartStudent={() => setView('student-registration')} 
-        onStartGraduate={() => setView('graduate-registration')} 
-        onStartProfessional={() => setView('professional-registration')}
-      />
-    );
-  }
-
-  if (view === 'professional-registration') {
-    return (
-      <ProfessionalRegistration 
-        onBack={() => setView('profile-selection')}
-        onComplete={() => {
-          setRegisteredProfileType('professional');
-          setView('registration-success');
-        }}
-      />
-    );
-  }
-
-  if (view === 'graduate-registration') {
-    return (
-      <GraduateRegistration 
-        onBack={() => setView('profile-selection')}
-        onComplete={() => {
-          setRegisteredProfileType('graduate');
-          setView('registration-success');
-        }}
-      />
-    );
-  }
-
-  if (view === 'student-registration') {
-    return (
-      <StudentRegistration 
-        onBack={() => setView('profile-selection')}
-        onComplete={() => {
-          setRegisteredProfileType('student');
-          setView('registration-success');
-        }}
-      />
-    );
-  }
-
-  if (view === 'registration-success') {
-    return (
-      <RegistrationSuccess 
-        onGoToDashboard={() => {
-          if (registeredProfileType === 'student') setView('user-dashboard');
-          else if (registeredProfileType === 'graduate') setView('graduate-dashboard');
-          else if (registeredProfileType === 'professional') setView('professional-dashboard');
-          else setView('user-dashboard');
-        }}
-      />
-    );
-  }
-
-  if (view === 'user-dashboard') {
-    return (
-      <UserDashboard 
-        onGoToResults={() => setView('result-screen')}
-        onGoToRoadmap={() => setView('roadmap-screen')}
-      />
-    );
-  }
-  
-  if (view === 'graduate-dashboard') {
-    return (
-      <GraduateDashboard 
-        onGoToResults={() => setView('result-screen')}
-        onGoToRoadmap={() => setView('roadmap-screen')}
-      />
-    );
-  }
-
-  if (view === 'professional-dashboard') {
-    return (
-      <ProfessionalDashboard 
-        onGoToResults={() => setView('result-screen')}
-        onGoToRoadmap={() => setView('roadmap-screen')}
-      />
-    );
-  }
-
-  if (view === 'result-screen') {
-    return (
-      <ResultScreen 
-        onGoToRoadmap={() => setView('roadmap-screen')}
-        onGoToDashboard={() => setView('user-dashboard')}
-        onGoToResults={() => setView('result-screen')}
-      />
-    );
-  }
-
-  if (view === 'roadmap-screen') {
-    return (
-      <RoadmapScreen 
-        onGoToDashboard={() => setView('user-dashboard')}
-        onGoToResults={() => setView('result-screen')}
-      />
-    );
-  }
-
-  if (view === 'about') {
-    return (
-      <About onBack={() => setView('landing')} />
-    );
-  }
-
-  if (view === 'insights') {
-    return (
-      <Insights 
-        onBack={() => setView('landing')} 
-        onGoToDashboard={() => setView('user-dashboard')}
-        onGoToRoadmap={() => setView('roadmap-screen')}
-        onGoToResults={() => setView('result-screen')}
-      />
-    );
-  }
-
-  if (view === 'contact-us') {
-    return (
-      <ContactUs onBack={() => setView('landing')} />
-    );
-  }
-
-  if (view === 'high-school') {
-    return <HighSchool onBack={() => setView('landing')} />;
-  }
-
-  if (view === 'plus-two') {
-    return <PlusTwo onBack={() => setView('landing')} />;
-  }
-
-  if (view === 'graduates') {
-    return <GraduatesService onBack={() => setView('landing')} />;
-  }
-
-  if (view === 'working-professional') {
-    return <WorkingProfessionalService onBack={() => setView('landing')} />;
-  }
+  // ─── Non-landing views ────────────────────────────────────
+  if (view === 'about') return <About onBack={() => setView('landing')} />;
+  if (view === 'insights') return <Insights onBack={() => setView('landing')} />;
+  if (view === 'contact-us') return <ContactUs onBack={() => setView('landing')} />;
+  if (view === 'high-school') return <ServicePage data={highSchoolData} onBack={() => setView('landing')} />;
+  if (view === 'plus-two') return <ServicePage data={plusTwoData} onBack={() => setView('landing')} />;
+  if (view === 'graduates') return <ServicePage data={graduatesData} onBack={() => setView('landing')} />;
+  if (view === 'working-professional') return <ServicePage data={workingProfessionalData} onBack={() => setView('landing')} />;
 
   return (
     <div className="min-h-screen bg-surface selection:bg-primary-fixed">
@@ -280,7 +112,7 @@ function MainApp() {
               <img 
                 alt="CareerDisha Logo" 
                 className="h-16 md:h-20 w-auto object-contain" 
-              src={logoUrl} 
+              src={LOGO_URL} 
               referrerPolicy="no-referrer" 
             />
             <span className="text-xl font-extrabold text-blue-700 tracking-tighter font-headline">Career Disha</span>
@@ -763,7 +595,7 @@ function MainApp() {
         <section className="py-32 bg-surface-container-low">
           <div className="max-w-7xl mx-auto px-8">
             <div className="text-center mb-20 flex flex-col items-center">
-              <img src={logoUrl} alt="Career Disha Logo" className="h-16 md:h-20 mb-6 object-contain" referrerPolicy="no-referrer" />
+              <img src={LOGO_URL} alt="Career Disha Logo" className="h-16 md:h-20 mb-6 object-contain" referrerPolicy="no-referrer" />
               <h2 className="text-4xl md:text-5xl font-extrabold mb-6">Why Choose Our Career Guidance</h2>
               <p className="max-w-2xl mx-auto text-on-surface-variant text-lg">We combine human psychology with advanced intelligence to provide career counselling and professional career guidance that actually helps you choose the right career.</p>            </div>            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 h-auto md:h-[600px]">
               <motion.div 
@@ -1009,6 +841,151 @@ function MainApp() {
             </div>
           </div>
         </section>
+
+        {/* Meet Our Counsellors Section */}
+        <section className="relative py-24 px-8 bg-slate-50 overflow-hidden" id="counsellors">
+          <div className="max-w-7xl mx-auto relative z-10">
+            <div className="text-center mb-16">
+              <span className="text-primary font-bold tracking-widest uppercase text-xs mb-2 block">Expert Guidance</span>
+              <h2 className="text-3xl md:text-5xl font-extrabold text-on-surface mb-4">Meet Our Counsellors</h2>
+              <div className="h-1 w-20 bg-secondary mx-auto rounded-full mb-6"></div>
+              <p className="text-on-surface-variant max-w-2xl mx-auto font-medium">Our dedicated team of career counsellors brings years of expertise to guide you towards the right path.</p>
+            </div>
+
+            {/* Scrolling container */}
+            <div className="relative">
+              {/* Gradient fade edges */}
+              <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-slate-50 to-transparent z-10 pointer-events-none"></div>
+              <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-slate-50 to-transparent z-10 pointer-events-none"></div>
+
+              <div className="overflow-hidden">
+                <div className="flex gap-8 animate-scroll-cards hover:[animation-play-state:paused]" style={{ width: 'max-content' }}>
+                  {/* Duplicate cards for seamless loop */}
+                  {[...Array(2)].map((_, setIndex) => (
+                    <div key={setIndex} className="flex gap-8 shrink-0">
+                      {/* Nishtha Vyas */}
+                      <div className="w-[420px] bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100 hover:shadow-2xl transition-shadow duration-300 shrink-0 group">
+                        <div className="relative h-72 overflow-hidden">
+                          <img
+                            src="/NishthaVyas.jpg"
+                            alt="Nishtha Vyas"
+                            className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+                          <div className="absolute bottom-4 left-6 right-6">
+                            <h3 className="text-2xl font-bold text-white mb-1">Nishtha Vyas</h3>
+                            <p className="text-sm font-semibold text-blue-300 uppercase tracking-wider">Senior Career Counsellor</p>
+                          </div>
+                        </div>
+                        <div className="p-6">
+                          <p className="text-slate-600 italic text-sm mb-5 leading-relaxed border-l-4 border-primary/30 pl-4">
+                            "Empowering students through data-driven insights and strategic foresight to navigate global career paths."
+                          </p>
+                          <ul className="space-y-2.5 text-sm">
+                            <li className="flex items-start gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0"></span>
+                              <span className="text-slate-700"><strong className="text-slate-900">Experience:</strong> 10 years in career development & mentorship</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-secondary mt-1.5 shrink-0"></span>
+                              <span className="text-slate-700"><strong className="text-slate-900">Specialization:</strong> Emerging industry trends & career architecture</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 shrink-0"></span>
+                              <span className="text-slate-700"><strong className="text-slate-900">Strategy:</strong> Global job market expertise for future-ready decisions</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 shrink-0"></span>
+                              <span className="text-slate-700"><strong className="text-slate-900">Approach:</strong> Building clarity through high-impact guidance</span>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+
+                      {/* Milli Tewari */}
+                      <div className="w-[420px] bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100 hover:shadow-2xl transition-shadow duration-300 shrink-0 group">
+                        <div className="relative h-72 overflow-hidden">
+                          <img
+                            src="/MilliTewari.jpg"
+                            alt="Milli Tewari"
+                            className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+                          <div className="absolute bottom-4 left-6 right-6">
+                            <h3 className="text-2xl font-bold text-white mb-1">Milli Tewari</h3>
+                            <p className="text-sm font-semibold text-green-300 uppercase tracking-wider">Lead Career Strategist</p>
+                          </div>
+                        </div>
+                        <div className="p-6">
+                          <p className="text-slate-600 italic text-sm mb-5 leading-relaxed border-l-4 border-secondary/30 pl-4">
+                            "Building agile and future-proof career paths through personalized strategy and market intelligence."
+                          </p>
+                          <ul className="space-y-2.5 text-sm">
+                            <li className="flex items-start gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0"></span>
+                              <span className="text-slate-700"><strong className="text-slate-900">Experience:</strong> 8 years in career strategy & mentorship</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-secondary mt-1.5 shrink-0"></span>
+                              <span className="text-slate-700"><strong className="text-slate-900">Core Focus:</strong> Modern industry shifts & global job markets</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 shrink-0"></span>
+                              <span className="text-slate-700"><strong className="text-slate-900">Methodology:</strong> Simplifying complex trends into actionable plans</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 shrink-0"></span>
+                              <span className="text-slate-700"><strong className="text-slate-900">Goal:</strong> Strategic mindset for long-term excellence</span>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+
+                      {/* Shruti Bhardwaj */}
+                      <div className="w-[420px] bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100 hover:shadow-2xl transition-shadow duration-300 shrink-0 group">
+                        <div className="relative h-72 overflow-hidden">
+                          <img
+                            src="/ShrutiBhardwaj.jpg"
+                            alt="Shruti Bhardwaj"
+                            className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+                          <div className="absolute bottom-4 left-6 right-6">
+                            <h3 className="text-2xl font-bold text-white mb-1">Shruti Bhardwaj</h3>
+                            <p className="text-sm font-semibold text-amber-300 uppercase tracking-wider">Career Development Specialist</p>
+                          </div>
+                        </div>
+                        <div className="p-6">
+                          <p className="text-slate-600 italic text-sm mb-5 leading-relaxed border-l-4 border-accent/30 pl-4">
+                            "Dedicated to bridging the gap between academic potential and professional success through personalized mentorship."
+                          </p>
+                          <ul className="space-y-2.5 text-sm">
+                            <li className="flex items-start gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0"></span>
+                              <span className="text-slate-700"><strong className="text-slate-900">Experience:</strong> 3 years in student career counseling & skill development</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-secondary mt-1.5 shrink-0"></span>
+                              <span className="text-slate-700"><strong className="text-slate-900">Focus:</strong> Discovering core strengths & aligning career paths</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 shrink-0"></span>
+                              <span className="text-slate-700"><strong className="text-slate-900">Approach:</strong> Relatable one-on-one guidance for early-career transitions</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 shrink-0"></span>
+                              <span className="text-slate-700"><strong className="text-slate-900">Commitment:</strong> Building a strong foundation for professional entry</span>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
 
       {/* Footer */}
@@ -1019,7 +996,7 @@ function MainApp() {
               <img 
                   alt="CareerDisha Logo" 
                   className="h-10 md:h-12 w-auto brightness-0 invert" 
-                src={logoUrl}
+                src={LOGO_URL}
                 referrerPolicy="no-referrer"
               />
               Career Disha
@@ -1076,7 +1053,7 @@ function MainApp() {
           </div>
         </div>
         <div className="max-w-7xl mx-auto mt-12 pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-xs uppercase tracking-widest text-slate-500">© The Luminary Guide. All rights reserved.</p>
+          <p className="text-xs uppercase tracking-widest text-slate-500">{COPYRIGHT_TEXT}</p>
           <div className="flex gap-6">
             <Globe className="w-5 h-5 text-slate-500 hover:text-white cursor-pointer transition-colors" onClick={() => window.open('https://zeopto.com/', '_blank')} />
             <Users className="w-5 h-5 text-slate-500 hover:text-white cursor-pointer transition-colors" onClick={() => window.open('https://linkedin.com/company/zeopto', '_blank')} />
@@ -1141,8 +1118,6 @@ export default function App() {
     </>
   );
 }
-
-
 
 
 
