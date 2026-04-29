@@ -922,7 +922,7 @@ function MainApp() {
                       <div className="w-[420px] bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100 hover:shadow-2xl transition-shadow duration-300 shrink-0 group">
                         <div className="relative h-72 overflow-hidden">
                           <img
-                            src="/NishthaVyas.jpg"
+                            src="/ShrutiBhardwaj.jpg"
                             alt="Nishtha Vyas"
                             className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                           />
@@ -961,7 +961,7 @@ function MainApp() {
                       <div className="w-[420px] bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100 hover:shadow-2xl transition-shadow duration-300 shrink-0 group">
                         <div className="relative h-72 overflow-hidden">
                           <img
-                            src="/MilliTewari.jpg"
+                            src="/NishthaVyas.jpg"
                             alt="Milli Tewari"
                             className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                           />
@@ -1000,7 +1000,7 @@ function MainApp() {
                       <div className="w-[420px] bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100 hover:shadow-2xl transition-shadow duration-300 shrink-0 group">
                         <div className="relative h-72 overflow-hidden">
                           <img
-                            src="/ShrutiBhardwaj.jpg"
+                            src="/MilliTewari.jpg"
                             alt="Shruti Bhardwaj"
                             className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                           />
@@ -1030,6 +1030,45 @@ function MainApp() {
                             <li className="flex items-start gap-2">
                               <span className="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 shrink-0"></span>
                               <span className="text-slate-700"><strong className="text-slate-900">Commitment:</strong> Building a strong foundation for professional entry</span>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+
+                      {/* Dr. Anjali Bhardwaj */}
+                      <div className="w-[420px] bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100 hover:shadow-2xl transition-shadow duration-300 shrink-0 group">
+                        <div className="relative h-72 overflow-hidden">
+                          <img
+                            src="/Psychologist.png"
+                            alt="Dr. Anjali Bhardwaj"
+                            className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+                          <div className="absolute bottom-4 left-6 right-6">
+                            <h3 className="text-2xl font-bold text-white mb-1">Dr. Anjali Bhardwaj</h3>
+                            <p className="text-sm font-semibold text-purple-300 uppercase tracking-wider">Senior Counselling Psychologist</p>
+                          </div>
+                        </div>
+                        <div className="p-6">
+                          <p className="text-slate-600 italic text-sm mb-5 leading-relaxed border-l-4 border-purple-500/30 pl-4">
+                            "Integrating psychological insights with career guidance to empower individuals with mental resilience and emotional clarity."
+                          </p>
+                          <ul className="space-y-2.5 text-sm">
+                            <li className="flex items-start gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0"></span>
+                              <span className="text-slate-700"><strong className="text-slate-900">Experience:</strong> 15 years in clinical counselling, behavioural therapy & wellness</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-secondary mt-1.5 shrink-0"></span>
+                              <span className="text-slate-700"><strong className="text-slate-900">Specialization:</strong> Psychometric assessments, personality mapping & stress management</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-purple-500 mt-1.5 shrink-0"></span>
+                              <span className="text-slate-700"><strong className="text-slate-900">Methodology:</strong> Scientific psychological frameworks & empathetic listening</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 shrink-0"></span>
+                              <span className="text-slate-700"><strong className="text-slate-900">Focus:</strong> Overcoming internal barriers, anxiety, & decision-making blocks</span>
                             </li>
                           </ul>
                         </div>

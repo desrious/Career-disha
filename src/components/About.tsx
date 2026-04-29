@@ -80,7 +80,11 @@ export default function About({ onBack }: AboutProps) {
         <section className="mb-24">
           <h2 className="text-3xl font-extrabold font-headline mb-12 text-center">What We Bring to You</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white p-8 rounded-3xl shadow-sm border border-outline-variant/10 hover:shadow-lg transition-shadow">
+            <motion.div 
+              whileHover={{ y: -8, scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              className="bg-white p-8 rounded-3xl shadow-sm border border-outline-variant/10 hover:shadow-xl transition-shadow cursor-pointer"
+            >
               <div className="w-14 h-14 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mb-6">
                 <Target className="w-8 h-8" />
               </div>
@@ -88,84 +92,125 @@ export default function About({ onBack }: AboutProps) {
               <p className="text-on-surface-variant text-sm leading-relaxed">
                 Careerदिशा leverages ZeOpto’s industry expertise to provide structured and practical career direction aligned with real-world demands.
               </p>
-            </div>
-            <div className="bg-white p-8 rounded-3xl shadow-sm border border-outline-variant/10 hover:shadow-lg transition-shadow">
-              <div className="w-14 h-14 bg-secondary/10 text-secondary rounded-2xl flex items-center justify-center mb-6">
+            </motion.div>
+            <motion.div 
+              whileHover={{ y: -8, scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              className="bg-white p-8 rounded-3xl shadow-sm border border-outline-variant/10 hover:shadow-xl transition-shadow cursor-pointer"
+            >
+              <div className="w-14 h-14 bg-yellow-500/10 text-yellow-600 rounded-2xl flex items-center justify-center mb-6">
                 <Users className="w-8 h-8" />
               </div>
               <h3 className="text-xl font-bold mb-4">Skilled & Certified Mentors</h3>
               <p className="text-on-surface-variant text-sm leading-relaxed">
                 Guidance comes from experienced professionals and certified experts who understand both industry expectations and career growth pathways.
               </p>
-            </div>
-            <div className="bg-white p-8 rounded-3xl shadow-sm border border-outline-variant/10 hover:shadow-lg transition-shadow">
-              <div className="w-14 h-14 bg-tertiary/10 text-tertiary rounded-2xl flex items-center justify-center mb-6">
+            </motion.div>
+            <motion.div 
+              whileHover={{ y: -8, scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              className="bg-white p-8 rounded-3xl shadow-sm border border-outline-variant/10 hover:shadow-xl transition-shadow cursor-pointer"
+            >
+              <div className="w-14 h-14 bg-amber-500/10 text-amber-600 rounded-2xl flex items-center justify-center mb-6">
                 <Rocket className="w-8 h-8" />
               </div>
               <h3 className="text-xl font-bold mb-4">Future-Ready Skill Development</h3>
               <p className="text-on-surface-variant text-sm leading-relaxed">
                 From foundational learning to advanced career insights, our approach ensures individuals are prepared for evolving industry trends and opportunities.
               </p>
-            </div>
+            </motion.div>
           </div>
         </section>
 
         {/* Vision, Mission, Ambition */}
         <section className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-24">
-          <div className="bg-primary text-white p-10 rounded-[2.5rem] relative overflow-hidden group">
-            <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full group-hover:scale-110 transition-transform"></div>
+          <motion.div 
+            whileHover={{ y: -8, scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            className="bg-primary text-white p-10 rounded-[2.5rem] relative overflow-hidden group cursor-pointer shadow-md hover:shadow-2xl"
+          >
+            <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full group-hover:scale-125 transition-transform duration-500"></div>
             <h3 className="text-2xl font-bold mb-6 flex items-center gap-3">
               <Lightbulb className="w-6 h-6" /> Our Vision
             </h3>
             <p className="text-white/80 leading-relaxed font-medium">
               To empower individuals with clarity, confidence, and the right direction, while continuing ZeOpto’s vision of becoming a trusted partner in digital transformation and career development.
             </p>
-          </div>
-          <div className="bg-secondary text-white p-10 rounded-[2.5rem] relative overflow-hidden group">
-            <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full group-hover:scale-110 transition-transform"></div>
+          </motion.div>
+          <motion.div 
+            whileHover={{ y: -8, scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            className="bg-yellow-500 text-white p-10 rounded-[2.5rem] relative overflow-hidden group cursor-pointer shadow-md hover:shadow-2xl"
+          >
+            <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full group-hover:scale-125 transition-transform duration-500"></div>
             <h3 className="text-2xl font-bold mb-6 flex items-center gap-3">
               <Target className="w-6 h-6" /> Our Mission
             </h3>
             <p className="text-white/80 leading-relaxed font-medium">
               To deliver value-driven guidance and solutions that enhance both career growth for individuals and performance for organizations.
             </p>
-          </div>
-          <div className="bg-tertiary text-white p-10 rounded-[2.5rem] relative overflow-hidden group">
-            <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full group-hover:scale-110 transition-transform"></div>
+          </motion.div>
+          <motion.div 
+            whileHover={{ y: -8, scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            className="bg-amber-500 text-white p-10 rounded-[2.5rem] relative overflow-hidden group cursor-pointer shadow-md hover:shadow-2xl"
+          >
+            <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full group-hover:scale-125 transition-transform duration-500"></div>
             <h3 className="text-2xl font-bold mb-6 flex items-center gap-3">
               <Rocket className="w-6 h-6" /> Our Ambition
             </h3>
             <p className="text-white/80 leading-relaxed font-medium">
               To create a unified ecosystem where learning, guidance, and industry expertise come together to drive 360-degree growth for students, professionals, and businesses.
             </p>
-          </div>
+          </motion.div>
         </section>
 
         {/* Core Values */}
-        <section className="mb-24 bg-surface-container-low rounded-[3rem] p-12">
-          <h2 className="text-3xl font-extrabold font-headline mb-12 text-center">Our Core Values</h2>
+        <section className="mb-24 bg-gradient-to-br from-slate-900 to-blue-950 border border-blue-800/50 rounded-[3rem] p-12 shadow-2xl">
+          <h2 className="text-3xl font-extrabold font-headline mb-12 text-center text-white">Our Core Values</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm">
-                <TrendingUp className="w-8 h-8 text-primary" />
-              </div>
-              <h4 className="text-xl font-bold mb-2">Growth</h4>
-              <p className="text-on-surface-variant text-sm">We believe in continuous progress through learning, performance, and real-world application.</p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm">
-                <Heart className="w-8 h-8 text-secondary" />
-              </div>
-              <h4 className="text-xl font-bold mb-2">Trust</h4>
-              <p className="text-on-surface-variant text-sm">We build reliable relationships through transparency, guidance, and consistent support.</p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm">
-                <Award className="w-8 h-8 text-tertiary" />
-              </div>
-              <h4 className="text-xl font-bold mb-2">Value</h4>
-              <p className="text-on-surface-variant text-sm">We focus on delivering meaningful impact that contributes to long-term success.</p>
-            </div>
+            <motion.div 
+              whileHover={{ y: -8 }}
+              className="text-center cursor-pointer group"
+            >
+              <motion.div 
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                transition={{ type: "spring", stiffness: 300 }}
+                className="w-16 h-16 bg-blue-500/10 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-blue-500/20 shadow-inner"
+              >
+                <TrendingUp className="w-8 h-8 text-blue-400 group-hover:text-blue-300 transition-colors" />
+              </motion.div>
+              <h4 className="text-xl font-bold mb-2 text-white">Growth</h4>
+              <p className="text-blue-100/70 text-sm leading-relaxed">We believe in continuous progress through learning, performance, and real-world application.</p>
+            </motion.div>
+            <motion.div 
+              whileHover={{ y: -8 }}
+              className="text-center cursor-pointer group"
+            >
+              <motion.div 
+                whileHover={{ scale: 1.1, rotate: -5 }}
+                transition={{ type: "spring", stiffness: 300 }}
+                className="w-16 h-16 bg-yellow-500/10 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-yellow-500/20 shadow-inner"
+              >
+                <Heart className="w-8 h-8 text-yellow-400 group-hover:text-yellow-300 transition-colors" />
+              </motion.div>
+              <h4 className="text-xl font-bold mb-2 text-white">Trust</h4>
+              <p className="text-blue-100/70 text-sm leading-relaxed">We build reliable relationships through transparency, guidance, and consistent support.</p>
+            </motion.div>
+            <motion.div 
+              whileHover={{ y: -8 }}
+              className="text-center cursor-pointer group"
+            >
+              <motion.div 
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                transition={{ type: "spring", stiffness: 300 }}
+                className="w-16 h-16 bg-amber-500/10 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-amber-500/20 shadow-inner"
+              >
+                <Award className="w-8 h-8 text-amber-400 group-hover:text-amber-300 transition-colors" />
+              </motion.div>
+              <h4 className="text-xl font-bold mb-2 text-white">Value</h4>
+              <p className="text-blue-100/70 text-sm leading-relaxed">We focus on delivering meaningful impact that contributes to long-term success.</p>
+            </motion.div>
           </div>
         </section>
 
@@ -178,13 +223,13 @@ export default function About({ onBack }: AboutProps) {
             </p>
             <ul className="space-y-4">
               <li className="flex items-center gap-3 font-bold text-on-surface">
-                <CheckCircle2 className="w-6 h-6 text-secondary" /> Industry-aligned career strategies
+                <CheckCircle2 className="w-6 h-6 text-yellow-500" /> Industry-aligned career strategies
               </li>
               <li className="flex items-center gap-3 font-bold text-on-surface">
-                <CheckCircle2 className="w-6 h-6 text-secondary" /> Personalized and scalable guidance
+                <CheckCircle2 className="w-6 h-6 text-amber-500" /> Personalized and scalable guidance
               </li>
               <li className="flex items-center gap-3 font-bold text-on-surface">
-                <CheckCircle2 className="w-6 h-6 text-secondary" /> Integration of learning, mentorship, and real-world insights
+                <CheckCircle2 className="w-6 h-6 text-yellow-500" /> Integration of learning, mentorship, and real-world insights
               </li>
             </ul>
           </div>
@@ -206,10 +251,21 @@ export default function About({ onBack }: AboutProps) {
         <section className="mb-24">
           <h2 className="text-3xl font-extrabold font-headline mb-12 text-center">Meet the Visionaries Behind the Platform</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-white p-10 rounded-[2.5rem] border border-outline-variant/10 shadow-sm hover:shadow-md transition-all flex flex-col h-full">
+            <motion.div 
+              whileHover={{ y: -8, scale: 1.01 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              className="bg-white p-10 rounded-[2.5rem] border border-outline-variant/10 shadow-sm hover:shadow-2xl transition-shadow flex flex-col h-full cursor-pointer"
+            >
               <div className="flex items-center gap-6 mb-8">
                 <div className="w-20 h-20 bg-primary/10 rounded-xl overflow-hidden shrink-0">
-                  <img src="/GunjanSir.jpeg" alt="Mr. Gunjan Tewari" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                  <motion.img 
+                    whileHover={{ scale: 1.1 }}
+                    transition={{ duration: 0.3 }}
+                    src="/GunjanSir.jpeg" 
+                    alt="Mr. Gunjan Tewari" 
+                    className="w-full h-full object-cover" 
+                    referrerPolicy="no-referrer" 
+                  />
                 </div>
                 <div>
                   <h4 className="text-2xl font-bold">Mr. Gunjan Tewari</h4>
@@ -239,15 +295,26 @@ export default function About({ onBack }: AboutProps) {
                 <button onClick={() => setIsContactModalOpen(true)} className="px-6 py-2 bg-primary text-white rounded-full font-bold hover:bg-opacity-90 transition-colors">Contact</button>
                 <a href="https://in.linkedin.com/in/gunjantewari" target="_blank" rel="noopener noreferrer" className="px-6 py-2 border-2 border-primary text-primary rounded-full font-bold hover:bg-primary/5 transition-colors">LinkedIn</a>
               </div>
-            </div>
-            <div className="bg-white p-10 rounded-[2.5rem] border border-outline-variant/10 shadow-sm hover:shadow-md transition-all flex flex-col h-full">
+            </motion.div>
+            <motion.div 
+              whileHover={{ y: -8, scale: 1.01 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              className="bg-white p-10 rounded-[2.5rem] border border-outline-variant/10 shadow-sm hover:shadow-2xl transition-shadow flex flex-col h-full cursor-pointer"
+            >
               <div className="flex items-center gap-6 mb-8">
-                <div className="w-20 h-20 bg-secondary/10 rounded-xl overflow-hidden shrink-0">
-                  <img src="/AbhijeetSir.jpeg" alt="Mr. Abhijit Vyas" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                <div className="w-20 h-20 bg-yellow-500/10 rounded-xl overflow-hidden shrink-0">
+                  <motion.img 
+                    whileHover={{ scale: 1.1 }}
+                    transition={{ duration: 0.3 }}
+                    src="/AbhijeetSir.jpeg" 
+                    alt="Mr. Abhijit Vyas" 
+                    className="w-full h-full object-cover" 
+                    referrerPolicy="no-referrer" 
+                  />
                 </div>
                 <div>
                   <h4 className="text-2xl font-bold">Mr. Abhijit Vyas</h4>
-                  <p className="text-secondary font-bold text-sm uppercase tracking-widest">Co-founder & Director</p>
+                  <p className="text-yellow-600 font-bold text-sm uppercase tracking-widest">Co-founder & Director</p>
                 </div>
               </div>
               <div className="flex flex-col flex-grow">
@@ -256,28 +323,28 @@ export default function About({ onBack }: AboutProps) {
                 </p>
                 <ul className="space-y-3 my-auto">
                   <li className="flex items-start gap-3 text-sm font-semibold text-slate-700">
-                    <CheckCircle2 className="w-5 h-5 text-secondary shrink-0" />
+                    <CheckCircle2 className="w-5 h-5 text-yellow-500 shrink-0" />
                     <span>Co-founder & Director</span>
                   </li>
                   <li className="flex items-start gap-3 text-sm font-semibold text-slate-700">
-                    <CheckCircle2 className="w-5 h-5 text-secondary shrink-0" />
+                    <CheckCircle2 className="w-5 h-5 text-yellow-500 shrink-0" />
                     <span>Certified AI Generalist</span>
                   </li>
                   <li className="flex items-start gap-3 text-sm font-semibold text-slate-700">
-                    <CheckCircle2 className="w-5 h-5 text-secondary shrink-0" />
+                    <CheckCircle2 className="w-5 h-5 text-yellow-500 shrink-0" />
                     <span>Technical Advisor & Mentor</span>
                   </li>
                   <li className="flex items-start gap-3 text-sm font-semibold text-slate-700">
-                    <CheckCircle2 className="w-5 h-5 text-secondary shrink-0" />
+                    <CheckCircle2 className="w-5 h-5 text-yellow-500 shrink-0" />
                     <span>IT Project Manager</span>
                   </li>
                 </ul>
               </div>
               <div className="flex gap-3 mt-8 pt-6 border-t border-outline-variant/10">
-                <button onClick={() => setIsContactModalOpen(true)} className="px-6 py-2 bg-secondary text-white rounded-full font-bold hover:bg-opacity-90 transition-colors">Contact</button>
-                <a href="https://in.linkedin.com/in/abhijit-vyas-696640216" target="_blank" rel="noopener noreferrer" className="px-6 py-2 border-2 border-secondary text-secondary rounded-full font-bold hover:bg-secondary/5 transition-colors">LinkedIn</a>
+                <button onClick={() => setIsContactModalOpen(true)} className="px-6 py-2 bg-yellow-500 text-white rounded-full font-bold hover:bg-opacity-90 transition-colors">Contact</button>
+                <a href="https://in.linkedin.com/in/abhijit-vyas-696640216" target="_blank" rel="noopener noreferrer" className="px-6 py-2 border-2 border-yellow-500 text-yellow-600 rounded-full font-bold hover:bg-yellow-500/5 transition-colors">LinkedIn</a>
               </div>
-            </div>
+            </motion.div>
           </div>
         </section>
 
@@ -294,11 +361,11 @@ export default function About({ onBack }: AboutProps) {
               <span className="font-bold">+91-9953280036</span>
             </div>
             <a href="mailto:hr@ZeOpto.com" className="flex items-center justify-center gap-4 bg-white/5 p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
-              <Mail className="w-6 h-6 text-secondary" />
+              <Mail className="w-6 h-6 text-yellow-400" />
               <span className="font-bold">hr@ZeOpto.com</span>
             </a>
             <a href="https://ZeOpto.com/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-4 bg-white/5 p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors group">
-              <Globe className="w-6 h-6 text-tertiary group-hover:rotate-12 transition-transform" />
+              <Globe className="w-6 h-6 text-amber-500 group-hover:rotate-12 transition-transform" />
               <span className="font-bold">Visit ZeOpto</span>
             </a>
           </div>

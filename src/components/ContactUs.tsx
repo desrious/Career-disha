@@ -3,9 +3,10 @@ import { Mail, Phone, MapPin, Send, MessageSquare, Facebook, Instagram, Linkedin
 
 export default function ContactUs({ onBack }: { onBack: () => void }) {
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col">
+    <section className="contact-section min-h-screen bg-[#f9fafb] flex flex-col relative overflow-hidden z-0">
+      
       {/* Header */}
-      <header className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between sticky top-0 z-50">
+      <header className="bg-white/80 backdrop-blur-md border-b border-slate-200 px-6 py-4 flex items-center justify-between sticky top-0 z-[50]">
         <div className="flex items-center gap-4">
           <button 
             onClick={onBack}
@@ -19,7 +20,7 @@ export default function ContactUs({ onBack }: { onBack: () => void }) {
         </div>
       </header>
 
-      <div className="flex-1 max-w-6xl mx-auto w-full p-8 py-12">
+      <div className="content flex-1 max-w-6xl mx-auto w-full p-8 py-12 relative z-[2]">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           
           {/* Contact Information */}
@@ -163,6 +164,6 @@ export default function ContactUs({ onBack }: { onBack: () => void }) {
           </motion.div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
