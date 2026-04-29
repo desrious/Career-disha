@@ -75,7 +75,7 @@ const ProfileCard = ({
         
         <div className="flex items-start md:items-center gap-6 mb-8 relative z-10 pointer-events-none">
           <div className={`w-28 h-36 md:w-32 md:h-40 ${bgLightClass} rounded-2xl overflow-hidden shrink-0 shadow-lg border border-${color}/20 ring-4 ring-white`}>
-            <img src={image} alt={name} className="w-full h-full object-cover object-top" referrerPolicy="no-referrer" />
+            <img src={image} alt={name} className="w-full h-full object-cover object-center" referrerPolicy="no-referrer" />
           </div>
           <div className="pt-2 md:pt-0">
             <h4 className="text-2xl font-bold text-slate-800 drop-shadow-sm">{name}</h4>
