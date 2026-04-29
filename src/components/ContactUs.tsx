@@ -3,7 +3,11 @@ import { Mail, Phone, MapPin, Send, MessageSquare, Facebook, Instagram, Linkedin
 
 export default function ContactUs({ onBack }: { onBack: () => void }) {
   return (
-    <section className="contact-section min-h-screen bg-[#f9fafb] flex flex-col relative overflow-hidden z-0">
+    <section 
+      className="contact-section min-h-screen flex flex-col relative overflow-hidden z-0 bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: 'url("/contactus.png")' }}
+    >
+      <div className="absolute inset-0 backdrop-blur-sm bg-white/10 z-[1] pointer-events-none"></div>
       
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-md border-b border-slate-200 px-6 py-4 flex items-center justify-between sticky top-0 z-[50]">
@@ -16,7 +20,8 @@ export default function ContactUs({ onBack }: { onBack: () => void }) {
               <path d="m15 18-6-6 6-6"/>
             </svg>
           </button>
-          <h1 className="text-xl font-bold text-slate-800">Contact Us</h1>
+          <img src="/CareerDishaLogo.png" alt="Career Disha Logo" className="h-14 object-contain" />
+          <h1 className="text-xl font-bold text-slate-800 ml-2">Contact Us</h1>
         </div>
       </header>
 
@@ -29,15 +34,27 @@ export default function ContactUs({ onBack }: { onBack: () => void }) {
             animate={{ opacity: 1, x: 0 }}
             className="space-y-8"
           >
-            <div>
-              <h2 className="text-3xl font-extrabold text-slate-900 mb-4">Let's Connect</h2>
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1, duration: 0.5 }}
+            >
+              <h2 className="text-3xl font-extrabold text-slate-900 mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 animate-pulse block pb-1">Let's Connect</h2>
               <p className="text-slate-600 text-lg leading-relaxed">
                 We're here to help you navigate your career journey. Reach out to us for expert advice and support.
               </p>
-            </div>
+            </motion.div>
 
-            <div className="space-y-6">
-              <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-start gap-4 hover:shadow-md transition-shadow">
+            <motion.div 
+              className="space-y-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+            >
+              <motion.div 
+                whileHover={{ scale: 1.02 }}
+                className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-start gap-4 hover:shadow-md transition-all"
+              >
                 <div className="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center flex-shrink-0">
                   <Phone className="w-6 h-6 text-green-600" />
                 </div>
@@ -48,9 +65,12 @@ export default function ContactUs({ onBack }: { onBack: () => void }) {
                       <a href="tel:+919289191165" className="text-slate-600 hover:text-green-600 transition-colors">+91-9289191165</a>
                     </div>
                 </div>
-              </div>
+              </motion.div>
 
-              <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-start gap-4 hover:shadow-md transition-shadow">
+              <motion.div 
+                whileHover={{ scale: 1.02 }}
+                className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-start gap-4 hover:shadow-md transition-all"
+              >
                 <div className="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center flex-shrink-0">
                   <Mail className="w-6 h-6 text-purple-600" />
                 </div>
@@ -58,10 +78,14 @@ export default function ContactUs({ onBack }: { onBack: () => void }) {
                   <h3 className="font-bold text-slate-900 text-lg mb-1">Email</h3>
                   <a href="mailto:hr@ZeOpto.com" className="text-slate-600 hover:text-purple-600 transition-colors">hr@ZeOpto.com</a>
                 </div>
-              </div>
+              </motion.div>
 
               {/* Map Add-on */}
-              <div className="rounded-2xl overflow-hidden shadow-sm border border-slate-100 mt-6 h-64 w-full">
+              <motion.div 
+                whileHover={{ scale: 1.01 }}
+                transition={{ duration: 0.2 }}
+                className="rounded-2xl overflow-hidden shadow-sm border border-slate-100 mt-6 h-64 w-full"
+              >
                 <iframe
                   title="ZeOpto Office Location"
                   src="https://maps.google.com/maps?q=ZeOpto%20IT%20Services,%20Sector%204,%20Noida&t=&z=15&ie=UTF8&iwloc=&output=embed"
@@ -72,9 +96,12 @@ export default function ContactUs({ onBack }: { onBack: () => void }) {
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                 ></iframe>
-              </div>
+              </motion.div>
 
-              <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-start gap-4 hover:shadow-md transition-shadow">
+              <motion.div 
+                whileHover={{ scale: 1.02 }}
+                className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-start gap-4 hover:shadow-md transition-all"
+              >
                 <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0">
                   <MapPin className="w-6 h-6 text-blue-600" />
                 </div>
@@ -82,10 +109,15 @@ export default function ContactUs({ onBack }: { onBack: () => void }) {
                   <h3 className="font-bold text-slate-900 text-lg mb-1">Corporate Office</h3>
                   <p className="text-slate-600">Offices B-02, A-28, Near Noida Sector 16 Metro Station, Block A, Sector 4, Noida, UP-201301</p>
                 </div>
-              </div>
+              </motion.div>
 
               {/* Social Media Links */}
-              <div className="flex items-center gap-4 pt-4">
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4, duration: 0.5 }}
+                className="flex items-center gap-4 pt-4"
+              >
                  <a href="https://www.facebook.com/ZeOptoitservices" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="w-12 h-12 bg-white rounded-full shadow-sm border border-slate-100 flex items-center justify-center text-blue-600 hover:bg-blue-600 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
                    <Facebook className="w-5 h-5" />
                  </a>
@@ -101,14 +133,16 @@ export default function ContactUs({ onBack }: { onBack: () => void }) {
                  <a href="https://youtube.com/@ZeOpto?si=k0Oijwu3wG1AhtNR" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="w-12 h-12 bg-white rounded-full shadow-sm border border-slate-100 flex items-center justify-center text-red-600 hover:bg-red-600 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
                    <Youtube className="w-5 h-5" />
                  </a>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </motion.div>
 
           {/* Contact Form */}
           <motion.div 
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+            whileHover={{ boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.15)" }}
             className="bg-white rounded-3xl p-8 shadow-xl shadow-slate-200/50 border border-slate-100"
           >
             <div className="flex items-center gap-3 mb-6">
