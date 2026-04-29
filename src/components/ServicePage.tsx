@@ -238,8 +238,8 @@ export default function ServicePage({ data, onBack }: ServicePageProps) {
 
       {/* Footer */}
       <footer className="py-8 bg-slate-100 text-center relative z-20">
-        <p className="text-slate-500 text-xs font-medium uppercase tracking-widest">
-          {COPYRIGHT_TEXT}
+        <p className="text-slate-500 text-xs font-medium tracking-widest" style={{ textTransform: 'none' }}>
+          &copy; 2026 Careerदिशा &mdash; Powered by ZeOpto
         </p>
       </footer>
     </div>

@@ -65,12 +65,12 @@ export default function About({ onBack }: AboutProps) {
             About <span className="text-primary">Careerदिशा</span>
           </h1>
           <ElectricBorder color="#0057c2" speed={1} chaos={0.15} borderRadius={48} className="shadow-2xl">
-            <div className="bg-white rounded-[3rem] p-8 md:p-12 text-left z-10 w-full h-full">
+            <div className="bg-white rounded-[3rem] p-8 md:p-12 text-justify z-10 w-full h-full">
               <p className="text-xl text-on-surface-variant leading-relaxed mb-6">
                 Careerदिशा, powered by <span className="font-bold text-primary">ZeOpto</span>, is built to bridge the gap between ambition and the right career path. Backed by ZeOpto’s strong foundation in SAP Consulting, IT Outsourcing, and Professional Training, Careerदिशा brings together technology, mentorship, and real-world insights to guide individuals toward meaningful careers.
               </p>
               <p className="text-xl text-on-surface-variant leading-relaxed">
-                ZeOpto has established itself as a trusted SAP services company, delivering high-performance solutions through consulting, implementation, and training. With a team of certified experts and a focus on innovation, efficiency, and quality, ZeOpto helps organizations streamline operations, reduce costs, and achieve sustainable growth. Careerदिशा extends this same expertise to students and professionals, making career guidance smarter, data-driven, and accessible.
+                <span className="font-bold text-primary">ZeOpto</span> has established itself as a trusted SAP services company, delivering high-performance solutions through consulting, implementation, and training. With a team of certified experts and a focus on innovation, efficiency, and quality, ZeOpto helps organizations streamline operations, reduce costs, and achieve sustainable growth. Careerदिशा extends this same expertise to students and professionals, making career guidance smarter, data-driven, and accessible.
               </p>
             </div>
           </ElectricBorder>
@@ -358,18 +358,18 @@ export default function About({ onBack }: AboutProps) {
           <div className="flex flex-col md:flex-row justify-center gap-8 relative z-10">
             <div className="flex items-center justify-center gap-4 bg-white/5 p-6 rounded-2xl border border-white/10">
               <Phone className="w-6 h-6 text-primary" />
-              <span className="font-bold">+91-9953280036</span>
+              <span className="font-bold">+91-9289191164</span>
             </div>
-            <a href="mailto:hr@ZeOpto.com" className="flex items-center justify-center gap-4 bg-white/5 p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
+            <a href="mailto:hr@zeopto.com" className="flex items-center justify-center gap-4 bg-white/5 p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
               <Mail className="w-6 h-6 text-yellow-400" />
-              <span className="font-bold">hr@ZeOpto.com</span>
+              <span className="font-bold lowercase">hr@zeopto.com</span>
             </a>
             <a href="https://ZeOpto.com/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-4 bg-white/5 p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors group">
               <Globe className="w-6 h-6 text-amber-500 group-hover:rotate-12 transition-transform" />
               <span className="font-bold">Visit ZeOpto</span>
             </a>
           </div>
-          <p className="mt-12 text-white/40 text-sm font-medium uppercase tracking-widest">
+          <p className="mt-12 text-white/80 text-sm font-medium uppercase tracking-widest relative z-10">
             Careerदिशा empowers individuals with the right direction, backed by ZeOpto’s expertise and commitment to excellence.
           </p>
         </section>
@@ -378,8 +378,8 @@ export default function About({ onBack }: AboutProps) {
       {/* Footer */}
       <footer className="bg-slate-100 py-12 px-8 w-full">
         <div className="max-w-7xl mx-auto text-center">
-          <p className="text-slate-500 text-xs font-medium uppercase tracking-widest">
-            {COPYRIGHT_TEXT}
+          <p className="text-slate-500 text-xs font-medium tracking-widest" style={{ textTransform: 'none' }}>
+            &copy; 2026 Careerदिशा &mdash; Powered by ZeOpto
           </p>
         </div>
       </footer>

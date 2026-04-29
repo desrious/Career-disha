@@ -77,7 +77,7 @@ function MainApp() {
     if (view !== 'landing') return;
     const imgInterval = setInterval(() => {
       setCurrentHeroImageIndex((prev) => (prev + 1) % heroImages.length);
-    }, 40000);
+    }, 20000);
     return () => clearInterval(imgInterval);
   }, [view]);
 
@@ -105,8 +105,8 @@ function MainApp() {
            <a href="tel:+919289191164" className="flex items-center gap-2 hover:text-primary transition-colors">
               <Phone size={12} /> +91-9289191164
            </a>
-           <a href="mailto:hr@ZeOpto.com" className="flex items-center gap-2 hover:text-primary transition-colors">
-              <Mail size={12} /> hr@ZeOpto.com
+           <a href="mailto:hr@zepto.com" className="flex items-center gap-2 hover:text-primary transition-colors lowercase">
+              <Mail size={12} /> hr@zepto.com
            </a>
            <a href="https://ZeOpto.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors">
               <Globe size={12} /> Visit ZeOpto

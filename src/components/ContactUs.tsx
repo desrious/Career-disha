@@ -39,7 +39,7 @@ export default function ContactUs({ onBack }: { onBack: () => void }) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1, duration: 0.5 }}
             >
-              <h2 className="text-3xl font-extrabold text-slate-900 mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 animate-pulse block pb-1">Let's Connect</h2>
+              <h2 className="text-3xl font-extrabold text-black mb-4 animate-pulse block pb-1 [text-shadow:_0_0_15px_rgba(0,0,0,0.5)]">Let's Connect</h2>
               <p className="text-slate-600 text-lg leading-relaxed">
                 We're here to help you navigate your career journey. Reach out to us for expert advice and support.
               </p>
