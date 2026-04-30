@@ -67,7 +67,7 @@ export default function About({ onBack }: AboutProps) {
           <ElectricBorder color="#0057c2" speed={1} chaos={0.15} borderRadius={48} className="shadow-2xl">
             <div className="bg-white rounded-[3rem] p-8 md:p-12 text-justify z-10 w-full h-full">
               <p className="text-xl text-on-surface-variant leading-relaxed mb-6">
-                Careerदिशा, powered by <span className="font-bold text-primary">ZeOpto</span>, is built to bridge the gap between ambition and the right career path. Backed by ZeOpto’s strong foundation in consulting, technology (cloud & AI), operations, and digital marketing, Careerदिशा brings together technology, mentorship, and real-world insights to guide individuals toward meaningful careers.
+                Careerदिशा, powered by <span className="font-bold text-primary">ZeOpto</span>, is built to bridge the gap between ambition and the right career path. Backed by ZeOpto’s strong foundation in SAP Consulting, IT Outsourcing, and Professional Training, Careerदिशा brings together technology, mentorship, and real-world insights to guide individuals toward meaningful careers.
               </p>
               <p className="text-xl text-on-surface-variant leading-relaxed">
                 <span className="font-bold text-primary">ZeOpto</span> has established itself as a trusted SAP services company, delivering high-performance solutions through consulting, implementation, and training. With a team of certified experts and a focus on innovation, efficiency, and quality, ZeOpto helps organizations streamline operations, reduce costs, and achieve sustainable growth. Careerदिशा extends this same expertise to students and professionals, making career guidance smarter, data-driven, and accessible.

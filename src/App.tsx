@@ -335,14 +335,14 @@ function MainApp() {
                 },
                 {
                   icon: <Brain className="w-10 h-10 group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-300" />,
-                  title: "Detailed Analysis",
+                  title: "AI Analysis (feature soon to get added)",
                   desc: "Receive deep mentor insights as our AI maps your profile against 500+ modern career paths.",
                   bg: "bg-secondary/10 text-secondary",
                   bgHover: "group-hover:bg-secondary group-hover:text-white group-hover:shadow-lg"
                 },
                 {
                   icon: <Route className="w-10 h-10 group-hover:scale-110 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />,
-                  title: "Personalized Roadmaps",
+                  title: "Roadmap (feature soon to get added)",
                   desc: "Get an actionable, step-by-step path including skill requirements and college recommendations.",
                   bg: "bg-balance/20 text-balance",
                   bgHover: "group-hover:bg-balance group-hover:shadow-lg"
@@ -595,7 +595,7 @@ function MainApp() {
                 },
                 {
                   icon: <Brain className="w-8 h-8" />,
-                  title: "Detailed Analysis",
+                  title: "AI Analysis (feature soon to get added)",
                   desc: "Our advanced models process 500+ data points to match your unique profile against global industry trends.",
                   color: "bg-secondary shadow-secondary/20",
                   textColor: "text-white",
@@ -603,8 +603,8 @@ function MainApp() {
                 },
                 {
                   icon: <Route className="w-8 h-8" />,
-                  title: "Personalized Roadmaps",
-                  desc: "Receive a comprehensive, multi-year blueprint tailored as per your personality. Our roadmaps include specific skill acquisition paths, verified college recommendations, and direct connections to industry mentors.",
+                  title: "Personalized Actionable Roadmaps (feature soon to get added)",
+                  desc: "Receive a comprehensive, multi-year blueprint tailored to your psychology. Our roadmaps include specific skill acquisition paths, verified college recommendations, and direct connections to industry mentors.",
                   color: "bg-accent shadow-accent/20",
                   textColor: "text-slate-900",
                   isSpecial: true,
@@ -898,7 +898,7 @@ function MainApp() {
         </section>
 
         {/* Meet Our Counsellors Section */}
-        <section className="relative py-24 px-8 bg-slate-50 overflow-hidden" id="counsellors">
+        <section className="relative py-24 px-8 bg-surface overflow-hidden" id="counsellors">
           <div className="max-w-7xl mx-auto relative z-10">
             <div className="text-center mb-16">
               <span className="text-primary font-bold tracking-widest uppercase text-xs mb-2 block">Expert Guidance</span>
@@ -910,8 +910,8 @@ function MainApp() {
             {/* Scrolling container */}
             <div className="relative">
               {/* Gradient fade edges */}
-              <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-slate-50 to-transparent z-10 pointer-events-none"></div>
-              <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-slate-50 to-transparent z-10 pointer-events-none"></div>
+              <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-surface to-transparent z-10 pointer-events-none"></div>
+              <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-surface to-transparent z-10 pointer-events-none"></div>
 
               <div className="overflow-hidden">
                 <div className="flex gap-8 animate-scroll-cards hover:[animation-play-state:paused]" style={{ width: 'max-content' }}>
@@ -924,7 +924,7 @@ function MainApp() {
                           <img
                             src="/ShrutiBhardwaj.jpg"
                             alt="Nishtha Vyas"
-                            className="w-full h-full object-cover object-[center_30%] group-hover:scale-105 transition-transform duration-500"
+                            className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
                           <div className="absolute bottom-4 left-6 right-6">
@@ -963,7 +963,7 @@ function MainApp() {
                           <img
                             src="/NishthaVyas.jpg"
                             alt="Milli Tewari"
-                            className="w-full h-full object-cover object-[center_30%] group-hover:scale-105 transition-transform duration-500"
+                            className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
                           <div className="absolute bottom-4 left-6 right-6">
@@ -1002,7 +1002,7 @@ function MainApp() {
                           <img
                             src="/MilliTewari.jpg"
                             alt="Shruti Bhardwaj"
-                            className="w-full h-full object-cover object-[center_30%] group-hover:scale-105 transition-transform duration-500"
+                            className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
                           <div className="absolute bottom-4 left-6 right-6">
@@ -1041,7 +1041,7 @@ function MainApp() {
                           <img
                             src="/Psychologist.png"
                             alt="Dr. Anjali Bhardwaj"
-                            className="w-full h-full object-cover object-[center_80%] group-hover:scale-105 transition-transform duration-500"
+                            className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 -translate-y-4"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
                           <div className="absolute bottom-4 left-6 right-6">
