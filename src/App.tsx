@@ -779,50 +779,29 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
               </button>
 
               <div id="testimonials-container" className="flex gap-8 overflow-x-auto pb-10 pt-4 no-scrollbar snap-x scroll-smooth px-4">
-                {/* Testimonial 1 */}
-                <div className="min-w-[320px] md:min-w-[400px] bg-white/60 backdrop-blur-lg p-10 rounded-3xl snap-center shadow-sm border border-white/50 hover:-translate-y-2 hover:shadow-xl transition-all duration-300">
-                  <div className="flex gap-1 text-accent mb-6">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-5 h-5 fill-accent" />
-                    ))}
-                  </div>
-                  <p className="text-slate-600 text-lg italic mb-10 leading-relaxed drop-shadow-sm">"The most clear career path guidance I've ever received. Their career planning helped me choose the right career by showing exact courses and internships needed to transition into AI Research."</p>
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-slate-200 overflow-hidden ring-2 ring-white">
-                      <img 
-                        alt="Priya Sharma" 
-                        src={priyaImg}
-                        referrerPolicy="no-referrer"
-                      />
+                {cmsData.testimonials.map((testimonial) => (
+                  <div key={testimonial.id} className="min-w-[320px] md:min-w-[400px] bg-white/60 backdrop-blur-lg p-10 rounded-3xl snap-center shadow-sm border border-white/50 hover:-translate-y-2 hover:shadow-xl transition-all duration-300">
+                    <div className="flex gap-1 text-accent mb-6">
+                      {[...Array(testimonial.rating || 5)].map((_, i) => (
+                        <Star key={i} className="w-5 h-5 fill-accent" />
+                      ))}
                     </div>
-                    <div>
-                      <h4 className="font-bold text-on-surface">Priya Sharma</h4>
-                      <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">College Student</p>
-                    </div>
-                  </div>
-                </div>
-                {/* Testimonial 2 */}
-                <div className="min-w-[320px] md:min-w-[400px] bg-white/60 backdrop-blur-lg p-10 rounded-3xl snap-center shadow-sm border border-white/50 hover:-translate-y-2 hover:shadow-xl transition-all duration-300">
-                  <div className="flex gap-1 text-accent mb-6">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-5 h-5 fill-accent" />
-                    ))}
-                  </div>
-                  <p className="text-slate-600 text-lg italic mb-10 leading-relaxed drop-shadow-sm">"Choosing a stream after 10th was a nightmare until I did the Career Disha assessment. It validated my love for design over medicine."</p>
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-slate-200 overflow-hidden ring-2 ring-white">
-                      <img 
-                        alt="Rohan Desai" 
-                        src={rohanImg}
-                        referrerPolicy="no-referrer"
-                      />
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-on-surface">Rohan Desai</h4>
-                      <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">High School Student</p>
+                    <p className="text-slate-600 text-lg italic mb-10 leading-relaxed drop-shadow-sm">"{testimonial.quote}"</p>
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-full bg-slate-200 overflow-hidden ring-2 ring-white">
+                        <img 
+                          alt={testimonial.name} 
+                          src={testimonial.image}
+                          referrerPolicy="no-referrer"
+                        />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-on-surface">{testimonial.name}</h4>
+                        <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">{testimonial.role}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
+                ))}
               </div>
 
               <button 
