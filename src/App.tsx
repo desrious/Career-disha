@@ -38,7 +38,29 @@ import { highSchoolData, plusTwoData, graduatesData, workingProfessionalData } f
 type ViewType = 'landing' | 'about' | 'insights' | 'contact-us' | 'high-school' | 'plus-two' | 'graduates' | 'working-professional';
 
 function MainApp({ cmsData }: { cmsData: CmsData }) {
-  const [view, setView] = useState<ViewType>('landing');
+  const [view, setViewLocal] = useState<ViewType>(() => {
+    const path = window.location.pathname.replace(/^\/+/, '').replace(/\/+$/, '');
+    const validViews: ViewType[] = ['landing', 'about', 'insights', 'contact-us', 'high-school', 'plus-two', 'graduates', 'working-professional'];
+    return validViews.includes(path as ViewType) ? (path as ViewType) : 'landing';
+  });
+
+  const setView = (newView: ViewType) => {
+    setViewLocal(newView);
+    const newPath = newView === 'landing' ? '/' : `/${newView}`;
+    window.history.pushState({}, '', newPath);
+    window.dispatchEvent(new PopStateEvent('popstate'));
+  };
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const path = window.location.pathname.replace(/^\/+/, '').replace(/\/+$/, '');
+      const validViews: ViewType[] = ['landing', 'about', 'insights', 'contact-us', 'high-school', 'plus-two', 'graduates', 'working-professional'];
+      setViewLocal(validViews.includes(path as ViewType) ? (path as ViewType) : 'landing');
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
   const [showInquiryModal, setShowInquiryModal] = useState(false);
 
   const heroImages = [
@@ -125,7 +147,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
             <span className="text-xl font-extrabold text-blue-700 tracking-tighter font-headline">Career Disha</span>
           </div>
           <div className="hidden md:flex items-center gap-8">
-            <a className="text-primary border-b-2 border-primary font-headline tracking-tight font-semibold hover:opacity-80 transition-opacity duration-300" href="#">Home</a>
+            <button onClick={() => setView('landing')} className="text-primary border-b-2 border-primary font-headline tracking-tight font-semibold hover:opacity-80 transition-opacity duration-300 cursor-pointer">Home</button>
             <button 
               onClick={() => setView('about')}
               className="text-on-surface-variant hover:text-primary font-headline tracking-tight font-semibold hover:opacity-80 transition-opacity duration-300"
