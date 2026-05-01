@@ -2,9 +2,11 @@ import { useRef } from 'react';
 import { ArrowLeft, Play, Youtube, BookOpen, ExternalLink, ChevronLeft, ChevronRight, Phone, Mail, Globe } from 'lucide-react';
 import { motion } from 'motion/react';
 import { LOGO_URL, COPYRIGHT_TEXT } from '../data/constants';
+import { CmsInsights, defaultCmsData } from '../data/cms';
 
 interface InsightsProps {
   onBack: () => void;
+  insights?: CmsInsights;
 }
 
 const videos = [
@@ -82,7 +84,7 @@ const mockBlogs = [
   }
 ];
 
-export default function Insights({ onBack }: InsightsProps) {
+export default function Insights({ onBack, insights = defaultCmsData.insights }: InsightsProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: 'left' | 'right') => {
@@ -123,10 +125,10 @@ export default function Insights({ onBack }: InsightsProps) {
           className="mb-20 text-center"
         >
           <h1 className="text-5xl md:text-6xl font-extrabold font-headline text-on-surface tracking-tight mb-6">
-            <span className="text-primary">Insights</span>
+            <span className="text-primary">{insights.heroTitle}</span>
           </h1>
           <p className="text-on-surface-variant text-lg max-w-2xl mx-auto">
-            Stay updated with the latest industry trends, expert mentorship sessions, and career guidance from the visionaries at Careerदिशा.
+            {insights.heroDescription}
           </p>
         </motion.section>
 
@@ -141,13 +143,41 @@ export default function Insights({ onBack }: InsightsProps) {
             </div>
           </div>
           
-          <div className="bg-slate-50 border border-slate-200 rounded-[2rem] p-12 text-center flex flex-col items-center justify-center min-h-[300px]">
-            <div className="w-20 h-20 bg-slate-200 rounded-full flex items-center justify-center mb-6 animate-pulse">
-              <Youtube className="w-10 h-10 text-slate-400" />
+          {insights.videos.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {insights.videos.map((video, index) => (
+                <motion.article
+                  key={video.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.08 }}
+                  className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-sm"
+                >
+                  <div className="aspect-video bg-slate-900">
+                    <iframe
+                      title={video.title}
+                      src={`https://www.youtube.com/embed/${video.youtubeId}`}
+                      className="h-full w-full"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+                  <div className="p-5">
+                    <h3 className="font-bold text-slate-900">{video.title}</h3>
+                  </div>
+                </motion.article>
+              ))}
             </div>
-            <h3 className="text-2xl font-bold text-slate-700 mb-2">Coming Soon</h3>
-            <p className="text-slate-500 max-w-md">Our curated video insights and expert mentorship sessions will be available here shortly.</p>
-          </div>
+          ) : (
+            <div className="bg-slate-50 border border-slate-200 rounded-[2rem] p-12 text-center flex flex-col items-center justify-center min-h-[300px]">
+              <div className="w-20 h-20 bg-slate-200 rounded-full flex items-center justify-center mb-6 animate-pulse">
+                <Youtube className="w-10 h-10 text-slate-400" />
+              </div>
+              <h3 className="text-2xl font-bold text-slate-700 mb-2">Coming Soon</h3>
+              <p className="text-slate-500 max-w-md">Our curated video insights and expert mentorship sessions will be available here shortly.</p>
+            </div>
+          )}
         </section>
 
         {/* Blogs Section Placeholder */}
@@ -159,48 +189,55 @@ export default function Insights({ onBack }: InsightsProps) {
             <h2 className="text-3xl font-extrabold font-headline">Latest Blogs</h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {mockBlogs.map((blog, index) => (
-              <motion.div 
-                key={index}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="bg-white rounded-[2.5rem] border border-outline-variant/10 flex flex-col overflow-hidden hover:shadow-xl transition-all group"
-              >
-                <div className="aspect-[4/3] relative overflow-hidden">
-                  <img 
-                    src={blog.image} 
-                    alt={blog.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    referrerPolicy="no-referrer"
-                  />
-                  <div className="absolute top-4 right-4 bg-primary/90 text-white px-3 py-1 rounded-full text-xs font-bold backdrop-blur-sm">
-                    {blog.date}
+          {insights.blogs.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {insights.blogs.map((blog, index) => (
+                <motion.div 
+                  key={blog.id}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  className="bg-white rounded-[2.5rem] border border-outline-variant/10 flex flex-col overflow-hidden hover:shadow-xl transition-all group"
+                >
+                  <div className="aspect-[4/3] relative overflow-hidden">
+                    <img 
+                      src={blog.image} 
+                      alt={blog.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      referrerPolicy="no-referrer"
+                    />
+                    <div className="absolute top-4 right-4 bg-primary/90 text-white px-3 py-1 rounded-full text-xs font-bold backdrop-blur-sm">
+                      {blog.date}
+                    </div>
                   </div>
-                </div>
-                <div className="p-8 flex flex-col flex-1">
-                  <span className="text-xs font-bold text-primary uppercase tracking-widest mb-4 block">{blog.category}</span>
-                  <h3 className="text-xl font-bold mb-4 leading-tight group-hover:text-primary transition-colors">{blog.title}</h3>
-                  <p className="text-on-surface-variant text-sm leading-relaxed mb-6 line-clamp-3">{blog.excerpt}</p>
-                  <div className="mt-auto pt-6 border-t border-outline-variant/10 flex items-center justify-between">
-                    <a 
-                      href={blog.link} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-primary font-bold text-sm flex items-center gap-1 hover:gap-2 transition-all"
-                    >
-                      Read More <ExternalLink className="w-4 h-4" />
-                    </a>
+                  <div className="p-8 flex flex-col flex-1">
+                    <span className="text-xs font-bold text-primary uppercase tracking-widest mb-4 block">{blog.category}</span>
+                    <h3 className="text-xl font-bold mb-4 leading-tight group-hover:text-primary transition-colors">{blog.title}</h3>
+                    <p className="text-on-surface-variant text-sm leading-relaxed mb-6 line-clamp-3">{blog.excerpt}</p>
+                    <div className="mt-auto pt-6 border-t border-outline-variant/10 flex items-center justify-between">
+                      <a 
+                        href={blog.link} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-primary font-bold text-sm flex items-center gap-1 hover:gap-2 transition-all"
+                      >
+                        Read More <ExternalLink className="w-4 h-4" />
+                      </a>
+                    </div>
                   </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-          <div className="mt-12 text-center">
-            <p className="text-outline font-medium italic">More blogs coming soon...</p>
-          </div>
+                </motion.div>
+              ))}
+            </div>
+          ) : (
+            <div className="bg-slate-50 border border-slate-200 rounded-[2rem] p-12 text-center flex flex-col items-center justify-center min-h-[300px]">
+              <div className="w-20 h-20 bg-slate-200 rounded-full flex items-center justify-center mb-6 animate-pulse">
+                <BookOpen className="w-10 h-10 text-slate-400" />
+              </div>
+              <h3 className="text-2xl font-bold text-slate-700 mb-2">Coming Soon</h3>
+              <p className="text-slate-500 max-w-md">More blogs coming soon....</p>
+            </div>
+          )}
         </section>
 
         {/* Contact */}
@@ -241,3 +278,5 @@ export default function Insights({ onBack }: InsightsProps) {
     </div>
   );
 }
+
+

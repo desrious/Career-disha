@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import About from './components/About';
+import Admin from './components/Admin';
 import Insights from './components/Insights';
 import SplashScreen from './components/SplashScreen';
 import ContactUs from './components/ContactUs';
@@ -30,12 +31,13 @@ import InquiryModal from './components/InquiryModal';
 import FollowCursor from './components/FollowCursor';
 import ComparisonSection from './components/ComparisonSection';
 import ProfileCard from './components/ProfileCard';
+import { CMS_STORAGE_KEY, CMS_UPDATED_EVENT, CmsData, loadCmsData, loadCmsDataSync } from './data/cms';
 import { LOGO_URL, COPYRIGHT_TEXT, CONTACT, SOCIALS, FOUNDERS } from './data/constants';
 import { highSchoolData, plusTwoData, graduatesData, workingProfessionalData } from './data/servicePageData';
 
 type ViewType = 'landing' | 'about' | 'insights' | 'contact-us' | 'high-school' | 'plus-two' | 'graduates' | 'working-professional';
 
-function MainApp() {
+function MainApp({ cmsData }: { cmsData: CmsData }) {
   const [view, setView] = useState<ViewType>('landing');
   const [showInquiryModal, setShowInquiryModal] = useState(false);
 
@@ -77,7 +79,7 @@ function MainApp() {
     if (view !== 'landing') return;
     const imgInterval = setInterval(() => {
       setCurrentHeroImageIndex((prev) => (prev + 1) % heroImages.length);
-    }, 20000);
+    }, 40000);
     return () => clearInterval(imgInterval);
   }, [view]);
 
@@ -88,7 +90,7 @@ function MainApp() {
 
   // ─── Non-landing views ────────────────────────────────────
   if (view === 'about') return <About onBack={() => setView('landing')} />;
-  if (view === 'insights') return <Insights onBack={() => setView('landing')} />;
+  if (view === 'insights') return <Insights onBack={() => setView('landing')} insights={cmsData.insights} />;
   if (view === 'contact-us') return <ContactUs onBack={() => setView('landing')} />;
   if (view === 'high-school') return <ServicePage data={highSchoolData} onBack={() => setView('landing')} />;
   if (view === 'plus-two') return <ServicePage data={plusTwoData} onBack={() => setView('landing')} />;
@@ -105,8 +107,8 @@ function MainApp() {
            <a href="tel:+919289191164" className="flex items-center gap-2 hover:text-primary transition-colors">
               <Phone size={12} /> +91-9289191164
            </a>
-           <a href="mailto:hr@zepto.com" className="flex items-center gap-2 hover:text-primary transition-colors lowercase">
-              <Mail size={12} /> hr@zepto.com
+           <a href="mailto:hr@ZeOpto.com" className="flex items-center gap-2 hover:text-primary transition-colors">
+              <Mail size={12} /> hr@ZeOpto.com
            </a>
            <a href="https://ZeOpto.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors">
               <Globe size={12} /> Visit ZeOpto
@@ -398,6 +400,7 @@ function MainApp() {
             </section>
   
             {/* Early Bird Promo Section */}
+            {cmsData.offer.visible && (
             <section className="py-12 px-6 relative z-10">
               <motion.div 
                 initial={{ opacity: 0, y: 50 }}
@@ -414,38 +417,39 @@ function MainApp() {
                   <div className="flex-1 text-center md:text-left">
                     <div className="inline-flex items-center justify-center gap-1.5 px-3 py-1 bg-red-100 text-red-600 rounded-full text-xs font-bold uppercase tracking-widest mb-4">
                       <Star size={14} className="fill-red-600" />
-                      Save ₹700
+                      {cmsData.offer.badge}
                     </div>
                     <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight font-headline mb-3">
-                      Limited Time Early Bird Offer 🎉
+                      {cmsData.offer.title}
                     </h2>
                     <p className="text-lg text-slate-600 font-medium">
-                      Grab this exclusive deal before it’s gone! Give your career a head start at an unbeatable price.
+                      {cmsData.offer.description}
                     </p>
                   </div>
                   
                   <div className="flex flex-col items-center md:items-end shrink-0">
                     <div className="flex items-center gap-3 mb-5">
                       <span className="text-2xl text-slate-400 font-bold line-through decoration-red-400/50 decoration-2">
-                        ₹1200
+                        {cmsData.offer.originalPrice}
                       </span>
                       <span className="text-5xl font-black text-[#fba70c] drop-shadow-sm">
-                        ₹500
+                        {cmsData.offer.offerPrice}
                       </span>
                     </div>
                     <button 
                       onClick={() => setShowInquiryModal(true)}
                       className="w-full md:w-auto px-8 py-4 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold font-headline text-[1.1rem] shadow-xl hover:shadow-2xl transition-all hover:-translate-y-1"
                     >
-                      Claim Offer Now
+                      {cmsData.offer.cta}
                     </button>
                     <p className="text-xs text-slate-400 font-medium mt-3 text-center md:text-right">
-                      * Offer valid for a limited time only
+                      {cmsData.offer.note}
                     </p>
                   </div>
                 </div>
               </motion.div>
             </section>
+            )}
 
             {/* Tailored Guidance For You */}
         <section className="py-24 px-6 relative overflow-hidden" id="about">
@@ -898,7 +902,7 @@ function MainApp() {
         </section>
 
         {/* Meet Our Counsellors Section */}
-        <section className="relative py-24 px-8 bg-surface overflow-hidden" id="counsellors">
+        <section className="relative py-24 px-8 bg-slate-50 overflow-hidden" id="counsellors">
           <div className="max-w-7xl mx-auto relative z-10">
             <div className="text-center mb-16">
               <span className="text-primary font-bold tracking-widest uppercase text-xs mb-2 block">Expert Guidance</span>
@@ -910,8 +914,8 @@ function MainApp() {
             {/* Scrolling container */}
             <div className="relative">
               {/* Gradient fade edges */}
-              <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-surface to-transparent z-10 pointer-events-none"></div>
-              <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-surface to-transparent z-10 pointer-events-none"></div>
+              <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-slate-50 to-transparent z-10 pointer-events-none"></div>
+              <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-slate-50 to-transparent z-10 pointer-events-none"></div>
 
               <div className="overflow-hidden">
                 <div className="flex gap-8 animate-scroll-cards hover:[animation-play-state:paused]" style={{ width: 'max-content' }}>
@@ -922,7 +926,7 @@ function MainApp() {
                       <div className="w-[420px] bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100 hover:shadow-2xl transition-shadow duration-300 shrink-0 group">
                         <div className="relative h-72 overflow-hidden">
                           <img
-                            src="/ShrutiBhardwaj.jpg"
+                            src="/NishthaVyas.jpg"
                             alt="Nishtha Vyas"
                             className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                           />
@@ -961,7 +965,7 @@ function MainApp() {
                       <div className="w-[420px] bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100 hover:shadow-2xl transition-shadow duration-300 shrink-0 group">
                         <div className="relative h-72 overflow-hidden">
                           <img
-                            src="/NishthaVyas.jpg"
+                            src="/MilliTewari.jpg"
                             alt="Milli Tewari"
                             className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                           />
@@ -1000,7 +1004,7 @@ function MainApp() {
                       <div className="w-[420px] bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100 hover:shadow-2xl transition-shadow duration-300 shrink-0 group">
                         <div className="relative h-72 overflow-hidden">
                           <img
-                            src="/MilliTewari.jpg"
+                            src="/ShrutiBhardwaj.jpg"
                             alt="Shruti Bhardwaj"
                             className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                           />
@@ -1030,45 +1034,6 @@ function MainApp() {
                             <li className="flex items-start gap-2">
                               <span className="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 shrink-0"></span>
                               <span className="text-slate-700"><strong className="text-slate-900">Commitment:</strong> Building a strong foundation for professional entry</span>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-
-                      {/* Dr. Anjali Bhardwaj */}
-                      <div className="w-[420px] bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100 hover:shadow-2xl transition-shadow duration-300 shrink-0 group">
-                        <div className="relative h-72 overflow-hidden">
-                          <img
-                            src="/Psychologist.png"
-                            alt="Dr. Anjali Bhardwaj"
-                            className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 -translate-y-4"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                          <div className="absolute bottom-4 left-6 right-6">
-                            <h3 className="text-2xl font-bold text-white mb-1">Dr. Anjali Bhardwaj</h3>
-                            <p className="text-sm font-semibold text-purple-300 uppercase tracking-wider">Senior Counselling Psychologist</p>
-                          </div>
-                        </div>
-                        <div className="p-6">
-                          <p className="text-slate-600 italic text-sm mb-5 leading-relaxed border-l-4 border-purple-500/30 pl-4">
-                            "Integrating psychological insights with career guidance to empower individuals with mental resilience and emotional clarity."
-                          </p>
-                          <ul className="space-y-2.5 text-sm">
-                            <li className="flex items-start gap-2">
-                              <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0"></span>
-                              <span className="text-slate-700"><strong className="text-slate-900">Experience:</strong> 15 years in clinical counselling, behavioural therapy & wellness</span>
-                            </li>
-                            <li className="flex items-start gap-2">
-                              <span className="w-1.5 h-1.5 rounded-full bg-secondary mt-1.5 shrink-0"></span>
-                              <span className="text-slate-700"><strong className="text-slate-900">Specialization:</strong> Psychometric assessments, personality mapping & stress management</span>
-                            </li>
-                            <li className="flex items-start gap-2">
-                              <span className="w-1.5 h-1.5 rounded-full bg-purple-500 mt-1.5 shrink-0"></span>
-                              <span className="text-slate-700"><strong className="text-slate-900">Methodology:</strong> Scientific psychological frameworks & empathetic listening</span>
-                            </li>
-                            <li className="flex items-start gap-2">
-                              <span className="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 shrink-0"></span>
-                              <span className="text-slate-700"><strong className="text-slate-900">Focus:</strong> Overcoming internal barriers, anxiety, & decision-making blocks</span>
                             </li>
                           </ul>
                         </div>
@@ -1191,16 +1156,61 @@ function MainApp() {
       </div>
 
       {showInquiryModal && (
-        <InquiryModal onClose={() => setShowInquiryModal(false)} />
+        <InquiryModal
+          onClose={() => setShowInquiryModal(false)}
+          heading={cmsData.expertAdvice.heading}
+          services={cmsData.expertAdvice.services}
+          successMessage={cmsData.expertAdvice.successMessage}
+        />
       )}
     </div>
   );
 }
 
 export default function App() {
+  const [cmsData, setCmsData] = useState<CmsData>(() => loadCmsDataSync());
+  const [pathname, setPathname] = useState(() => window.location.pathname);
   const [showSplash, setShowSplash] = useState(() => localStorage.getItem('seenSplash') !== 'true');
 
-  if (!showSplash) return <MainApp />;
+  useEffect(() => {
+    loadCmsData().then(setCmsData);
+  }, []);
+
+  useEffect(() => {
+    const syncCmsFromStorage = () => {
+      setCmsData(loadCmsDataSync());
+    };
+
+    const onStorage = (event: StorageEvent) => {
+      if (event.key === CMS_STORAGE_KEY) {
+        syncCmsFromStorage();
+      }
+    };
+
+    window.addEventListener(CMS_UPDATED_EVENT, syncCmsFromStorage);
+    window.addEventListener('storage', onStorage);
+    return () => {
+      window.removeEventListener(CMS_UPDATED_EVENT, syncCmsFromStorage);
+      window.removeEventListener('storage', onStorage);
+    };
+  }, []);
+
+  useEffect(() => {
+    const onRouteChange = () => {
+      setPathname(window.location.pathname);
+    };
+
+    window.addEventListener('popstate', onRouteChange);
+    return () => window.removeEventListener('popstate', onRouteChange);
+  }, []);
+
+  const isAdminRoute = pathname === '/admin' || pathname === '/admin/';
+
+  if (isAdminRoute) {
+    return <Admin data={cmsData} onDataChange={setCmsData} />;
+  }
+
+  if (!showSplash) return <MainApp cmsData={cmsData} />;
 
   return (
     <>
@@ -1208,7 +1218,7 @@ export default function App() {
         localStorage.setItem('seenSplash', 'true');
         setShowSplash(false);
       }} />
-      <MainApp />
+      <MainApp cmsData={cmsData} />
     </>
   );
 }

@@ -1,0 +1,563 @@
+export type CmsOffer = {
+  badge: string;
+  title: string;
+  description: string;
+  originalPrice: string;
+  offerPrice: string;
+  note: string;
+  cta: string;
+  visible: boolean;
+};
+
+export type CmsTestimonial = {
+  id: string;
+  name: string;
+  role: string;
+  quote: string;
+  image: string;
+  rating: number;
+};
+
+export type CmsCounsellor = {
+  id: string;
+  name: string;
+  title: string;
+  image: string;
+  quote: string;
+  bullets: string[];
+  accent: string;
+};
+
+export type CmsExpertAdvice = {
+  heading: string;
+  services: string[];
+  successMessage: string;
+};
+
+export type CmsContact = {
+  phones: string[];
+  email: string;
+  website: string;
+  address: string;
+  whatsapp: string;
+  mapQuery: string;
+  socials: {
+    facebook: string;
+    instagram: string;
+    linkedin: string;
+    whatsapp: string;
+    youtube: string;
+  };
+};
+
+export type CmsFooter = {
+  brand: string;
+  description: string;
+  copyright: string;
+  exploreLinks: string[];
+  legalLinks: string[];
+};
+
+export type CmsInsightBlog = {
+  id: string;
+  title: string;
+  excerpt: string;
+  date: string;
+  category: string;
+  image: string;
+  link: string;
+};
+
+export type CmsInsightVideo = {
+  id: string;
+  youtubeId: string;
+  title: string;
+};
+
+export type CmsInsights = {
+  heroTitle: string;
+  heroDescription: string;
+  blogs: CmsInsightBlog[];
+  videos: CmsInsightVideo[];
+};
+
+export type CmsData = {
+  offer: CmsOffer;
+  testimonials: CmsTestimonial[];
+  counsellors: CmsCounsellor[];
+  expertAdvice: CmsExpertAdvice;
+  contact: CmsContact;
+  footer: CmsFooter;
+  insights: CmsInsights;
+};
+
+export type ExpertAdviceInquiry = {
+  id?: string;
+  name: string;
+  email: string;
+  mobile: string;
+  service: string;
+  message?: string;
+  created_at?: string;
+};
+
+export const CMS_STORAGE_KEY = 'careerDishaCmsData';
+export const CMS_UPDATED_EVENT = 'careerDishaCmsUpdated';
+export const CMS_UPDATED_AT_KEY = 'careerDishaCmsUpdatedAt';
+export const ADMIN_SESSION_STORAGE_KEY = 'careerDishaAdminSessionToken';
+const CMS_ROW_ID = 'site';
+
+export const defaultCmsData: CmsData = {
+  offer: {
+    badge: 'Save Rs 700',
+    title: 'Limited Time Early Bird Offer',
+    description: "Grab this exclusive deal before it's gone! Give your career a head start at an unbeatable price.",
+    originalPrice: 'Rs 1200',
+    offerPrice: 'Rs 500',
+    note: '* Offer valid for a limited time only',
+    cta: 'Claim Offer Now',
+    visible: true,
+  },
+  testimonials: [
+    {
+      id: 'priya-sharma',
+      name: 'Priya Sharma',
+      role: 'College Student',
+      quote: "The most clear career path guidance I've ever received. Their career planning helped me choose the right career by showing exact courses and internships needed to transition into AI Research.",
+      image: 'https://randomuser.me/api/portraits/women/44.jpg',
+      rating: 5,
+    },
+    {
+      id: 'rohan-desai',
+      name: 'Rohan Desai',
+      role: 'High School Student',
+      quote: 'Choosing a stream after 10th was a nightmare until I did the Career Disha assessment. It validated my love for design over medicine.',
+      image: 'https://randomuser.me/api/portraits/men/46.jpg',
+      rating: 5,
+    },
+  ],
+  counsellors: [
+    {
+      id: 'nishtha-vyas',
+      name: 'Nishtha Vyas',
+      title: 'Senior Career Counsellor',
+      image: '/ShrutiBhardwaj.jpg',
+      quote: 'Empowering students through data-driven insights and strategic foresight to navigate global career paths.',
+      accent: 'border-primary/30 text-blue-300',
+      bullets: [
+        'Experience: 10 years in career development & mentorship',
+        'Specialization: Emerging industry trends & career architecture',
+        'Strategy: Global job market expertise for future-ready decisions',
+        'Approach: Building clarity through high-impact guidance',
+      ],
+    },
+    {
+      id: 'milli-tewari',
+      name: 'Milli Tewari',
+      title: 'Lead Career Strategist',
+      image: '/NishthaVyas.jpg',
+      quote: 'Building agile and future-proof career paths through personalized strategy and market intelligence.',
+      accent: 'border-secondary/30 text-green-300',
+      bullets: [
+        'Experience: 8 years in career strategy & mentorship',
+        'Core Focus: Modern industry shifts & global job markets',
+        'Methodology: Simplifying complex trends into actionable plans',
+        'Goal: Strategic mindset for long-term excellence',
+      ],
+    },
+    {
+      id: 'shruti-bhardwaj',
+      name: 'Shruti Bhardwaj',
+      title: 'Career Development Specialist',
+      image: '/MilliTewari.jpg',
+      quote: 'Dedicated to bridging the gap between academic potential and professional success through personalized mentorship.',
+      accent: 'border-accent/30 text-amber-300',
+      bullets: [
+        'Experience: 3 years in student career counseling & skill development',
+        'Focus: Discovering core strengths & aligning career paths',
+        'Approach: Relatable one-on-one guidance for early-career transitions',
+        'Commitment: Building a strong foundation for professional entry',
+      ],
+    },
+    {
+      id: 'anjali-bhardwaj',
+      name: 'Dr. Anjali Bhardwaj',
+      title: 'Senior Counselling Psychologist',
+      image: '/Psychologist.png',
+      quote: 'Integrating psychological insights with career guidance to empower individuals with mental resilience and emotional clarity.',
+      accent: 'border-purple-500/30 text-purple-300',
+      bullets: [
+        'Experience: 15 years in clinical counselling, behavioural therapy & wellness',
+        'Specialization: Psychometric assessments, personality mapping & stress management',
+        'Methodology: Scientific psychological frameworks & empathetic listening',
+        'Focus: Overcoming internal barriers, anxiety, & decision-making blocks',
+      ],
+    },
+  ],
+  expertAdvice: {
+    heading: 'Expert Advice',
+    services: ['Career Counselling', 'Become a Partner'],
+    successMessage: 'An expert will get in contact with you shortly.',
+  },
+  contact: {
+    phones: ['+91-9289191164', '+91-9289191165'],
+    email: 'hr@ZeOpto.com',
+    website: 'https://ZeOpto.com',
+    address: 'Offices B-02, A-28, Near Noida Sector 16 Metro Station, Block A, Sector 4, Noida, UP-201301',
+    whatsapp: 'https://wa.me/919953280036',
+    mapQuery: 'ZeOpto IT Services, Sector 4, Noida',
+    socials: {
+      facebook: 'https://www.facebook.com/ZeOptoitservices',
+      instagram: 'https://www.instagram.com/ZeOptoitservices/?igsh=MTBkYThwNG8wY2F5ZA%3D%3D#',
+      linkedin: 'https://www.linkedin.com/company/ZeOpto-it-services/?viewAsMember=true',
+      whatsapp: 'https://www.whatsapp.com/channel/0029Vb5aVHkDzgT8eqtO4p3n',
+      youtube: 'https://youtube.com/@ZeOpto?si=k0Oijwu3wG1AhtNR',
+    },
+  },
+  footer: {
+    brand: 'Career Disha',
+    description: 'Delivering expert career counselling and career planning to guide the next generation in choosing the right career.',
+    copyright: 'Career Disha - Powered by ZeOpto',
+    exploreLinks: ['Resources', 'Career Blog', 'Support', 'Contact Us'],
+    legalLinks: ['Privacy', 'Terms'],
+  },
+  insights: {
+    heroTitle: 'Insights',
+    heroDescription: 'Stay updated with the latest industry trends, expert mentorship sessions, and career guidance from the visionaries at Career Disha.',
+    videos: [
+      { id: 'career-guidance-session-1', youtubeId: '2RBDdsniaHw', title: 'Career Guidance Session 1' },
+      { id: 'sap-consulting-insights', youtubeId: 'U2QHNZmi-XY', title: 'SAP Consulting Insights' },
+      { id: 'future-of-work', youtubeId: 'zkBlpi7JYnw', title: 'Future of Work' },
+    ],
+    blogs: [
+      {
+        id: 'sap-career-viable',
+        title: 'Is adopting career in SAP is viable Opt...',
+        excerpt: 'Is Adopting a Career in SAP for Fresher Graduates a Viable Option? In toda...',
+        date: '7-Sep-2025',
+        category: 'Career Advice',
+        image: 'https://www.zeopto.com/img/ChatGPT%20Image%20Sep%207,%202025,%2012_54_10%20PM.png',
+        link: 'https://ZeOpto.com/blog-details.php?slug=is-adopting-career-in-sap-is-viable-option-',
+      },
+      {
+        id: 'amrapali-workshop',
+        title: 'ZeOpto Workshop at Amrapali University -...',
+        excerpt: 'Learning is always special when it connects with real-world opportunities. Our recent SAP Worksho...',
+        date: '30-Sep-2025',
+        category: 'Workshop',
+        image: 'https://www.zeopto.com/img/Amrapali%20Workshop.png',
+        link: 'https://ZeOpto.com/blog-details.php?slug=ZeOpto-workshop-at-amrapali-university---a-journey-of-learning-growth',
+      },
+      {
+        id: 'sap-fico-training',
+        title: 'Best SAP FICO Training Institute | ZeOpt...',
+        excerpt: 'SAP FICO Training. Choosing the right SAP FICO training institute in Noida can shape your ca...',
+        date: '6-Nov-2025',
+        category: 'Training',
+        image: 'https://www.zeopto.com/img/SAP%20FICO%20Training%20(1).png',
+        link: 'https://ZeOpto.com/blog-details.php?slug=best-sap-fico-training-institute-ZeOpto',
+      },
+      {
+        id: 'sap-mm-training',
+        title: 'Best SAP MM Training Institute in Noida ...',
+        excerpt: 'SAP MM is one of the most important modules in the SAP system and is widely used in industries th...',
+        date: '16-Nov-2025',
+        category: 'Training',
+        image: 'https://www.zeopto.com/img/SAP%20MM%20Training%20ZeOpto.png',
+        link: 'https://ZeOpto.com/blog-details.php?slug=best-sap-mm-training-institute-in-noida-ZeOpto',
+      },
+      {
+        id: 'sap-training-noida',
+        title: 'Best SAP Training Institute in Noida | Z...',
+        excerpt: 'Best SAP Training Institute in Noida. SAP is one of the most widely used business software...',
+        date: '15-Dec-2025',
+        category: 'Education',
+        image: 'https://www.zeopto.com/img/Thumbnail%20.png',
+        link: 'https://ZeOpto.com/blog-details.php?slug=best-sap-training-institute-in-noida-ZeOpto',
+      },
+      {
+        id: 'graphic-era-workshop',
+        title: 'ZeOpto Workshop at Graphic Era Universit...',
+        excerpt: 'ZeOpto Workshop at Graphic Era University - Industry-Focused Learning Experience...',
+        date: '5-Feb-2026',
+        category: 'Workshop',
+        image: 'https://www.zeopto.com/img/Untitled%20design%20(59).png',
+        link: 'https://ZeOpto.com/blog-details.php?slug=ZeOpto-workshop-at-graphic-era-university-empowering-students-with-industry-ready-it-sap-skills',
+      },
+      {
+        id: 'sap-classes-noida',
+        title: 'SAP Classes in Noida...',
+        excerpt: 'SAP Classes in Noida: Learn SAP with Practical Training at ZeOpto. Today, com...',
+        date: '5-Feb-2026',
+        category: 'Training',
+        image: 'https://www.zeopto.com/img/Best%20SAP%20CLasses%20in%20Noida.png',
+        link: 'https://ZeOpto.com/blog-details.php?slug=sap-classes-in-noida',
+      },
+    ],
+  },
+};
+
+const supabaseEnv = (import.meta as unknown as { env?: Record<string, string | undefined> }).env ?? {};
+const SUPABASE_URL = supabaseEnv.NEXT_PUBLIC_SUPABASE_URL ?? supabaseEnv.VITE_SUPABASE_URL ?? '';
+const SUPABASE_KEY = supabaseEnv.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? supabaseEnv.VITE_SUPABASE_PUBLISHABLE_KEY ?? '';
+
+export class SupabaseCmsError extends Error {
+  status: number;
+
+  constructor(message: string, status: number) {
+    super(message);
+    this.name = 'SupabaseCmsError';
+    this.status = status;
+  }
+}
+
+function hasSupabaseConfig() {
+  return Boolean(SUPABASE_URL && SUPABASE_KEY);
+}
+
+export type SupabaseConnectionStatus = {
+  frontend: boolean;
+  backend: boolean;
+  message: string;
+};
+
+export type AdminSession = {
+  session_token: string;
+  expires_at: string;
+  username: string;
+};
+
+async function supabaseRequest<T>(path: string, init: RequestInit = {}): Promise<T> {
+  if (!hasSupabaseConfig()) {
+    throw new Error('Supabase URL or publishable key is missing.');
+  }
+
+  const response = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+    ...init,
+    cache: 'no-store',
+    headers: {
+      apikey: SUPABASE_KEY,
+      Authorization: `Bearer ${SUPABASE_KEY}`,
+      'Content-Type': 'application/json',
+      ...(init.headers ?? {}),
+    },
+  });
+
+  if (!response.ok) {
+    const detail = await response.text();
+    throw new SupabaseCmsError(detail || `Supabase request failed with ${response.status}`, response.status);
+  }
+
+  if (response.status === 204) return undefined as T;
+
+  const text = await response.text();
+  if (!text) return undefined as T;
+  return JSON.parse(text) as T;
+}
+
+async function supabaseRpc<T>(fn: string, body: Record<string, unknown>) {
+  return supabaseRequest<T>(`rpc/${fn}`, {
+    method: 'POST',
+    body: JSON.stringify(body),
+  });
+}
+
+function mergeCmsData(parsed: Partial<CmsData>): CmsData {
+  const hasInsightsBlogs = Array.isArray(parsed.insights?.blogs);
+  const hasInsightsVideos = Array.isArray(parsed.insights?.videos);
+  const hasTestimonials = Array.isArray(parsed.testimonials);
+  const hasCounsellors = Array.isArray(parsed.counsellors);
+
+  return {
+    ...defaultCmsData,
+    ...parsed,
+    offer: { ...defaultCmsData.offer, ...parsed.offer },
+    expertAdvice: { ...defaultCmsData.expertAdvice, ...parsed.expertAdvice },
+    contact: {
+      ...defaultCmsData.contact,
+      ...parsed.contact,
+      socials: { ...defaultCmsData.contact.socials, ...parsed.contact?.socials },
+    },
+    footer: { ...defaultCmsData.footer, ...parsed.footer },
+    insights: {
+      ...defaultCmsData.insights,
+      ...parsed.insights,
+      blogs: hasInsightsBlogs ? parsed.insights!.blogs! : defaultCmsData.insights.blogs,
+      videos: hasInsightsVideos ? parsed.insights!.videos! : defaultCmsData.insights.videos,
+    },
+    testimonials: hasTestimonials ? parsed.testimonials! : defaultCmsData.testimonials,
+    counsellors: hasCounsellors ? parsed.counsellors! : defaultCmsData.counsellors,
+  };
+}
+
+export function loadCmsDataSync(): CmsData {
+  if (typeof window === 'undefined') return defaultCmsData;
+
+  try {
+    const stored = window.localStorage.getItem(CMS_STORAGE_KEY);
+    if (!stored) return defaultCmsData;
+    const parsed = JSON.parse(stored) as Partial<CmsData>;
+    return mergeCmsData(parsed);
+  } catch {
+    return defaultCmsData;
+  }
+}
+
+export async function loadCmsData(): Promise<CmsData> {
+  const fallback = loadCmsDataSync();
+
+  try {
+    const rows = await supabaseRequest<{ data: Partial<CmsData> }[]>(
+      `cms_settings?id=eq.${CMS_ROW_ID}&select=data&limit=1`,
+    );
+    const remoteData = rows[0]?.data;
+    if (!remoteData) return fallback;
+
+    const merged = mergeCmsData(remoteData);
+    window.localStorage.setItem(CMS_STORAGE_KEY, JSON.stringify(merged));
+    return merged;
+  } catch (error) {
+    console.warn('Using local CMS data because Supabase CMS load failed.', error);
+    return fallback;
+  }
+}
+
+export async function saveCmsData(data: CmsData) {
+  const sessionToken = window.sessionStorage.getItem(ADMIN_SESSION_STORAGE_KEY);
+  if (!sessionToken) {
+    throw new SupabaseCmsError('Admin session missing', 401);
+  }
+
+  window.localStorage.setItem(CMS_STORAGE_KEY, JSON.stringify(data));
+
+  try {
+    await supabaseRpc('save_cms_settings', {
+      p_session_token: sessionToken,
+      p_data: data,
+    });
+    window.localStorage.setItem(CMS_UPDATED_AT_KEY, String(Date.now()));
+    window.dispatchEvent(new CustomEvent(CMS_UPDATED_EVENT, { detail: data }));
+  } catch (error) {
+    console.warn('Saved CMS locally, but Supabase CMS save failed.', error);
+    throw error;
+  }
+}
+
+export async function saveExpertAdviceInquiry(inquiry: ExpertAdviceInquiry) {
+  return supabaseRequest<ExpertAdviceInquiry[]>('expert_advice_inquiries', {
+    method: 'POST',
+    headers: {
+      Prefer: 'return=minimal',
+    },
+    body: JSON.stringify(inquiry),
+  });
+}
+
+export async function loadExpertAdviceInquiries() {
+  const sessionToken = window.sessionStorage.getItem(ADMIN_SESSION_STORAGE_KEY);
+  if (!sessionToken) return [];
+
+  try {
+    return await supabaseRpc<ExpertAdviceInquiry[]>('list_expert_advice_inquiries', {
+      p_session_token: sessionToken,
+    });
+  } catch (error) {
+    console.warn('Supabase inquiry load failed.', error);
+    return [];
+  }
+}
+
+export async function deleteExpertAdviceInquiry(inquiryId: string) {
+  const sessionToken = window.sessionStorage.getItem(ADMIN_SESSION_STORAGE_KEY);
+  if (!sessionToken) {
+    throw new SupabaseCmsError('Admin session missing', 401);
+  }
+
+  await supabaseRpc('delete_expert_advice_inquiry', {
+    p_session_token: sessionToken,
+    p_inquiry_id: inquiryId,
+  });
+}
+
+export async function deleteAllExpertAdviceInquiries() {
+  const sessionToken = window.sessionStorage.getItem(ADMIN_SESSION_STORAGE_KEY);
+  if (!sessionToken) {
+    throw new SupabaseCmsError('Admin session missing', 401);
+  }
+
+  await supabaseRpc('delete_all_expert_advice_inquiries', {
+    p_session_token: sessionToken,
+  });
+}
+
+export async function loginAdmin(username: string, password: string) {
+  const rows = await supabaseRpc<AdminSession[]>('verify_admin_login', {
+    p_username: username,
+    p_password: password,
+  });
+  return rows[0] ?? null;
+}
+
+export async function verifyAdminSession(sessionToken: string) {
+  const rows = await supabaseRpc<{ is_valid: boolean; username: string; expires_at: string }[]>(
+    'verify_admin_session',
+    {
+      p_session_token: sessionToken,
+    },
+  );
+  return rows[0] ?? null;
+}
+
+export async function logoutAdmin(sessionToken: string) {
+  await supabaseRpc('revoke_admin_session', {
+    p_session_token: sessionToken,
+  });
+}
+
+export async function checkSupabaseConnection(): Promise<SupabaseConnectionStatus> {
+  if (!hasSupabaseConfig()) {
+    return {
+      frontend: false,
+      backend: false,
+      message: 'Supabase env missing',
+    };
+  }
+
+  try {
+    await Promise.all([
+      supabaseRequest('cms_settings?select=id&limit=1'),
+      supabaseRpc('verify_admin_login', {
+        p_username: '__health_check__',
+        p_password: '__health_check__',
+      }),
+    ]);
+
+    return {
+      frontend: true,
+      backend: true,
+      message: 'Supabase connected',
+    };
+  } catch (error) {
+    if (error instanceof SupabaseCmsError && error.status === 404 && error.message.includes('PGRST202')) {
+      return {
+        frontend: true,
+        backend: false,
+        message: 'Admin RPC missing',
+      };
+    }
+
+    if (error instanceof SupabaseCmsError && error.status === 404) {
+      return {
+        frontend: true,
+        backend: false,
+        message: 'Tables missing',
+      };
+    }
+
+    return {
+      frontend: true,
+      backend: false,
+      message: 'Backend unavailable',
+    };
+  }
+}

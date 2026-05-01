@@ -1,7 +1,10 @@
 import { motion } from 'motion/react';
 import { Mail, Phone, MapPin, Send, MessageSquare, Facebook, Instagram, Linkedin, Youtube, MessageCircle } from 'lucide-react';
+import { CmsContact, defaultCmsData } from '../data/cms';
 
-export default function ContactUs({ onBack }: { onBack: () => void }) {
+export default function ContactUs({ onBack, contact = defaultCmsData.contact }: { onBack: () => void; contact?: CmsContact }) {
+  const mapSrc = `https://maps.google.com/maps?q=${encodeURIComponent(contact.mapQuery || contact.address)}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+
   return (
     <section 
       className="contact-section min-h-screen flex flex-col relative overflow-hidden z-0 bg-cover bg-center bg-no-repeat"
@@ -61,8 +64,9 @@ export default function ContactUs({ onBack }: { onBack: () => void }) {
                 <div>
                   <h3 className="font-bold text-slate-900 text-lg mb-1">Phone</h3>
                     <div className="flex flex-col gap-1">
-                      <a href="tel:+919289191164" className="text-slate-600 hover:text-green-600 transition-colors">+91-9289191164</a>
-                      <a href="tel:+919289191165" className="text-slate-600 hover:text-green-600 transition-colors">+91-9289191165</a>
+                      {contact.phones.map((phone) => (
+                        <a key={phone} href={`tel:${phone.replace(/\s/g, '')}`} className="text-slate-600 hover:text-green-600 transition-colors">{phone}</a>
+                      ))}
                     </div>
                 </div>
               </motion.div>
@@ -76,7 +80,7 @@ export default function ContactUs({ onBack }: { onBack: () => void }) {
                 </div>
                 <div>
                   <h3 className="font-bold text-slate-900 text-lg mb-1">Email</h3>
-                  <a href="mailto:hr@ZeOpto.com" className="text-slate-600 hover:text-purple-600 transition-colors">hr@ZeOpto.com</a>
+                  <a href={`mailto:${contact.email}`} className="text-slate-600 hover:text-purple-600 transition-colors">{contact.email}</a>
                 </div>
               </motion.div>
 
@@ -88,7 +92,7 @@ export default function ContactUs({ onBack }: { onBack: () => void }) {
               >
                 <iframe
                   title="ZeOpto Office Location"
-                  src="https://maps.google.com/maps?q=ZeOpto%20IT%20Services,%20Sector%204,%20Noida&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                  src={mapSrc}
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
@@ -107,7 +111,7 @@ export default function ContactUs({ onBack }: { onBack: () => void }) {
                 </div>
                 <div>
                   <h3 className="font-bold text-slate-900 text-lg mb-1">Corporate Office</h3>
-                  <p className="text-slate-600">Offices B-02, A-28, Near Noida Sector 16 Metro Station, Block A, Sector 4, Noida, UP-201301</p>
+                  <p className="text-slate-600">{contact.address}</p>
                 </div>
               </motion.div>
 
@@ -118,19 +122,19 @@ export default function ContactUs({ onBack }: { onBack: () => void }) {
                 transition={{ delay: 0.4, duration: 0.5 }}
                 className="flex items-center gap-4 pt-4"
               >
-                 <a href="https://www.facebook.com/ZeOptoitservices" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="w-12 h-12 bg-white rounded-full shadow-sm border border-slate-100 flex items-center justify-center text-blue-600 hover:bg-blue-600 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
+                 <a href={contact.socials.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="w-12 h-12 bg-white rounded-full shadow-sm border border-slate-100 flex items-center justify-center text-blue-600 hover:bg-blue-600 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
                    <Facebook className="w-5 h-5" />
                  </a>
-                 <a href="https://www.instagram.com/ZeOptoitservices/?igsh=MTBkYThwNG8wY2F5ZA%3D%3D#" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="w-12 h-12 bg-white rounded-full shadow-sm border border-slate-100 flex items-center justify-center text-pink-600 hover:bg-pink-600 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
+                 <a href={contact.socials.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="w-12 h-12 bg-white rounded-full shadow-sm border border-slate-100 flex items-center justify-center text-pink-600 hover:bg-pink-600 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
                    <Instagram className="w-5 h-5" />
                  </a>
-                 <a href="https://www.linkedin.com/company/ZeOpto-it-services/?viewAsMember=true" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="w-12 h-12 bg-white rounded-full shadow-sm border border-slate-100 flex items-center justify-center text-blue-700 hover:bg-blue-700 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
+                 <a href={contact.socials.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="w-12 h-12 bg-white rounded-full shadow-sm border border-slate-100 flex items-center justify-center text-blue-700 hover:bg-blue-700 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
                    <Linkedin className="w-5 h-5" />
                  </a>
-                 <a href="https://www.whatsapp.com/channel/0029Vb5aVHkDzgT8eqtO4p3n" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="w-12 h-12 bg-white rounded-full shadow-sm border border-slate-100 flex items-center justify-center text-green-500 hover:bg-green-500 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
+                 <a href={contact.socials.whatsapp} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="w-12 h-12 bg-white rounded-full shadow-sm border border-slate-100 flex items-center justify-center text-green-500 hover:bg-green-500 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
                    <MessageCircle className="w-5 h-5" />
                  </a>
-                 <a href="https://youtube.com/@ZeOpto?si=k0Oijwu3wG1AhtNR" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="w-12 h-12 bg-white rounded-full shadow-sm border border-slate-100 flex items-center justify-center text-red-600 hover:bg-red-600 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
+                 <a href={contact.socials.youtube} target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="w-12 h-12 bg-white rounded-full shadow-sm border border-slate-100 flex items-center justify-center text-red-600 hover:bg-red-600 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
                    <Youtube className="w-5 h-5" />
                  </a>
               </motion.div>
