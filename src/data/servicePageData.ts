@@ -74,7 +74,7 @@ export const highSchoolData: ServicePageData = {
       iconColor: 'text-rose-500',
       bgColor: 'bg-rose-50',
       title: 'Stream Selection Guidance',
-      desc: "Which science commerce arts career options fit you best? It's a big decision that dictates future career paths, and guessing isn't a viable strategy.",
+      desc: "Which science, commerce, humanities career options fit you best? It's a big decision that dictates future career paths, and guessing isn't a viable strategy.",
     },
     ...sharedProblems,
   ],

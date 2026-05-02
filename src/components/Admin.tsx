@@ -26,7 +26,7 @@ type AdminProps = {
   onDataChange: (data: CmsData) => void;
 };
 
-type SectionKey = 'offer' | 'expert' | 'insights' | 'testimonials' | 'counsellors' | 'contact' | 'footer';
+type SectionKey = 'offer' | 'expert' | 'insights' | 'testimonials' | 'counsellors' | 'contact';
 
 const sections: { key: SectionKey; label: string }[] = [
   { key: 'offer', label: 'Offer' },
@@ -35,7 +35,6 @@ const sections: { key: SectionKey; label: string }[] = [
   { key: 'testimonials', label: 'Testimonials' },
   { key: 'counsellors', label: 'Counsellors' },
   { key: 'contact', label: 'Contact Info' },
-  { key: 'footer', label: 'Footer' },
 ];
 
 const emptyTestimonial = (): CmsTestimonial => ({
@@ -749,18 +748,6 @@ export default function Admin({ data, onDataChange }: AdminProps) {
             </div>
           )}
 
-          {active === 'footer' && (
-            <div className="space-y-4">
-              <Field label="Brand" value={draft.footer.brand} onChange={(brand) => updateDraft({ ...draft, footer: { ...draft.footer, brand } })} />
-              <TextArea label="Description" value={draft.footer.description} onChange={(description) => updateDraft({ ...draft, footer: { ...draft.footer, description } })} />
-              <Field label="Copyright Text" value={draft.footer.copyright} onChange={(copyright) => updateDraft({ ...draft, footer: { ...draft.footer, copyright } })} />
-              <TextArea label="Explore Links (one per line)" value={draft.footer.exploreLinks.join('\n')} onChange={(value) => updateDraft({ ...draft, footer: { ...draft.footer, exploreLinks: value.split('\n').filter(Boolean) } })} />
-              <TextArea label="Legal Links (one per line)" value={draft.footer.legalLinks.join('\n')} onChange={(value) => updateDraft({ ...draft, footer: { ...draft.footer, legalLinks: value.split('\n').filter(Boolean) } })} />
-              <button onClick={() => updateDraft(defaultCmsData)} className="rounded-lg border border-red-200 px-4 py-2 text-sm font-bold text-red-600 hover:bg-red-50">
-                Reset CMS Defaults
-              </button>
-            </div>
-          )}
 
         </section>
       </div>

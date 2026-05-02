@@ -115,7 +115,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
   const scrollPosRef = useRef(0);
   const speedRef = useRef(1.5); // base speed
   const targetSpeedRef = useRef(1.5);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (view !== 'landing') return;
@@ -1178,9 +1178,9 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
             <div className="flex flex-col gap-4">
               <h4 className="text-xs uppercase tracking-widest font-bold text-slate-100">Explore</h4>
             <ul className="space-y-2">
+              <li><a href="#testimonials" onClick={() => setView('landing')} className="block text-slate-400 text-sm hover:text-primary transition-colors text-left w-full">Testimonials</a></li>
               <li><button onClick={() => setView('insights')} className="text-slate-400 text-sm hover:text-primary transition-colors text-left w-full">Resources</button></li>
               <li><button onClick={() => setView('insights')} className="text-slate-400 text-sm hover:text-primary transition-colors text-left w-full">Career Blog</button></li>
-              <li><a href="#testimonials" onClick={() => setView('landing')} className="block text-slate-400 text-sm hover:text-primary transition-colors text-left w-full">Testimonials</a></li>
               <li><button onClick={() => setView('contact-us')} className="text-slate-400 text-sm hover:text-primary transition-colors text-left w-full">Support</button></li>
               <li><button onClick={() => setView('contact-us')} className="text-slate-400 text-sm hover:text-primary transition-colors text-left w-full">Contact Us</button></li>
             </ul>
@@ -1238,7 +1238,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
           <img 
             src="/Whatsapp.png" 
             alt="WhatsApp Icon" 
-            className="w-16 h-16 md:w-20 md:h-20 object-contain drop-shadow-lg"
+            className="w-20 h-20 md:w-24 md:h-24 object-contain drop-shadow-lg"
           />
         </motion.a>
       </div>
