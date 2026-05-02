@@ -24,7 +24,7 @@ const comparisonData = [
       { name: "No of Career Recommendations", cd: "5", others: "3-5*" },
       { name: "Career Paths Recommendations", cd: "10+", others: "NOT AVAILABLE" },
       { name: "Career Report with Execution Plan", cd: "Very Unique", others: "NOT AVAILABLE" },
-      { name: "Milestones Report 10 years Plan", cd: "Unique to CareerDisha", others: "NOT AVAILABLE" }
+      { name: "Milestones Report 10 years Plan", cd: "Unique to Careerदिशा", others: "NOT AVAILABLE" }
     ]
   },
   {
@@ -57,7 +57,7 @@ const comparisonData = [
       { name: "Trained and Certified Counsellors", cd: "4.9 Rated", others: "3.5-4.5 Rated" },
       { name: "Network of Career Counsellors", cd: "9000+", others: "10-100" },
       { name: "Cities Covered", cd: "340+", others: "1-20" },
-      { name: "Extensive Handholdings", cd: "Unique to CareerDisha", others: "Limited" }
+      { name: "Extensive Handholdings", cd: "Unique to Careerदिशा", others: "Limited" }
     ]
   },
   {
@@ -65,10 +65,10 @@ const comparisonData = [
     title: "Other Career Counselling Tools",
     desc: "Additional integrated tools including SOP maker, career information, and decision-making support.",
     features: [
-      { name: "AI Powered Guiding Star", cd: "Exclusive to CareerDisha", others: "NOT AVAILABLE" },
-      { name: "SOP Maker", cd: "Unique to CareerDisha", others: "No" },
-      { name: "Student Portfolio Webpage", cd: "Unique to CareerDisha", others: "No" },
-      { name: "Student Execution Plan Milestones", cd: "Unique to CareerDisha", others: "No" }
+      { name: "AI Powered Guiding Star", cd: "Exclusive to Careerदिशा", others: "NOT AVAILABLE" },
+      { name: "SOP Maker", cd: "Unique to Careerदिशा", others: "No" },
+      { name: "Student Portfolio Webpage", cd: "Unique to Careerदिशा", others: "No" },
+      { name: "Student Execution Plan Milestones", cd: "Unique to Careerदिशा", others: "No" }
     ]
   }
 ];
@@ -110,10 +110,10 @@ const ComparisonSection = () => {
                   {/* Decorative VS Background */}
                   <div className="hidden md:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full items-center justify-center font-bold text-slate-300 z-10 shadow-sm border border-slate-100">VS</div>
 
-                  {/* CareerDisha Column */}
+                  {/* Careerदिशा Column */}
                   <div className="relative group bg-primary/5 border-2 border-primary/20 rounded-xl p-6 md:p-8 shadow-[0_0_15px_rgba(var(--color-primary),0.05)] transition-all duration-300 hover:shadow-[0_0_30px_rgba(var(--color-primary),0.2)] hover:bg-primary/10 hover:scale-[1.01] z-0 hover:z-20">
-                    <div className="absolute top-0 right-0 bg-primary text-white text-xs font-bold px-4 py-1.5 rounded-bl-xl rounded-tr-lg tracking-widest uppercase transition-transform group-hover:scale-105 origin-top-right">
-                      CareerDisha
+                    <div className="absolute top-0 right-0 bg-primary text-white text-xs font-bold px-4 py-1.5 rounded-bl-xl rounded-tr-lg tracking-widest transition-transform group-hover:scale-105 origin-top-right">
+                      Careerदिशा
                     </div>
                     <ul className="space-y-3 mt-4">
                       {item.features.map((feature, fIdx) => (

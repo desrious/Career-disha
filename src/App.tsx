@@ -441,7 +441,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
                     {[...Array(12)].map((_, i) => (
                         <div className="flex items-center space-x-3 mx-4 shrink-0 h-full" key={i}>
                           <img src="/CareerDishaLogo.png" alt="Logo" className="h-7 md:h-9 w-auto object-contain" />
-                          <span className="text-2xl md:text-[2rem] font-bold text-black tracking-tight font-sans uppercase mt-1">CAREERदिशा</span>
+                          <span className="text-2xl md:text-[2rem] font-bold text-black tracking-tight font-sans mt-1">Careerदिशा</span>
                         </div>
                       ))}
                   </div>
@@ -453,7 +453,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
                     {[...Array(12)].map((_, i) => (
                       <div className="flex items-center space-x-3 mx-4 shrink-0 h-full" key={i}>
                           <img src="/CareerDishaLogo.png" alt="Logo" className="h-7 md:h-9 w-auto object-contain" />
-                          <span className="text-2xl md:text-[2rem] font-bold text-black tracking-tight font-sans uppercase mt-1">CAREERदिशा</span>
+                          <span className="text-2xl md:text-[2rem] font-bold text-black tracking-tight font-sans mt-1">Careerदिशा</span>
                         </div>
                       ))}
                     </div>
