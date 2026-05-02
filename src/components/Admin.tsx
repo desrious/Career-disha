@@ -403,7 +403,7 @@ export default function Admin({ data, onDataChange }: AdminProps) {
               }
             }}
           >
-            <img src="/CareerDishaLogo.png" alt="Career Disha" className="mb-6 h-16 w-auto brightness-0 invert" />
+            <img src="/CareerDishaLogo.png" alt="Careerदिशा" className="mb-6 h-16 w-auto brightness-0 invert" />
             <h1 className="mb-2 text-3xl font-extrabold">Admin CMS</h1>
             <p className="mb-8 text-sm text-slate-300">Sign in with the admin account stored in Supabase.</p>
             <div className="space-y-4">
@@ -425,7 +425,7 @@ export default function Admin({ data, onDataChange }: AdminProps) {
       <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/90 px-6 py-4 backdrop-blur">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4">
           <div>
-            <p className="text-xs font-bold uppercase tracking-widest text-primary">Career Disha</p>
+            <p className="text-xs font-bold uppercase tracking-widest text-primary">Careerदिशा</p>
             <h1 className="text-2xl font-extrabold">Admin CMS</h1>
           </div>
           <div className="flex items-center gap-3">

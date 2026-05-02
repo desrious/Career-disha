@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   ArrowRight,
   HelpCircle,
@@ -110,6 +110,47 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
     window.scrollTo(0, 0);
   }, [view]);
 
+  // ─── Smooth Decelerating Counsellor Scroll ────────────────
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const scrollPosRef = useRef(0);
+  const speedRef = useRef(1.5); // base speed
+  const targetSpeedRef = useRef(1.5);
+  const animationRef = useRef<number>();
+
+  useEffect(() => {
+    if (view !== 'landing') return;
+
+    const animateScroll = () => {
+      // smooth deceleration/acceleration (lerp)
+      speedRef.current += (targetSpeedRef.current - speedRef.current) * 0.05;
+      scrollPosRef.current += speedRef.current;
+
+      if (scrollRef.current) {
+        // The container holds 2 identical sets for seamless loop
+        const halfWidth = scrollRef.current.scrollWidth / 2;
+        if (scrollPosRef.current >= halfWidth) {
+           scrollPosRef.current -= halfWidth;
+        }
+        scrollRef.current.style.transform = `translateX(-${scrollPosRef.current}px)`;
+      }
+
+      animationRef.current = requestAnimationFrame(animateScroll);
+    };
+
+    animationRef.current = requestAnimationFrame(animateScroll);
+    return () => {
+      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+    };
+  }, [view]);
+
+  const handleCounsellorMouseEnter = () => {
+    targetSpeedRef.current = 0;
+  };
+  
+  const handleCounsellorMouseLeave = () => {
+    targetSpeedRef.current = 1.5;
+  };
+
   // ─── Non-landing views ────────────────────────────────────
   if (view === 'about') return <About onBack={() => setView('landing')} />;
   if (view === 'insights') return <Insights onBack={() => setView('landing')} insights={cmsData.insights} />;
@@ -129,8 +170,8 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
            <a href="tel:+919289191164" className="flex items-center gap-2 hover:text-primary transition-colors">
               <Phone size={12} /> +91-9289191164
            </a>
-           <a href="mailto:hr@ZeOpto.com" className="flex items-center gap-2 hover:text-primary transition-colors">
-              <Mail size={12} /> hr@ZeOpto.com
+           <a href="mailto:hr@zeopto.com" className="flex items-center gap-2 hover:text-primary transition-colors">
+              <Mail size={12} /> hr@zeopto.com
            </a>
            <a href="https://ZeOpto.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors">
               <Globe size={12} /> Visit ZeOpto
@@ -139,14 +180,13 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
         <nav className="flex justify-between items-center px-4 h-24 max-w-full">
             <div className="flex items-center gap-2">
               <img 
-                alt="CareerDisha Logo" 
+                alt="Careerदिशा Logo" 
                 className="h-16 md:h-20 w-auto object-contain" 
               src={LOGO_URL} 
               referrerPolicy="no-referrer" 
             />
-            <span className="text-xl font-extrabold text-blue-700 tracking-tighter font-headline">Career Disha</span>
           </div>
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex flex-1 justify-center items-center gap-6 lg:gap-10">
             <button onClick={() => setView('landing')} className="text-primary border-b-2 border-primary font-headline tracking-tight font-semibold hover:opacity-80 transition-opacity duration-300 cursor-pointer">Home</button>
             <button 
               onClick={() => setView('about')}
@@ -173,7 +213,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
             >
               Insights
             </button>
-            <a className="text-on-surface-variant hover:text-primary font-headline tracking-tight font-semibold hover:opacity-80 transition-opacity duration-300" href="#testimonials">Testimonials</a>
+            <a className="text-on-surface-variant hover:text-primary font-headline tracking-tight font-semibold hover:opacity-80 transition-opacity duration-300" href="#counsellors">Counsellors</a>
             <a 
               className="text-on-surface-variant hover:text-primary font-headline tracking-tight font-semibold hover:opacity-80 transition-opacity duration-300" 
               href="/brochure.pdf" 
@@ -359,14 +399,14 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
                 },
                 {
                   icon: <Brain className="w-10 h-10 group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-300" />,
-                  title: "AI Analysis (feature soon to get added)",
+                  title: "AI Analysis",
                   desc: "Receive deep mentor insights as our AI maps your profile against 500+ modern career paths.",
                   bg: "bg-secondary/10 text-secondary",
                   bgHover: "group-hover:bg-secondary group-hover:text-white group-hover:shadow-lg"
                 },
                 {
                   icon: <Route className="w-10 h-10 group-hover:scale-110 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />,
-                  title: "Roadmap (feature soon to get added)",
+                  title: "Personalized Career Roadmap",
                   desc: "Get an actionable, step-by-step path including skill requirements and college recommendations.",
                   bg: "bg-balance/20 text-balance",
                   bgHover: "group-hover:bg-balance group-hover:shadow-lg"
@@ -401,7 +441,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
                     {[...Array(12)].map((_, i) => (
                         <div className="flex items-center space-x-3 mx-4 shrink-0 h-full" key={i}>
                           <img src="/CareerDishaLogo.png" alt="Logo" className="h-7 md:h-9 w-auto object-contain" />
-                          <span className="text-2xl md:text-[2rem] font-bold text-black tracking-tight font-sans uppercase mt-1">CAREER DISHA</span>
+                          <span className="text-2xl md:text-[2rem] font-bold text-black tracking-tight font-sans uppercase mt-1">CAREERदिशा</span>
                         </div>
                       ))}
                   </div>
@@ -413,7 +453,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
                     {[...Array(12)].map((_, i) => (
                       <div className="flex items-center space-x-3 mx-4 shrink-0 h-full" key={i}>
                           <img src="/CareerDishaLogo.png" alt="Logo" className="h-7 md:h-9 w-auto object-contain" />
-                          <span className="text-2xl md:text-[2rem] font-bold text-black tracking-tight font-sans uppercase mt-1">CAREER DISHA</span>
+                          <span className="text-2xl md:text-[2rem] font-bold text-black tracking-tight font-sans uppercase mt-1">CAREERदिशा</span>
                         </div>
                       ))}
                     </div>
@@ -491,7 +531,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
 
           <div className="max-w-7xl mx-auto relative z-10">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-5xl font-extrabold text-on-surface mb-4">Tailored Guidance For You</h2>
+              <h2 className="text-3xl md:text-5xl font-extrabold text-on-surface">Tailored Guidance For You</h2>
               <div className="h-1 w-20 bg-secondary mx-auto rounded-full mb-6"></div>
               <p className="text-on-surface-variant max-w-2xl mx-auto font-medium">Whether you're starting out or scaling up, we provide the roadmap to your unique potential.</p>
             </div>
@@ -530,7 +570,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
                 {
                   icon: <TrendingUp className="w-8 h-8 group-hover:scale-110 transition-transform duration-300" />,
                   title: "Working Professionals",
-                  desc: "Ready for a change? We analyze your transferable skills and provide a step-by-step blueprint for a successful career pivot into tech, management, or design.",
+                  desc: "Ready for a change? We analyze your transferable skills and provide a step-by-step blueprint for a successful career pivot into Technology, Management or Design.",
                   features: ["Career Pivoting", "Executive Mentorship"],
                   themeMap: {
                     bgDecor: "bg-red-500/5",
@@ -606,22 +646,30 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
               </div>
               <p className="text-on-surface-variant max-w-sm font-medium mb-1">We move you from confusion to confidence through three core scientific stages.</p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-16 relative mt-16">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-16 relative mt-16">
               {/* Connecting Line (Desktop only) */}
-              <div className="hidden md:block absolute top-[2rem] left-1/6 right-1/6 h-[2px] bg-gradient-to-r from-primary/30 via-secondary/30 to-accent/30 -z-10"></div>
+              <div className="hidden md:block absolute top-[2rem] left-[12.5%] right-[12.5%] h-[2px] bg-gradient-to-r from-tertiary/30 via-primary/30 to-accent/30 -z-10"></div>
               
               {[
+                {
+                  icon: <Users className="w-8 h-8" />,
+                  title: "Pre-counselling",
+                  desc: "Initial consultation to understand your career aspirations, current challenges, and set expectations.",
+                  color: "bg-tertiary shadow-tertiary/20",
+                  textColor: "text-white",
+                  delay: 0.1
+                },
                 {
                   icon: <HelpCircle className="w-8 h-8" />,
                   title: "Assessment",
                   desc: "Identify your core strengths, interests, and subconscious personality drivers via our gold-standard survey.",
                   color: "bg-primary shadow-primary/20",
                   textColor: "text-white",
-                  delay: 0.1
+                  delay: 0.2
                 },
                 {
                   icon: <Brain className="w-8 h-8" />,
-                  title: "AI Analysis (feature soon to get added)",
+                  title: "AI Analysis",
                   desc: "Our advanced models process 500+ data points to match your unique profile against global industry trends.",
                   color: "bg-secondary shadow-secondary/20",
                   textColor: "text-white",
@@ -629,12 +677,12 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
                 },
                 {
                   icon: <Route className="w-8 h-8" />,
-                  title: "Personalized Actionable Roadmaps (feature soon to get added)",
+                  title: "Personalized Actionable Roadmaps",
                   desc: "Receive a comprehensive, multi-year blueprint tailored to your psychology. Our roadmaps include specific skill acquisition paths, verified college recommendations, and direct connections to industry mentors.",
                   color: "bg-accent shadow-accent/20",
                   textColor: "text-slate-900",
                   isSpecial: true,
-                  delay: 0.5
+                  delay: 0.4
                 }
               ].map((step, idx) => (
                 <motion.div 
@@ -650,7 +698,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
                       initial={{ opacity: 0, y: -10 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.8 }}
-                      className="absolute -top-4 left-1/2 -translate-x-1/2 bg-accent text-slate-900 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-tighter shadow-sm"
+                      className="absolute -top-5 left-1/2 -translate-x-1/2 whitespace-nowrap bg-accent text-slate-900 text-xs font-extrabold px-4 py-1.5 rounded-full uppercase tracking-widest shadow-md border border-slate-900/10"
                     >
                       Core Platform Feature
                     </motion.div>
@@ -676,7 +724,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
         <section className="py-32 bg-slate-200">
           <div className="max-w-7xl mx-auto px-8">
             <div className="text-center mb-20 flex flex-col items-center">
-              <img src={LOGO_URL} alt="Career Disha Logo" className="h-16 md:h-20 mb-6 object-contain" referrerPolicy="no-referrer" />
+              <img src={LOGO_URL} alt="Careerदिशा Logo" className="h-16 md:h-20 mb-6 object-contain" referrerPolicy="no-referrer" />
               <h2 className="text-4xl md:text-5xl font-extrabold mb-6">Why Choose Our Career Guidance</h2>
               <p className="max-w-2xl mx-auto text-on-surface-variant text-lg">We combine human psychology with advanced intelligence to provide career counselling and professional career guidance that actually helps you choose the right career.</p>            </div>            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 h-auto md:h-[600px]">
               <motion.div 
@@ -688,7 +736,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
                 className="md:col-span-7 bg-primary-container p-12 rounded-[2rem] flex flex-col justify-between text-on-primary-container relative overflow-hidden group"
               >
                 <div className="relative z-10">
-                  <motion.div whileHover={{ rotate: 10, scale: 1.1 }}><Award className="w-12 h-12 mb-6" /></motion.div>
+                  <motion.div className="inline-block transform origin-center transition-transform" whileHover={{ rotate: 10, scale: 1.1 }}><Award className="w-12 h-12 mb-6" /></motion.div>
                   <h3 className="text-3xl font-bold mb-4">Psychologically Grounded</h3>
                   <p className="text-on-primary-container/80 text-lg max-w-md">Our assessments aren't just tests; they are deep-dives into personality frameworks used by top career psychologists globally.</p>
                 </div>
@@ -707,7 +755,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
                 <div className="bg-white/20 p-4 rounded-2xl w-fit mb-6 transition-transform group-hover:-rotate-6 group-hover:scale-110 duration-300">
                   <Bot className="w-10 h-10" />
                 </div>
-                <h3 className="text-3xl font-bold mb-4">Expert Career Advice <span className="text-sm font-normal opacity-75">(features soon to expand)</span></h3>
+                <h3 className="text-3xl font-bold mb-4">Expert Career Advice</h3>
                 <p className="text-on-secondary-container/80 text-lg">24/7 access to career advice for students that helps decode complex career path guidance based on your unique profile.</p>
               </motion.div>
               <motion.div 
@@ -719,7 +767,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
                 className="md:col-span-5 bg-tertiary-fixed p-12 rounded-[2rem] flex flex-col justify-center text-on-tertiary-fixed group"
               >
                 <h3 className="text-3xl font-bold mb-4 flex items-center gap-3 flex-wrap">
-                  Actionable Career Plans <span className="text-lg font-medium opacity-80">(soon to expand)</span>
+                  Actionable Career Plans
                   <Route className="w-8 h-8 opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all duration-300" />
                 </h3>
                 <p className="text-on-tertiary-fixed-variant text-lg">No generic career advice. We provide structured career planning, targeted dates, links to courses, and specific jobs to aim for.</p>
@@ -738,7 +786,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
                     <motion.div animate={{ y: [0, -5, 0] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0.4 }} className="w-14 h-14 rounded-full border-4 border-white bg-indigo-400"></motion.div>
                   </div>
                   <div>
-                    <p className="text-3xl font-extrabold text-indigo-900">15,000+</p>
+                    <p className="text-3xl font-extrabold text-indigo-900">10,000+</p>
                     <p className="text-indigo-700 text-lg font-semibold mt-1">Careers transformed this year</p>
                   </div>
                 </div>
@@ -830,7 +878,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
             </div>
             <div className="relative z-10 px-8 py-20 text-center">
               <h2 className="text-4xl md:text-6xl font-extrabold text-white mb-6">Ready to find your career direction?</h2>
-              <p className="text-slate-400 text-xl max-w-2xl mx-auto mb-12">Join 15,000+ others who have engaged with our professional career guidance and found their calling with Career Disha's unique psychological approach to career planning.</p>
+              <p className="text-slate-400 text-xl max-w-2xl mx-auto mb-12">Join 5,000+ others who have engaged with our professional career guidance and found their calling with Careerदिशा's unique psychological approach to career planning.</p>
               <motion.div
                 animate={{ y: [-8, 8, -8] }}
                 transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
@@ -918,8 +966,12 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
               <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-slate-50 to-transparent z-10 pointer-events-none"></div>
               <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-slate-50 to-transparent z-10 pointer-events-none"></div>
 
-              <div className="overflow-hidden">
-                <div className="flex gap-8 animate-scroll-cards hover:[animation-play-state:paused]" style={{ width: 'max-content' }}>
+              <div 
+                className="overflow-hidden"
+                onMouseEnter={handleCounsellorMouseEnter}
+                onMouseLeave={handleCounsellorMouseLeave}
+              >
+                <div ref={scrollRef} className="flex gap-8" style={{ width: 'max-content' }}>
                   {/* Duplicate cards for seamless loop */}
                   {[...Array(2)].map((_, setIndex) => (
                     <div key={setIndex} className="flex gap-8 shrink-0">
@@ -1005,7 +1057,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
                       <div className="w-[420px] bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100 hover:shadow-2xl transition-shadow duration-300 shrink-0 group">
                         <div className="relative h-72 overflow-hidden">
                           <img
-                            src="/ShrutiBhardwaj.jpg"
+                            src="/Shruti_bhardwaj.jpg"
                             alt="Shruti Bhardwaj"
                             className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                           />
@@ -1039,6 +1091,47 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
                           </ul>
                         </div>
                       </div>
+
+                      {/* Dr. Anjali Bhardwaj */}
+                      <div className="w-[420px] bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100 hover:shadow-2xl transition-shadow duration-300 shrink-0 group">
+                        <div className="relative h-72 overflow-hidden">
+                          <img
+                            src="/Anjali_Bhardwaj.png" alt="Dr. Anjali Bhardwaj" className="w-full h-full object-cover object-[50%_25%] group-hover:scale-105 transition-transform duration-500"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+                          <div className="absolute bottom-4 left-6 right-6">
+                            <h3 className="text-2xl font-bold text-white mb-1">Dr. Anjali Bhardwaj</h3>
+                            <p className="text-sm font-semibold text-purple-300 uppercase tracking-wider">Senior Counselling Psychologist</p>
+                          </div>
+                        </div>
+                        <div className="p-6">
+                          <p className="text-slate-600 italic text-sm mb-5 leading-relaxed border-l-4 border-purple-500/30 pl-4">
+                            "Integrating psychological insights with career guidance to empower individuals with mental resilience and emotional clarity."
+                          </p>
+                          <ul className="space-y-2.5 text-sm">
+                            <li className="flex items-start gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0"></span>
+                              <span className="text-slate-700"><strong className="text-slate-900">Experience:</strong> 15 years in clinical counselling, behavioural therapy, and mental wellness.</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-secondary mt-1.5 shrink-0"></span>
+                              <span className="text-slate-700"><strong className="text-slate-900">Specialization:</strong> Expert in psychometric assessments, personality mapping, and managing academic or career-related stress.</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-purple-500 mt-1.5 shrink-0"></span>
+                              <span className="text-slate-700"><strong className="text-slate-900">Methodology:</strong> Combining empathetic listening with scientific psychological frameworks to uncover an individual's true potential.</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 shrink-0"></span>
+                              <span className="text-slate-700"><strong className="text-slate-900">Focus:</strong> Dedicated to helping students and professionals overcome internal barriers, anxiety, and decision-making blocks.</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-orange-500 mt-1.5 shrink-0"></span>
+                              <span className="text-slate-700"><strong className="text-slate-900">Vision:</strong> Committed to ensuring every individual achieves a harmonious balance between professional success and personal well-being.</span>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -1054,14 +1147,14 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
           <div className="flex flex-col gap-4">
             <span className="font-headline font-bold text-white text-xl flex items-center gap-2">
               <img 
-                  alt="CareerDisha Logo" 
+                  alt="Careerदिशा Logo" 
                   className="h-10 md:h-12 w-auto brightness-0 invert" 
                 src={LOGO_URL}
                 referrerPolicy="no-referrer"
               />
-              Career Disha
+              Careerदिशा
               </span>
-              <p className="text-slate-400 text-sm leading-relaxed mb-1">Offices B-02, A-28, Near Noida Sector 16 Metro Station, Block A, Sector 4, Noida, UP-201301</p>
+              <p className="text-slate-400 text-sm leading-relaxed mb-1">C2, Block-C, 2nd floor, Sector 2, Noida, Uttar Pradesh 201301</p>
               <p className="text-slate-400 text-sm leading-relaxed">Delivering expert career counselling and career planning to guide the next generation in choosing the right career.</p>
               
               <div className="flex items-center justify-start gap-3 pt-4 flex-wrap">
@@ -1087,6 +1180,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
             <ul className="space-y-2">
               <li><button onClick={() => setView('insights')} className="text-slate-400 text-sm hover:text-primary transition-colors text-left w-full">Resources</button></li>
               <li><button onClick={() => setView('insights')} className="text-slate-400 text-sm hover:text-primary transition-colors text-left w-full">Career Blog</button></li>
+              <li><a href="#testimonials" onClick={() => setView('landing')} className="block text-slate-400 text-sm hover:text-primary transition-colors text-left w-full">Testimonials</a></li>
               <li><button onClick={() => setView('contact-us')} className="text-slate-400 text-sm hover:text-primary transition-colors text-left w-full">Support</button></li>
               <li><button onClick={() => setView('contact-us')} className="text-slate-400 text-sm hover:text-primary transition-colors text-left w-full">Contact Us</button></li>
             </ul>
@@ -1113,7 +1207,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
           </div>
         </div>
         <div className="max-w-7xl mx-auto mt-12 pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-xs uppercase tracking-widest text-slate-500">{COPYRIGHT_TEXT}</p>
+          <p className="text-xs tracking-widest text-slate-500">{COPYRIGHT_TEXT}</p>
           <div className="flex gap-6">
             <Globe className="w-5 h-5 text-slate-500 hover:text-white cursor-pointer transition-colors" onClick={() => window.open('https://zeopto.com/', '_blank')} />
             <Users className="w-5 h-5 text-slate-500 hover:text-white cursor-pointer transition-colors" onClick={() => window.open('https://linkedin.com/company/zeopto', '_blank')} />
@@ -1131,29 +1225,22 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
       </footer>
 
       {/* Floating WhatsApp Icon */}
-      <div className="fixed bottom-6 right-6 z-[1000] flex flex-col items-end gap-1">
-        <a 
-          href="https://wa.me/919953280036" 
+      <div className="fixed bottom-10 right-5 z-[1000]">
+        <motion.a 
+          href="https://wa.me/919289191164" 
           target="_blank" 
           rel="noopener noreferrer"
-          className="hover:scale-105 transition-transform duration-300 bg-white rounded-full p-2 shadow-lg"
+          className="block hover:scale-110 hover:drop-shadow-[0_0_15px_rgba(37,211,102,0.6)] transition-all duration-300"
           title="WhatsApp Chat"
+          animate={{ y: [-6, 6, -6] }}
+          transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
         >
           <img 
-            src="https://cdn-icons-png.flaticon.com/512/3670/3670051.png" 
+            src="/Whatsapp.png" 
             alt="WhatsApp Icon" 
-            className="w-16 h-16 object-contain"
+            className="w-16 h-16 md:w-20 md:h-20 object-contain drop-shadow-lg"
           />
-        </a>
-        <a 
-          href="https://www.flaticon.com/free-icons/whatsapp" 
-          title="whatsapp icons" 
-          className="text-[10px] text-slate-400 opacity-50 hover:opacity-100"
-          target="_blank" 
-          rel="noopener noreferrer"
-        >
-          Whatsapp icons created by Freepik - Flaticon
-        </a>
+        </motion.a>
       </div>
 
       {showInquiryModal && (
@@ -1223,6 +1310,9 @@ export default function App() {
     </>
   );
 }
+
+
+
 
 
 

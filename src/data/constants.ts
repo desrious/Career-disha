@@ -4,7 +4,7 @@
 // will supplement these, but branding/contact info stays here.
 
 export const APP_NAME = 'Careerदिशा';
-export const APP_NAME_EN = 'Career Disha';
+export const APP_NAME_EN = 'Careerदिशा';
 export const APP_TAGLINE = 'Confusion Se Clarity Tak';
 export const COMPANY_NAME = 'ZeOpto';
 export const COPYRIGHT_YEAR = new Date().getFullYear();
@@ -15,10 +15,10 @@ export const LOGO_URL = '/CareerDishaLogo.png';
 // ─── Contact Info ─────────────────────────────────────────────
 export const CONTACT = {
   phone: ['+91-9289191164', '+91-9289191165'],
-  email: 'hr@ZeOpto.com',
+  email: 'hr@zeopto.com',
   website: 'https://ZeOpto.com',
   address:
-    'Offices B-02, A-28, Near Noida Sector 16 Metro Station, Block A, Sector 4, Noida, UP-201301',
+    'C2, Block-C, 2nd floor, Sector 2, Noida, Uttar Pradesh 201301',
 } as const;
 
 // ─── Social Links ─────────────────────────────────────────────

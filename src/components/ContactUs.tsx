@@ -23,7 +23,7 @@ export default function ContactUs({ onBack, contact = defaultCmsData.contact }: 
               <path d="m15 18-6-6 6-6"/>
             </svg>
           </button>
-          <img src="/CareerDishaLogo.png" alt="Career Disha Logo" className="h-14 object-contain" />
+          <img src="/CareerDishaLogo.png" alt="Careerदिशा Logo" className="h-14 object-contain" />
           <h1 className="text-xl font-bold text-slate-800 ml-2">Contact Us</h1>
         </div>
       </header>

@@ -120,19 +120,19 @@ export const defaultCmsData: CmsData = {
   },
   testimonials: [
     {
-      id: 'priya-sharma',
-      name: 'Priya Sharma',
+      id: 'prateek-sharma',
+      name: 'Prateek Sharma',
       role: 'College Student',
       quote: "The most clear career path guidance I've ever received. Their career planning helped me choose the right career by showing exact courses and internships needed to transition into AI Research.",
-      image: 'https://randomuser.me/api/portraits/women/44.jpg',
+      image: 'https://images.unsplash.com/photo-1618698544970-d021c33fca40?w=200&h=200&fit=crop',
       rating: 5,
     },
     {
       id: 'rohan-desai',
       name: 'Rohan Desai',
       role: 'High School Student',
-      quote: 'Choosing a stream after 10th was a nightmare until I did the Career Disha assessment. It validated my love for design over medicine.',
-      image: 'https://randomuser.me/api/portraits/men/46.jpg',
+      quote: 'Choosing a stream after 10th was a nightmare until I did the Careerदिशा assessment. It validated my love for design over medicine.',
+      image: 'https://images.unsplash.com/photo-1603570388466-eb4eb5acdd8a?w=200&h=200&fit=crop',
       rating: 5,
     },
   ],
@@ -201,9 +201,9 @@ export const defaultCmsData: CmsData = {
   },
   contact: {
     phones: ['+91-9289191164', '+91-9289191165'],
-    email: 'hr@ZeOpto.com',
+    email: 'hr@zeopto.com',
     website: 'https://ZeOpto.com',
-    address: 'Offices B-02, A-28, Near Noida Sector 16 Metro Station, Block A, Sector 4, Noida, UP-201301',
+    address: 'C2, Block-C, 2nd floor, Sector 2, Noida, Uttar Pradesh 201301',
     whatsapp: 'https://wa.me/919953280036',
     mapQuery: 'ZeOpto IT Services, Sector 4, Noida',
     socials: {
@@ -215,15 +215,15 @@ export const defaultCmsData: CmsData = {
     },
   },
   footer: {
-    brand: 'Career Disha',
+    brand: 'Careerदिशा',
     description: 'Delivering expert career counselling and career planning to guide the next generation in choosing the right career.',
-    copyright: 'Career Disha - Powered by ZeOpto',
+    copyright: 'Careerदिशा - Powered by ZeOpto',
     exploreLinks: ['Resources', 'Career Blog', 'Support', 'Contact Us'],
     legalLinks: ['Privacy', 'Terms'],
   },
   insights: {
     heroTitle: 'Insights',
-    heroDescription: 'Stay updated with the latest industry trends, expert mentorship sessions, and career guidance from the visionaries at Career Disha.',
+    heroDescription: 'Stay updated with the latest industry trends, expert mentorship sessions, and career guidance from the visionaries at Careerदिशा.',
     videos: [
       { id: 'career-guidance-session-1', youtubeId: '2RBDdsniaHw', title: 'Career Guidance Session 1' },
       { id: 'sap-consulting-insights', youtubeId: 'U2QHNZmi-XY', title: 'SAP Consulting Insights' },

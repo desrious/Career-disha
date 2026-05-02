@@ -45,6 +45,16 @@
   h1, h2, h3, h4, h5, h6 {
     @apply font-headline;
   }
+
+  /* Remove arrows from number inputs */
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
 }
 
 @layer utilities {
@@ -85,10 +95,4 @@
   animation: elegant-zoom 2s ease-in-out infinite;
 }
 
-@keyframes scroll-cards {
-  0% { transform: translateX(0%); }
-  100% { transform: translateX(-50%); }
-}
-.animate-scroll-cards {
-  animation: scroll-cards 30s linear infinite;
-}
+
