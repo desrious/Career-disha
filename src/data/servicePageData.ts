@@ -20,6 +20,7 @@ export interface OfferItem {
 
 export interface ServicePageData {
   badge: string;
+  pageTitle: string;
   heroTitle: string;
   heroHighlight: string;
   heroDescription: string;
@@ -33,6 +34,8 @@ export interface ServicePageData {
   recommendLabel: string;
   recommendValue: string;
   benefitsHeading: string;
+  bgConfused?: string;
+  bgConfident?: string;
 }
 
 // ─── Shared problem cards (2 & 3 are identical across all) ───
@@ -49,13 +52,14 @@ const sharedProblems: ProblemCard[] = [
     iconColor: 'text-blue-500',
     bgColor: 'bg-blue-50',
     title: 'Peer & Parent Pressure',
-    desc: 'Choosing what friends are doing or what parents suggest without aligning it with personal aptitude and interests.',
+    desc: 'Choosing what friends are doing or what parents suggest without aligning it with personal aptitude and interests is not a viable option.',
   },
 ];
 
 // ─── High School (9th & 10th) ────────────────────────────────
 export const highSchoolData: ServicePageData = {
-  badge: 'CareerDisha for High School',
+  badge: 'Careerदिशा for High School',
+  pageTitle: 'Career Counselling for High School (9th & 10th)',
   heroTitle: 'Explore ',
   heroHighlight: 'Career Options After 10th',
   heroDescription:
@@ -78,6 +82,7 @@ export const highSchoolData: ServicePageData = {
   offerSubtext:
     'A structured, scientific approach to help students discover the best career choices for students as they navigate their first major academic crossroad.',
   offers: [
+    { title: 'Pre-counselling sessions', desc: 'Initial consultation to understand your career aspirations and set expectations.' },
     { title: 'Career Discovery Assessment', desc: 'Identify innate traits and potential pathways.' },
     { title: 'Interest & Aptitude Analysis', desc: 'Understand what you truly enjoy and excel at.' },
     { title: 'Stream Selection Guidance', desc: 'Data-driven recommendations for 11th & 12th.' },
@@ -85,12 +90,13 @@ export const highSchoolData: ServicePageData = {
   ],
   recommendLabel: 'Recommended Stream',
   recommendValue: 'Science (PCM)',
-  benefitsHeading: 'Why Choose CareerDisha Early?',
+  benefitsHeading: 'Why Choose Careerदिशा Early?',
 };
 
 // ─── Plus Two (11th & 12th) ──────────────────────────────────
 export const plusTwoData: ServicePageData = {
-  badge: 'CareerDisha for Plus Two (11th & 12th)',
+  badge: 'Careerदिशा for Plus Two (11th & 12th)',
+  pageTitle: 'Career Counselling for Plus-two (11th & 12th)',
   heroTitle: 'Discover ',
   heroHighlight: 'Career Options After 12th',
   heroDescription:
@@ -109,10 +115,11 @@ export const plusTwoData: ServicePageData = {
     },
     ...sharedProblems,
   ],
-  offerHeading: 'What CareerDisha Offers',
+  offerHeading: 'What Careerदिशा Offers',
   offerSubtext:
     'A structured, scientific approach to help students navigate their first major academic crossroad.',
   offers: [
+    { title: 'Pre-counselling sessions', desc: 'Initial consultation to understand your career aspirations and set expectations.' },
     { title: 'Career Discovery Assessment', desc: 'Identify innate traits and potential pathways.' },
     { title: 'Interest & Aptitude Analysis', desc: 'Understand what you truly enjoy and excel at.' },
     { title: 'College & Path Selection', desc: 'Data-driven recommendations for higher education.' },
@@ -120,12 +127,13 @@ export const plusTwoData: ServicePageData = {
   ],
   recommendLabel: 'Recommended Courses',
   recommendValue: 'B.Tech / B.E. (CS)',
-  benefitsHeading: 'Why Choose CareerDisha Early?',
+  benefitsHeading: 'Why Choose Careerदिशा Early?',
 };
 
 // ─── Graduates ───────────────────────────────────────────────
 export const graduatesData: ServicePageData = {
-  badge: 'CareerDisha for Graduates',
+  badge: 'Careerदिशा for Graduates',
+  pageTitle: 'Career Counselling for Graduates',
   heroTitle: 'Discover Your ',
   heroHighlight: 'Career Development Plan',
   heroDescription:
@@ -144,10 +152,11 @@ export const graduatesData: ServicePageData = {
     },
     ...sharedProblems,
   ],
-  offerHeading: 'What CareerDisha Offers',
+  offerHeading: 'What Careerदिशा Offers',
   offerSubtext:
     'A structured, scientific approach to help students navigate their first major academic crossroad.',
   offers: [
+    { title: 'Pre-counselling sessions', desc: 'Initial consultation to understand your career aspirations and set expectations.' },
     { title: 'Career Discovery Assessment', desc: 'Identify innate traits and potential pathways.' },
     { title: 'Interest & Aptitude Analysis', desc: 'Understand what you truly enjoy and excel at.' },
     { title: 'Stream Selection Guidance', desc: 'Data-driven recommendations for post-graduation opportunities.' },
@@ -155,12 +164,15 @@ export const graduatesData: ServicePageData = {
   ],
   recommendLabel: 'Career Path',
   recommendValue: 'Data Science & Analytics',
-  benefitsHeading: 'Why Choose CareerDisha Early?',
+  benefitsHeading: 'Why Choose Careerदिशा Early?',
 };
 
 // ─── Working Professionals ───────────────────────────────────
 export const workingProfessionalData: ServicePageData = {
-  badge: 'CareerDisha for Working Professional',
+  bgConfused: '/confused_professional.png',
+  bgConfident: '/confident_professional.png',
+  badge: 'Careerदिशा for Working Professionals',
+  pageTitle: 'Career Counselling for Working Professionals',
   heroTitle: 'Discover Your ',
   heroHighlight: 'Path Early',
   heroDescription:
@@ -179,10 +191,11 @@ export const workingProfessionalData: ServicePageData = {
     },
     ...sharedProblems,
   ],
-  offerHeading: 'What CareerDisha Offers',
+  offerHeading: 'What Careerदिशा Offers',
   offerSubtext:
     'A structured, scientific approach to help professionals navigate their career transitions with data-driven precision.',
   offers: [
+    { title: 'Pre-counselling sessions', desc: 'Initial consultation to understand your career aspirations and set expectations.' },
     { title: 'Career Discovery Assessment', desc: 'Identify innate traits and potential pathways.' },
     { title: 'Interest & Aptitude Analysis', desc: 'Understand what you truly enjoy and excel at.' },
     { title: 'Stream Selection Guidance', desc: 'Data-driven recommendations for advanced career moves.' },
@@ -190,5 +203,5 @@ export const workingProfessionalData: ServicePageData = {
   ],
   recommendLabel: 'Next Role Strategy',
   recommendValue: 'Senior Product Manager',
-  benefitsHeading: 'Why Choose CareerDisha?',
+  benefitsHeading: 'Why Choose Careerदिशा?',
 };
