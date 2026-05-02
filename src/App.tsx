@@ -213,7 +213,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
             >
               Insights
             </button>
-            <a className="text-on-surface-variant hover:text-primary font-headline tracking-tight font-semibold hover:opacity-80 transition-opacity duration-300" href="#counsellors">Counsellors</a>
+
             <a 
               className="text-on-surface-variant hover:text-primary font-headline tracking-tight font-semibold hover:opacity-80 transition-opacity duration-300" 
               href="/brochure.pdf" 
