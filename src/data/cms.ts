@@ -101,7 +101,7 @@ export type ExpertAdviceInquiry = {
   created_at?: string;
 };
 
-export const CMS_STORAGE_KEY = 'careerDishaCmsData';
+export const CMS_STORAGE_KEY = 'careerDishaCmsData_v2';
 export const CMS_UPDATED_EVENT = 'careerDishaCmsUpdated';
 export const CMS_UPDATED_AT_KEY = 'careerDishaCmsUpdatedAt';
 export const ADMIN_SESSION_STORAGE_KEY = 'careerDishaAdminSessionToken';

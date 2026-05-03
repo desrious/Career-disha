@@ -107,7 +107,7 @@ export default function Insights({ onBack, insights = defaultCmsData.insights }:
               <span className="text-xl font-extrabold text-blue-700 tracking-tighter font-headline">Careerदिशा</span>
             </button>
           </div>
-          <button 
+          <button
             onClick={onBack}
             className="flex items-center gap-2 text-on-surface-variant font-bold hover:text-primary transition-colors group"
           >
@@ -119,7 +119,7 @@ export default function Insights({ onBack, insights = defaultCmsData.insights }:
 
       <main className="pt-24 sm:pt-32 pb-16 sm:pb-24 px-4 sm:px-6 max-w-7xl mx-auto">
         {/* Hero Section */}
-        <motion.section 
+        <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="mb-20 text-center"
@@ -128,7 +128,7 @@ export default function Insights({ onBack, insights = defaultCmsData.insights }:
             <span className="text-primary">{insights.heroTitle}</span>
           </h1>
           <p className="text-on-surface-variant text-lg max-w-2xl mx-auto">
-            {insights.heroDescription}
+            {insights.heroDescription.replace(/Career Disha/gi, 'Careerदिशा')}
           </p>
         </motion.section>
 
@@ -142,7 +142,7 @@ export default function Insights({ onBack, insights = defaultCmsData.insights }:
               <h2 className="text-3xl font-extrabold font-headline">YouTube Videos</h2>
             </div>
           </div>
-          
+
           {insights.videos.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {insights.videos.map((video, index) => (
@@ -192,7 +192,7 @@ export default function Insights({ onBack, insights = defaultCmsData.insights }:
           {insights.blogs.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {insights.blogs.map((blog, index) => (
-                <motion.div 
+                <motion.div
                   key={blog.id}
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
@@ -201,8 +201,8 @@ export default function Insights({ onBack, insights = defaultCmsData.insights }:
                   className="bg-white rounded-[2.5rem] border border-outline-variant/10 flex flex-col overflow-hidden hover:shadow-xl transition-all group"
                 >
                   <div className="aspect-[4/3] relative overflow-hidden">
-                    <img 
-                      src={blog.image} 
+                    <img
+                      src={blog.image}
                       alt={blog.title}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       referrerPolicy="no-referrer"
@@ -216,9 +216,9 @@ export default function Insights({ onBack, insights = defaultCmsData.insights }:
                     <h3 className="text-xl font-bold mb-4 leading-tight group-hover:text-primary transition-colors">{blog.title}</h3>
                     <p className="text-on-surface-variant text-sm leading-relaxed mb-6 line-clamp-3">{blog.excerpt}</p>
                     <div className="mt-auto pt-6 border-t border-outline-variant/10 flex items-center justify-between">
-                      <a 
-                        href={blog.link} 
-                        target="_blank" 
+                      <a
+                        href={blog.link}
+                        target="_blank"
                         rel="noopener noreferrer"
                         className="text-primary font-bold text-sm flex items-center gap-1 hover:gap-2 transition-all"
                       >
@@ -252,16 +252,16 @@ export default function Insights({ onBack, insights = defaultCmsData.insights }:
               <Phone className="w-6 h-6 text-primary" />
               <span className="font-bold">+91-9289191164</span>
             </div>
-            <a href="mailto:hr@zeopto.com" className="flex items-center justify-center gap-4 bg-white/5 p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
+            <a href="mailto:hr@ZeOpto.com" className="flex items-center justify-center gap-4 bg-white/5 p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
               <Mail className="w-6 h-6 text-secondary" />
-              <span className="font-bold">hr@zeopto.com</span>
+              <span className="font-bold">hr@ZeOpto.com</span>
             </a>
             <a href="https://ZeOpto.com/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-4 bg-white/5 p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors group">
               <Globe className="w-6 h-6 text-tertiary group-hover:rotate-12 transition-transform" />
               <span className="font-bold">Visit ZeOpto</span>
             </a>
           </div>
-          <p className="mt-12 text-white/40 text-sm font-medium uppercase tracking-widest">
+          <p className="mt-12 text-white/40 text-sm font-medium tracking-widest">
             Careerदिशा empowers individuals with the right direction, backed by ZeOpto’s expertise and commitment to excellence.
           </p>
         </section>
@@ -270,8 +270,8 @@ export default function Insights({ onBack, insights = defaultCmsData.insights }:
       {/* Footer */}
       <footer className="bg-slate-100 py-12 px-8 w-full">
         <div className="max-w-7xl mx-auto text-center">
-          <p className="text-slate-500 text-xs font-medium uppercase tracking-widest">
-            {COPYRIGHT_TEXT}
+          <p className="text-slate-500 text-xs font-medium tracking-widest">
+            © 2026 Careerदिशा — Powered by ZeOpto
           </p>
         </div>
       </footer>
