@@ -121,7 +121,7 @@ export default function About({ onBack }: AboutProps) {
         </div>
       </nav>
 
-      <main className="pt-32 pb-24 px-6 max-w-5xl mx-auto">
+      <main className="pt-24 sm:pt-32 pb-16 sm:pb-24 px-4 sm:px-6 max-w-5xl mx-auto">
         {/* Hero Section */}
         <motion.section 
           initial={{ opacity: 0, y: 20 }}
@@ -134,11 +134,11 @@ export default function About({ onBack }: AboutProps) {
             src={logoUrl} 
             referrerPolicy="no-referrer" 
           />
-          <h1 className="text-5xl md:text-7xl font-extrabold font-headline text-on-surface tracking-tight mb-8 leading-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-extrabold font-headline text-on-surface tracking-tight mb-6 sm:mb-8 leading-tight">
             About <span className="text-primary">Careerदिशा</span>
           </h1>
           <ElectricBorder color="#0057c2" speed={1} chaos={0.15} borderRadius={48} className="shadow-2xl">
-            <div className="bg-white rounded-[3rem] p-8 md:p-12 text-left z-10 w-full h-full space-y-6">
+            <div className="bg-white rounded-[2rem] sm:rounded-[3rem] p-5 sm:p-8 md:p-12 text-left z-10 w-full h-full space-y-6">
               <p className="text-lg md:text-xl text-on-surface-variant leading-relaxed text-left break-words">
                 Careerदिशा, powered by <span className="font-bold text-primary">ZeOpto</span>, is built to bridge the gap between ambition and the right career path. Backed by ZeOpto’s global expertise in consulting, cloud and AI-driven technology, operations optimization, and digital marketing, Careerदिशा brings together technology, mentorship, and real-world insights to guide individuals toward meaningful careers.
               </p>
@@ -185,7 +185,7 @@ export default function About({ onBack }: AboutProps) {
 
         {/* Vision, Mission, Ambition */}
         <section className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-24">
-          <div className="bg-blue-600 text-white p-10 rounded-[2.5rem] relative overflow-hidden group hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
+          <div className="bg-blue-600 text-white p-6 sm:p-8 md:p-10 rounded-[2rem] sm:rounded-[2.5rem] relative overflow-hidden group hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
             <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full group-hover:scale-110 transition-transform"></div>
             <h3 className="text-2xl font-bold mb-6 flex items-center gap-3">
               <Lightbulb className="w-6 h-6" /> Our Vision
@@ -194,7 +194,7 @@ export default function About({ onBack }: AboutProps) {
               To empower individuals with clarity, confidence, and the right direction, while continuing ZeOpto’s vision of becoming a trusted partner in digital transformation and career development.
             </p>
           </div>
-          <div className="bg-yellow-500 text-white p-10 rounded-[2.5rem] relative overflow-hidden group hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
+          <div className="bg-yellow-500 text-white p-6 sm:p-8 md:p-10 rounded-[2rem] sm:rounded-[2.5rem] relative overflow-hidden group hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
             <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full group-hover:scale-110 transition-transform"></div>
             <h3 className="text-2xl font-bold mb-6 flex items-center gap-3">
               <Target className="w-6 h-6" /> Our Mission
@@ -203,7 +203,7 @@ export default function About({ onBack }: AboutProps) {
               To deliver value-driven guidance and solutions that enhance both career growth for individuals and performance for organizations.
             </p>
           </div>
-          <div className="bg-orange-500 text-white p-10 rounded-[2.5rem] relative overflow-hidden group hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
+          <div className="bg-orange-500 text-white p-6 sm:p-8 md:p-10 rounded-[2rem] sm:rounded-[2.5rem] relative overflow-hidden group hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
             <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full group-hover:scale-110 transition-transform"></div>
             <h3 className="text-2xl font-bold mb-6 flex items-center gap-3">
               <Rocket className="w-6 h-6" /> Our Ambition
@@ -215,9 +215,9 @@ export default function About({ onBack }: AboutProps) {
         </section>
 
         {/* Core Values */}
-        <section className="mb-24 bg-slate-900 text-white rounded-[3rem] p-12 shadow-2xl">
+        <section className="mb-16 sm:mb-24 bg-slate-900 text-white rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-8 md:p-12 shadow-2xl">
           <h2 className="text-3xl font-extrabold font-headline mb-12 text-center text-white">Our Core Values</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 md:gap-12">
             <div className="text-center bg-white/5 p-8 rounded-3xl border border-white/10 hover:bg-white/10 hover:-translate-y-2 hover:shadow-xl transition-all duration-300 group">
               <div className="w-16 h-16 bg-blue-500/20 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm group-hover:scale-110 transition-transform">
                 <TrendingUp className="w-8 h-8 text-blue-400" />
@@ -428,9 +428,9 @@ export default function About({ onBack }: AboutProps) {
         </section>
 
         {/* Contact */}
-        <section className="bg-slate-900 text-white p-12 md:p-20 rounded-[3rem] text-center relative overflow-hidden">
+        <section className="bg-slate-900 text-white p-6 sm:p-8 md:p-12 lg:p-20 rounded-[2rem] sm:rounded-[3rem] text-center relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
-          <h2 className="text-4xl font-extrabold mb-8 relative z-10">Get in Touch</h2>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-6 sm:mb-8 relative z-10">Get in Touch</h2>
           <p className="text-white/60 text-lg max-w-2xl mx-auto mb-12 relative z-10">
             Discover how Careerदिशा, powered by ZeOpto, can guide you toward the right career path and help you unlock your true potential.
           </p>

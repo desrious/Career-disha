@@ -117,14 +117,14 @@ export default function Insights({ onBack, insights = defaultCmsData.insights }:
         </div>
       </nav>
 
-      <main className="pt-32 pb-24 px-6 max-w-7xl mx-auto">
+      <main className="pt-24 sm:pt-32 pb-16 sm:pb-24 px-4 sm:px-6 max-w-7xl mx-auto">
         {/* Hero Section */}
         <motion.section 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="mb-20 text-center"
         >
-          <h1 className="text-5xl md:text-6xl font-extrabold font-headline text-on-surface tracking-tight mb-6">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold font-headline text-on-surface tracking-tight mb-6">
             <span className="text-primary">{insights.heroTitle}</span>
           </h1>
           <p className="text-on-surface-variant text-lg max-w-2xl mx-auto">
@@ -241,9 +241,9 @@ export default function Insights({ onBack, insights = defaultCmsData.insights }:
         </section>
 
         {/* Contact */}
-        <section className="bg-slate-900 text-white p-12 md:p-20 rounded-[3rem] text-center relative overflow-hidden">
+        <section className="bg-slate-900 text-white p-6 sm:p-8 md:p-12 lg:p-20 rounded-[2rem] sm:rounded-[3rem] text-center relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
-          <h2 className="text-4xl font-extrabold mb-8 relative z-10">Get in Touch</h2>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-6 sm:mb-8 relative z-10">Get in Touch</h2>
           <p className="text-white/60 text-lg max-w-2xl mx-auto mb-12 relative z-10">
             Discover how Careerदिशा, powered by ZeOpto, can guide you toward the right career path and help you unlock your true potential.
           </p>

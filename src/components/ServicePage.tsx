@@ -173,7 +173,7 @@ export default function ServicePage({ data, onBack }: ServicePageProps) {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-4 gap-8 relative">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 relative">
               {/* Connecting line */}
               <div className="hidden md:block absolute top-12 left-[12%] right-[12%] h-1 bg-[rgba(255,255,255,0.8)] shadow-sm z-0 rounded-full border border-black/5"></div>
 
@@ -246,12 +246,12 @@ export default function ServicePage({ data, onBack }: ServicePageProps) {
       {/* CTA Section */}
       <section className="py-24 relative z-20 bg-slate-900 text-center border-t border-slate-800">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-br from-blue-600 to-indigo-800 p-10 md:p-16 rounded-3xl border border-blue-400/50 shadow-[0_0_40px_rgba(59,130,246,0.3)] backdrop-blur-sm hover:-translate-y-2 hover:scale-[1.02] transition-all duration-500 ease-in-out relative overflow-hidden group">
+          <div className="bg-gradient-to-br from-blue-600 to-indigo-800 p-6 sm:p-8 md:p-10 lg:p-16 rounded-2xl sm:rounded-3xl border border-blue-400/50 shadow-[0_0_40px_rgba(59,130,246,0.3)] backdrop-blur-sm hover:-translate-y-2 hover:scale-[1.02] transition-all duration-500 ease-in-out relative overflow-hidden group">
             
             {/* Subtle glow overlay on hover */}
             <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl pointer-events-none"></div>
 
-            <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-6 drop-shadow-sm relative z-10">Ready to Discover Your Path?</h2>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white mb-6 drop-shadow-sm relative z-10">Ready to Discover Your Path?</h2>
             <p className="text-xl text-blue-100 mb-10 font-bold relative z-10 max-w-2xl mx-auto">
               Take the first step towards a fulfilling academic and professional journey.
             </p>

@@ -79,10 +79,10 @@ const ComparisonSection = () => {
   const visibleData = isExpanded ? comparisonData : comparisonData.slice(0, 2);
 
   return (
-    <section className="py-24 bg-surface px-6 md:px-8">
+    <section className="py-16 sm:py-24 bg-surface px-4 sm:px-6 md:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-extrabold text-on-surface mb-4">Comprehensive Career Guidance Comparison</h2>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-on-surface mb-4">Comprehensive Career Guidance Comparison</h2>
           <div className="h-1 w-20 bg-secondary mx-auto rounded-full mb-6"></div>
           <p className="text-on-surface-variant max-w-2xl mx-auto font-medium text-lg">
             Understand how different career guidance solutions compare across key areas
@@ -102,16 +102,16 @@ const ComparisonSection = () => {
                 whileHover={{ y: -5 }}
                 className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden transition-shadow hover:shadow-xl hover:border-primary/20"
               >
-                <div className="p-6 md:p-8 border-b border-slate-100 bg-slate-50/50 transition-colors hover:bg-primary/5">
+                <div className="p-4 sm:p-6 md:p-8 border-b border-slate-100 bg-slate-50/50 transition-colors hover:bg-primary/5">
                   <h3 className="text-2xl font-bold text-slate-800 mb-2 transition-colors">{item.id}. {item.title}</h3>
                   <p className="text-slate-600">{item.desc}</p>
                 </div>
-                <div className="p-6 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-6 relative">
+                <div className="p-4 sm:p-6 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 relative">
                   {/* Decorative VS Background */}
                   <div className="hidden md:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full items-center justify-center font-bold text-slate-300 z-10 shadow-sm border border-slate-100">VS</div>
 
                   {/* Careerदिशा Column */}
-                  <div className="relative group bg-primary/5 border-2 border-primary/20 rounded-xl p-6 md:p-8 shadow-[0_0_15px_rgba(var(--color-primary),0.05)] transition-all duration-300 hover:shadow-[0_0_30px_rgba(var(--color-primary),0.2)] hover:bg-primary/10 hover:scale-[1.01] z-0 hover:z-20">
+                  <div className="relative group bg-primary/5 border-2 border-primary/20 rounded-xl p-4 sm:p-6 md:p-8 shadow-[0_0_15px_rgba(var(--color-primary),0.05)] transition-all duration-300 hover:shadow-[0_0_30px_rgba(var(--color-primary),0.2)] hover:bg-primary/10 hover:scale-[1.01] z-0 hover:z-20">
                     <div className="absolute top-0 right-0 bg-primary text-white text-xs font-bold px-4 py-1.5 rounded-bl-xl rounded-tr-lg tracking-widest transition-transform group-hover:scale-105 origin-top-right">
                       Careerदिशा
                     </div>
@@ -128,7 +128,7 @@ const ComparisonSection = () => {
                   </div>
 
                   {/* Others Column */}
-                  <div className="relative group bg-slate-50 border border-slate-200 rounded-xl p-6 md:p-8 opacity-90 transition-all duration-300 hover:opacity-100 hover:bg-slate-100 hover:shadow-md hover:scale-[1.01] z-0 hover:z-20">
+                  <div className="relative group bg-slate-50 border border-slate-200 rounded-xl p-4 sm:p-6 md:p-8 opacity-90 transition-all duration-300 hover:opacity-100 hover:bg-slate-100 hover:shadow-md hover:scale-[1.01] z-0 hover:z-20">
                     <div className="absolute top-0 right-0 bg-slate-300 text-slate-700 text-xs font-bold px-4 py-1.5 rounded-bl-xl rounded-tr-lg tracking-widest uppercase transition-transform group-hover:scale-105 origin-top-right">
                       Other Platforms
                     </div>

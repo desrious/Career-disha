@@ -30,6 +30,8 @@ const ProfileCard = ({
   const [tiltStyle, setTiltStyle] = useState({});
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    // Disable tilt on touch devices
+    if (window.matchMedia('(pointer: coarse)').matches) return;
     const card = e.currentTarget;
     const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left - rect.width / 2;
@@ -69,7 +71,7 @@ const ProfileCard = ({
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         style={{ ...tiltStyle, background: innerGradient || 'white' }}
-        className="bg-white p-10 rounded-[2.5rem] border border-outline-variant/10 shadow-lg hover:shadow-2xl transition-all duration-300 ease-out flex flex-col h-full relative overflow-hidden z-10 will-change-transform"
+        className="bg-white p-6 sm:p-8 md:p-10 rounded-[2.5rem] border border-outline-variant/10 shadow-lg hover:shadow-2xl transition-all duration-300 ease-out flex flex-col h-full relative overflow-hidden z-10 will-change-transform"
       >
         <div className={`absolute top-0 right-0 w-32 h-32 ${color === 'primary' ? 'bg-primary/5' : 'bg-secondary/5'} rounded-bl-[100px] -z-10 group-hover:scale-110 transition-transform`} />
         

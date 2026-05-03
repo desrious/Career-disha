@@ -28,8 +28,8 @@ export default function ContactUs({ onBack, contact = defaultCmsData.contact }: 
         </div>
       </header>
 
-      <div className="content flex-1 max-w-6xl mx-auto w-full p-8 py-12 relative z-[2]">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <div className="content flex-1 max-w-6xl mx-auto w-full p-4 sm:p-6 md:p-8 py-8 sm:py-12 relative z-[2]">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12">
           
           {/* Contact Information */}
           <motion.div 

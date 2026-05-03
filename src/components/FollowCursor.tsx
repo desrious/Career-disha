@@ -10,12 +10,13 @@ const FollowCursor: React.FC<FollowCursorProps> = ({
   zIndex = 9999,
 }) => {
   useEffect(() => {
-    let canvas: HTMLCanvasElement;
-    let context: CanvasRenderingContext2D | null;
+    let canvas: HTMLCanvasElement | null = null;
+    let context: CanvasRenderingContext2D | null = null;
     let animationFrame: number;
     let width = window.innerWidth;
     let height = window.innerHeight;
     let cursor = { x: width / 2, y: height / 2 };
+    let isActive = false;
     
     // Safety check for SSR / build environments
     if (typeof window === 'undefined') return;
@@ -23,6 +24,9 @@ const FollowCursor: React.FC<FollowCursorProps> = ({
     const prefersReducedMotion = window.matchMedia(
       '(prefers-reduced-motion: reduce)'
     );
+
+    // Desktop-only media query: only enable on screens >= 1024px
+    const desktopQuery = window.matchMedia('(min-width: 1024px)');
 
     class Dot {
       position: { x: number; y: number };
@@ -98,8 +102,7 @@ const FollowCursor: React.FC<FollowCursorProps> = ({
     };
 
     const init = () => {
-      if (prefersReducedMotion.matches) {
-        console.log('Reduced motion enabled, cursor effect skipped.');
+      if (prefersReducedMotion.matches || !desktopQuery.matches || isActive) {
         return;
       }
 
@@ -116,17 +119,22 @@ const FollowCursor: React.FC<FollowCursorProps> = ({
 
       window.addEventListener('mousemove', onMouseMove);
       window.addEventListener('resize', onWindowResize);
+      isActive = true;
       loop();
     };
 
     const destroy = () => {
       if (canvas && canvas.parentNode) canvas.remove();
+      canvas = null;
+      context = null;
       cancelAnimationFrame(animationFrame);
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('resize', onWindowResize);
+      isActive = false;
     };
 
-    prefersReducedMotion.onchange = () => {
+    // Handle reduced motion preference changes
+    const onReducedMotionChange = () => {
       if (prefersReducedMotion.matches) {
         destroy();
       } else {
@@ -134,10 +142,25 @@ const FollowCursor: React.FC<FollowCursorProps> = ({
       }
     };
 
+    // Handle screen size changes — enable/disable dynamically
+    const onDesktopQueryChange = (e: MediaQueryListEvent) => {
+      if (e.matches) {
+        init();
+      } else {
+        destroy();
+      }
+    };
+
+    prefersReducedMotion.addEventListener('change', onReducedMotionChange);
+    desktopQuery.addEventListener('change', onDesktopQueryChange);
+
+    // Only init if on desktop
     init();
 
     return () => {
       destroy();
+      prefersReducedMotion.removeEventListener('change', onReducedMotionChange);
+      desktopQuery.removeEventListener('change', onDesktopQueryChange);
     };
   }, [color, zIndex]);
 

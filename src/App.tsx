@@ -19,6 +19,9 @@ import {
   Share2,
   Phone,
   Mail,
+  Menu,
+  X,
+  ChevronDown,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import About from './components/About';
@@ -62,6 +65,8 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
   }, []);
 
   const [showInquiryModal, setShowInquiryModal] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileProgramsOpen, setMobileProgramsOpen] = useState(false);
 
   const heroImages = [
     "/landing_page_img1.png",
@@ -129,7 +134,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
         // The container holds 2 identical sets for seamless loop
         const halfWidth = scrollRef.current.scrollWidth / 2;
         if (scrollPosRef.current >= halfWidth) {
-           scrollPosRef.current -= halfWidth;
+          scrollPosRef.current -= halfWidth;
         }
         scrollRef.current.style.transform = `translateX(-${scrollPosRef.current}px)`;
       }
@@ -146,7 +151,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
   const handleCounsellorMouseEnter = () => {
     targetSpeedRef.current = 0;
   };
-  
+
   const handleCounsellorMouseLeave = () => {
     targetSpeedRef.current = 1.5;
   };
@@ -166,29 +171,29 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
       {/* TopAppBar */}
       <header className="fixed top-0 w-full z-50 flex flex-col bg-slate-50/80 backdrop-blur-md border-b border-slate-100">
         {/* Top Info Bar */}
-        <div className="w-full bg-slate-900 text-white py-1.5 px-6 flex justify-center md:justify-end gap-6 text-[10px] sm:text-xs font-semibold tracking-wider">
-           <a href="tel:+919289191164" className="flex items-center gap-2 hover:text-primary transition-colors">
-              <Phone size={12} /> +91-9289191164
-           </a>
-           <a href="mailto:hr@zeopto.com" className="flex items-center gap-2 hover:text-primary transition-colors">
-              <Mail size={12} /> hr@zeopto.com
-           </a>
-           <a href="https://ZeOpto.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors">
-              <Globe size={12} /> Visit ZeOpto
-           </a>
+        <div className="w-full bg-slate-900 text-white py-1.5 px-3 sm:px-6 flex justify-center md:justify-end gap-3 sm:gap-6 text-[9px] sm:text-xs font-semibold tracking-wider">
+          <a href="tel:+919289191164" className="flex items-center gap-1 sm:gap-2 hover:text-primary transition-colors">
+            <Phone size={12} /> <span className="hidden sm:inline">+91-</span>9289191164
+          </a>
+          <a href="mailto:hr@zeopto.com" className="hidden sm:flex items-center gap-2 hover:text-primary transition-colors">
+            <Mail size={12} /> hr@zeopto.com
+          </a>
+          <a href="https://ZeOpto.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 sm:gap-2 hover:text-primary transition-colors">
+            <Globe size={12} /> Visit ZeOpto
+          </a>
         </div>
-        <nav className="flex justify-between items-center px-4 h-24 max-w-full">
-            <div className="flex items-center gap-2">
-              <img 
-                alt="Careerदिशा Logo" 
-                className="h-16 md:h-20 w-auto object-contain" 
-              src={LOGO_URL} 
-              referrerPolicy="no-referrer" 
+        <nav className="flex justify-between items-center px-3 sm:px-4 h-16 md:h-24 max-w-full">
+          <div className="flex items-center gap-2">
+            <img
+              alt="Careerदिशा Logo"
+              className="h-10 sm:h-14 md:h-20 w-auto object-contain"
+              src={LOGO_URL}
+              referrerPolicy="no-referrer"
             />
           </div>
-          <div className="hidden md:flex flex-1 justify-center items-center gap-6 lg:gap-10">
+          <div className="hidden lg:flex flex-1 justify-center items-center gap-6 xl:gap-10">
             <button onClick={() => setView('landing')} className="text-primary border-b-2 border-primary font-headline tracking-tight font-semibold hover:opacity-80 transition-opacity duration-300 cursor-pointer">Home</button>
-            <button 
+            <button
               onClick={() => setView('about')}
               className="text-on-surface-variant hover:text-primary font-headline tracking-tight font-semibold hover:opacity-80 transition-opacity duration-300"
             >
@@ -207,38 +212,38 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
                 </div>
               </div>
             </div>
-            <button 
+            <button
               onClick={() => setView('insights')}
               className="text-on-surface-variant hover:text-primary font-headline tracking-tight font-semibold hover:opacity-80 transition-opacity duration-300"
             >
               Insights
             </button>
 
-            <a 
-              className="text-on-surface-variant hover:text-primary font-headline tracking-tight font-semibold hover:opacity-80 transition-opacity duration-300" 
-              href="/brochure.pdf" 
-              target="_blank" 
+            <a
+              className="text-on-surface-variant hover:text-primary font-headline tracking-tight font-semibold hover:opacity-80 transition-opacity duration-300"
+              href="/brochure.pdf"
+              target="_blank"
               rel="noopener noreferrer"
             >
               Download Brochure
             </a>
-            <button 
+            <button
               onClick={() => setView('contact-us')}
               className="text-on-surface-variant hover:text-primary font-headline tracking-tight font-semibold hover:opacity-80 transition-opacity duration-300"
             >
               Partner With Us
             </button>
-            <button 
+            <button
               onClick={() => setView('contact-us')}
               className="text-on-surface-variant hover:text-primary font-headline tracking-tight font-semibold hover:opacity-80 transition-opacity duration-300"
             >
               Contact Us
             </button>
           </div>
-          <div className="flex items-center gap-4">
-            <button 
+          <div className="flex items-center gap-2 sm:gap-4">
+            <button
               onClick={() => setShowInquiryModal(true)}
-              className="group flex h-10 items-center justify-center gap-2 rounded-full bg-[#fba70c] pl-3 pr-4 transition-all duration-300 ease-in-out hover:bg-[#d97706] hover:pl-2 text-white font-semibold font-headline animate-elegant-zoom shadow-md hover:shadow-lg active:bg-[#b45309]"
+              className="group hidden sm:flex h-10 items-center justify-center gap-2 rounded-full bg-[#fba70c] pl-3 pr-4 transition-all duration-300 ease-in-out hover:bg-[#d97706] hover:pl-2 text-white font-semibold font-headline animate-elegant-zoom shadow-md hover:shadow-lg active:bg-[#b45309]"
             >
               <span className="rounded-full bg-white p-1 text-sm transition-colors duration-300 group-hover:bg-white flex items-center justify-center">
                 <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="-translate-x-[200%] text-[0px] transition-all duration-300 group-hover:translate-x-0 group-hover:text-lg group-hover:text-[#d97706] group-active:-rotate-45" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
@@ -248,17 +253,73 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
               </span>
               <span>Expert Advice</span>
             </button>
+            {/* Mobile Hamburger */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="lg:hidden p-2 rounded-lg hover:bg-slate-100 transition-colors"
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
           </div>
         </nav>
+        {/* Mobile Menu Drawer */}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              className="lg:hidden overflow-hidden bg-white border-t border-slate-100"
+            >
+              <div className="flex flex-col py-4 px-4 gap-1">
+                <button onClick={() => { setView('landing'); setMobileMenuOpen(false); }} className="text-left px-4 py-3 text-primary font-headline font-semibold rounded-lg bg-primary/5">Home</button>
+                <button onClick={() => { setView('about'); setMobileMenuOpen(false); }} className="text-left px-4 py-3 text-on-surface-variant font-headline font-semibold rounded-lg hover:bg-slate-50 transition-colors">About Us</button>
+                <div>
+                  <button onClick={() => setMobileProgramsOpen(!mobileProgramsOpen)} className="w-full text-left px-4 py-3 text-on-surface-variant font-headline font-semibold rounded-lg hover:bg-slate-50 transition-colors flex items-center justify-between">
+                    Programs
+                    <ChevronDown className={`w-4 h-4 transition-transform ${mobileProgramsOpen ? 'rotate-180' : ''}`} />
+                  </button>
+                  <AnimatePresence>
+                    {mobileProgramsOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className="overflow-hidden pl-4"
+                      >
+                        <button onClick={() => { setView('high-school'); setMobileMenuOpen(false); }} className="w-full text-left px-4 py-2.5 text-sm font-semibold text-slate-600 rounded-lg hover:bg-slate-50 transition-colors">High School (9th & 10th)</button>
+                        <button onClick={() => { setView('plus-two'); setMobileMenuOpen(false); }} className="w-full text-left px-4 py-2.5 text-sm font-semibold text-slate-600 rounded-lg hover:bg-slate-50 transition-colors">Plus-two (11th & 12th)</button>
+                        <button onClick={() => { setView('graduates'); setMobileMenuOpen(false); }} className="w-full text-left px-4 py-2.5 text-sm font-semibold text-slate-600 rounded-lg hover:bg-slate-50 transition-colors">Graduates</button>
+                        <button onClick={() => { setView('working-professional'); setMobileMenuOpen(false); }} className="w-full text-left px-4 py-2.5 text-sm font-semibold text-slate-600 rounded-lg hover:bg-slate-50 transition-colors">Working Professional</button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+                <button onClick={() => { setView('insights'); setMobileMenuOpen(false); }} className="text-left px-4 py-3 text-on-surface-variant font-headline font-semibold rounded-lg hover:bg-slate-50 transition-colors">Insights</button>
+                <a href="/brochure.pdf" target="_blank" rel="noopener noreferrer" className="text-left px-4 py-3 text-on-surface-variant font-headline font-semibold rounded-lg hover:bg-slate-50 transition-colors">Download Brochure</a>
+                <button onClick={() => { setView('contact-us'); setMobileMenuOpen(false); }} className="text-left px-4 py-3 text-on-surface-variant font-headline font-semibold rounded-lg hover:bg-slate-50 transition-colors">Partner With Us</button>
+                <button onClick={() => { setView('contact-us'); setMobileMenuOpen(false); }} className="text-left px-4 py-3 text-on-surface-variant font-headline font-semibold rounded-lg hover:bg-slate-50 transition-colors">Contact Us</button>
+                <button
+                  onClick={() => { setShowInquiryModal(true); setMobileMenuOpen(false); }}
+                  className="mt-2 w-full py-3 bg-[#fba70c] text-white font-bold font-headline rounded-full hover:bg-[#d97706] transition-colors"
+                >
+                  Expert Advice
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </header>
 
-      <main className="pt-24">
+      <main className="pt-20 md:pt-24">
         {/* Hero Section */}
-        <section className="relative min-h-[700px] flex items-center overflow-hidden">
+        <section className="relative min-h-[500px] sm:min-h-[600px] md:min-h-[700px] flex items-center overflow-hidden">
           <div className="absolute inset-0 z-0">
             <div className="absolute inset-0 hero-overlay z-10 backdrop-blur-[2px] bg-black/30"></div>
             <AnimatePresence mode="popLayout">
-              <motion.img 
+              <motion.img
                 key={heroImages[currentHeroImageIndex]}
                 src={heroImages[currentHeroImageIndex]}
                 alt="Empowering Career Vision"
@@ -270,8 +331,8 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
               />
             </AnimatePresence>
           </div>
-          <div className="relative z-20 max-w-7xl mx-auto px-8 w-full">
-            <motion.div 
+          <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 md:px-8 w-full">
+            <motion.div
               initial="hidden"
               animate="visible"
               variants={{
@@ -281,45 +342,46 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
                   transition: { staggerChildren: 0.2, delayChildren: 0.2 }
                 }
               }}
-              className="max-w-4xl bg-white/10 backdrop-blur-md border border-white/20 p-8 md:p-10 rounded-3xl shadow-2xl relative lg:-left-8 xl:-left-12"
+              className="max-w-4xl bg-white/10 backdrop-blur-md border border-white/20 p-5 sm:p-6 md:p-8 lg:p-10 rounded-2xl sm:rounded-3xl shadow-2xl relative lg:-left-8 xl:-left-12"
             >
-              <div className="h-[240px] md:h-[190px] relative w-full overflow-visible">
+              <div className="h-[120px] sm:h-[140px] md:h-[160px] lg:h-[180px] xl:h-[210px] relative w-full overflow-visible">
                 <AnimatePresence mode="popLayout">
-                  <motion.h1 
+                  <motion.h1
                     key={currentPhraseIndex}
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -30 }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
-                    className="absolute top-0 left-0 w-full text-6xl md:text-7xl font-extrabold text-on-surface leading-tight mb-6 tracking-tight drop-shadow-lg"
+                    className="absolute top-0 left-0 w-full text-[1.6rem] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-on-surface leading-[1.2] mb-6 tracking-tight"
+                    style={{ textShadow: '0 0 20px rgba(255,255,255,0.4), 0 0 40px rgba(59,130,246,0.25), 0 2px 4px rgba(0,0,0,0.3)' }}
                   >
-                    <span className="whitespace-nowrap block mb-2">
+                    <span className="block mb-1 sm:mb-2 whitespace-nowrap">
                       {heroPhrases[currentPhraseIndex].line1}
                       <span className="relative inline-block ml-1">
                         <span className="relative z-10 text-white">{heroPhrases[currentPhraseIndex].key1}</span>
-                        <motion.span initial={{ width: "0%" }} animate={{ width: "100%" }} transition={{ delay: 0.4, duration: 0.6, ease: "easeOut" }} className="absolute bottom-2 left-0 h-4 md:h-5 bg-primary/60 -rotate-2 z-0 origin-left rounded-md w-full"></motion.span>
+                        <motion.span initial={{ width: "0%" }} animate={{ width: "100%" }} transition={{ delay: 0.4, duration: 0.6, ease: "easeOut" }} className="absolute bottom-0 sm:bottom-1 md:bottom-2 left-0 h-2 sm:h-3 md:h-4 lg:h-5 bg-primary/60 -rotate-2 z-0 origin-left rounded-md w-full"></motion.span>
                       </span>
                     </span>
-                    <span className="whitespace-nowrap block">
-                      <span className="bg-gradient-to-r from-primary via-blue-500 to-tertiary-fixed bg-clip-text text-transparent animate-gradient-x drop-shadow-md">
+                    <span className="block whitespace-nowrap">
+                      <span className="text-blue-500" style={{ textShadow: 'none', WebkitTextStroke: '1px rgba(255, 255, 255, 0.4)' }}>
                         {heroPhrases[currentPhraseIndex].line2}
                       </span>
                       <span className="relative inline-block ml-1">
                         <span className="relative z-10 text-white drop-shadow-md">{heroPhrases[currentPhraseIndex].key2}</span>
-                        <motion.span initial={{ width: "0%" }} animate={{ width: "100%" }} transition={{ delay: 0.8, duration: 0.6, ease: "easeOut" }} className="absolute bottom-2 left-0 h-4 md:h-5 bg-blue-400/80 rotate-1 z-0 origin-left rounded-md w-full"></motion.span>
+                        <motion.span initial={{ width: "0%" }} animate={{ width: "100%" }} transition={{ delay: 0.8, duration: 0.6, ease: "easeOut" }} className="absolute bottom-0 sm:bottom-1 md:bottom-2 left-0 h-2 sm:h-3 md:h-4 lg:h-5 bg-blue-400/80 rotate-1 z-0 origin-left rounded-md w-full"></motion.span>
                       </span>
                     </span>
                   </motion.h1>
                 </AnimatePresence>
               </div>
-              <motion.p 
+              <motion.p
                 variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } } }}
-                className="text-base md:text-lg mb-8 leading-relaxed font-medium text-white/90 drop-shadow-md w-full md:whitespace-nowrap"
+                className="text-sm sm:text-base md:text-lg mb-6 sm:mb-8 leading-relaxed font-medium text-white/90 drop-shadow-md w-full"
               >
                 Confused about your career? Get personalized professional career guidance <br className="hidden md:block" />
                 and career counselling designed for the next generation of leaders to choose the right career.
               </motion.p>
-              <motion.div 
+              <motion.div
                 variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } } }}
                 className="flex flex-col sm:flex-row gap-4"
               >
@@ -327,11 +389,11 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
                   animate={{ y: [-8, 8, -8] }}
                   transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
                 >
-                  <motion.button 
+                  <motion.button
                     onClick={() => alert("Feature coming soon!")}
                     whileHover={{ x: 4, y: -4 }}
                     whileTap={{ scale: 0.95 }}
-                    className="group bg-yellow-400 text-black border-2 border-black rounded-full font-bold text-lg px-8 py-4 flex items-center justify-center gap-2 transition-all duration-300 hover:shadow-[-8px_8px_0_0_rgba(255,255,255,1)]"
+                    className="group bg-yellow-400 text-black border-2 border-black rounded-full font-bold text-sm sm:text-base md:text-lg px-5 sm:px-6 md:px-8 py-3 sm:py-4 flex items-center justify-center gap-2 transition-all duration-300 hover:shadow-[-8px_8px_0_0_rgba(255,255,255,1)]"
                   >
                     START ASSESSMENT
                     <motion.div
@@ -346,8 +408,8 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
             </motion.div>
           </div>
           {/* Floating Decorative Element */}
-          <motion.div 
-            animate={{ 
+          <motion.div
+            animate={{
               y: [-10, 10, -10],
               rotate: [0, 5, 0]
             }}
@@ -358,8 +420,8 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
             }}
             className="absolute right-[5%] top-[20%] hidden xl:block w-32 h-32 blur-[60px] bg-primary rounded-full opacity-60 pointer-events-none"
           />
-          <motion.div 
-            animate={{ 
+          <motion.div
+            animate={{
               y: [10, -10, 10],
               rotate: [0, -5, 0]
             }}
@@ -373,12 +435,12 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
         </section>
 
         {/* How it Works Section */}
-        <section className="relative pt-16 pb-24 bg-surface px-8 border-b border-slate-100 overflow-hidden" id="how-it-works">
+        <section className="relative pt-12 sm:pt-16 pb-16 sm:pb-24 bg-surface px-4 sm:px-6 md:px-8 border-b border-slate-100 overflow-hidden" id="how-it-works">
           {/* Confusion to Clarity Background Image */}
           <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none opacity-20">
-            <img 
-              src="/confusiontoclarity.png" 
-              alt="" 
+            <img
+              src="/confusiontoclarity.png"
+              alt=""
               className="w-full h-full object-cover"
             />
           </div>
@@ -388,7 +450,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
               <h2 className="text-3xl md:text-5xl font-extrabold text-on-surface mb-4">From Career Confusion to Clarity</h2>
               <p className="text-on-surface-variant max-w-2xl mx-auto font-medium">Three simple steps of career planning to unlock your professional potential and choose the right career.</p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 relative">
               {[
                 {
                   icon: <HelpCircle className="w-10 h-10 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300" />,
@@ -433,92 +495,92 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
         </section>
 
         <section className="relative h-[200px] md:h-[250px] bg-transparent overflow-hidden flex flex-col justify-center my-4 z-20">
-              <div className="absolute inset-0 flex justify-center items-center">
-                
-                {/* Ribbon 1 - Criss Cross (Top Left to Bottom Right) */}
-                <div className="absolute w-[150vw] left-[-25vw] bg-white h-[4.5rem] md:h-[5.5rem] flex items-center border-y-[3px] border-black rotate-[6deg] z-10 shadow-[0_5px_15px_rgba(0,0,0,0.05)]">
-                  <div className="flex whitespace-nowrap animate-marquee items-center h-full">
-                    {[...Array(12)].map((_, i) => (
-                        <div className="flex items-center space-x-3 mx-4 shrink-0 h-full" key={i}>
-                          <img src="/CareerDishaLogo.png" alt="Logo" className="h-7 md:h-9 w-auto object-contain" />
-                          <span className="text-2xl md:text-[2rem] font-bold text-black tracking-tight font-sans mt-1">Careerदिशा</span>
-                        </div>
-                      ))}
-                  </div>
-                </div>
-    
-                {/* Ribbon 2 - Criss Cross (Bottom Left to Top Right) */}
-                <div className="absolute w-[150vw] left-[-25vw] bg-white h-[4.5rem] md:h-[5.5rem] flex items-center border-y-[3px] border-black rotate-[-6deg] z-20 shadow-[0_5px_15px_rgba(0,0,0,0.1)]">
-                  <div className="flex whitespace-nowrap animate-marquee-reverse items-center h-full">
-                    {[...Array(12)].map((_, i) => (
-                      <div className="flex items-center space-x-3 mx-4 shrink-0 h-full" key={i}>
-                          <img src="/CareerDishaLogo.png" alt="Logo" className="h-7 md:h-9 w-auto object-contain" />
-                          <span className="text-2xl md:text-[2rem] font-bold text-black tracking-tight font-sans mt-1">Careerदिशा</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-              </div>
-            </section>
-  
-            {/* Early Bird Promo Section */}
-            {cmsData.offer.visible && (
-            <section className="py-12 px-6 relative z-10">
-              <motion.div 
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.8, type: "spring", bounce: 0.4 }}
-                className="max-w-5xl mx-auto rounded-[2.5rem] bg-gradient-to-br from-indigo-50/90 to-white/95 border border-indigo-100 shadow-[0_20px_60px_-15px_rgba(79,70,229,0.15)] overflow-hidden relative"
-              >
-                {/* Decorative blobs */}
-                <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-[#fba70c]/20 rounded-full blur-3xl mix-blend-multiply pointer-events-none"></div>
-                <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl mix-blend-multiply pointer-events-none"></div>
-                
-                <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 p-8 md:p-12">
-                  <div className="flex-1 text-center md:text-left">
-                    <div className="inline-flex items-center justify-center gap-1.5 px-3 py-1 bg-red-100 text-red-600 rounded-full text-xs font-bold uppercase tracking-widest mb-4">
-                      <Star size={14} className="fill-red-600" />
-                      {cmsData.offer.badge}
-                    </div>
-                    <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight font-headline mb-3">
-                      {cmsData.offer.title}
-                    </h2>
-                    <p className="text-lg text-slate-600 font-medium">
-                      {cmsData.offer.description}
-                    </p>
-                  </div>
-                  
-                  <div className="flex flex-col items-center md:items-end shrink-0">
-                    <div className="flex items-center gap-3 mb-5">
-                      <span className="text-2xl text-slate-400 font-bold line-through decoration-red-400/50 decoration-2">
-                        {cmsData.offer.originalPrice}
-                      </span>
-                      <span className="text-5xl font-black text-[#fba70c] drop-shadow-sm">
-                        {cmsData.offer.offerPrice}
-                      </span>
-                    </div>
-                    <button 
-                      onClick={() => setShowInquiryModal(true)}
-                      className="w-full md:w-auto px-8 py-4 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold font-headline text-[1.1rem] shadow-xl hover:shadow-2xl transition-all hover:-translate-y-1"
-                    >
-                      {cmsData.offer.cta}
-                    </button>
-                    <p className="text-xs text-slate-400 font-medium mt-3 text-center md:text-right">
-                      {cmsData.offer.note}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            </section>
-            )}
+          <div className="absolute inset-0 flex justify-center items-center">
 
-            {/* Tailored Guidance For You */}
-        <section className="py-24 px-6 relative overflow-hidden" id="about">
+            {/* Ribbon 1 - Criss Cross (Top Left to Bottom Right) */}
+            <div className="absolute w-[150vw] left-[-25vw] bg-white h-[4.5rem] md:h-[5.5rem] flex items-center border-y-[3px] border-black rotate-[6deg] z-10 shadow-[0_5px_15px_rgba(0,0,0,0.05)]">
+              <div className="flex whitespace-nowrap animate-marquee items-center h-full">
+                {[...Array(12)].map((_, i) => (
+                  <div className="flex items-center space-x-3 mx-4 shrink-0 h-full" key={i}>
+                    <img src="/CareerDishaLogo.png" alt="Logo" className="h-7 md:h-9 w-auto object-contain" />
+                    <span className="text-2xl md:text-[2rem] font-bold text-black tracking-tight font-sans mt-1">Careerदिशा</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Ribbon 2 - Criss Cross (Bottom Left to Top Right) */}
+            <div className="absolute w-[150vw] left-[-25vw] bg-white h-[4.5rem] md:h-[5.5rem] flex items-center border-y-[3px] border-black rotate-[-6deg] z-20 shadow-[0_5px_15px_rgba(0,0,0,0.1)]">
+              <div className="flex whitespace-nowrap animate-marquee-reverse items-center h-full">
+                {[...Array(12)].map((_, i) => (
+                  <div className="flex items-center space-x-3 mx-4 shrink-0 h-full" key={i}>
+                    <img src="/CareerDishaLogo.png" alt="Logo" className="h-7 md:h-9 w-auto object-contain" />
+                    <span className="text-2xl md:text-[2rem] font-bold text-black tracking-tight font-sans mt-1">Careerदिशा</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Early Bird Promo Section */}
+        {cmsData.offer.visible && (
+          <section className="py-12 px-6 relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.8, type: "spring", bounce: 0.4 }}
+              className="max-w-5xl mx-auto rounded-[2.5rem] bg-gradient-to-br from-indigo-50/90 to-white/95 border border-indigo-100 shadow-[0_20px_60px_-15px_rgba(79,70,229,0.15)] overflow-hidden relative"
+            >
+              {/* Decorative blobs */}
+              <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-[#fba70c]/20 rounded-full blur-3xl mix-blend-multiply pointer-events-none"></div>
+              <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl mix-blend-multiply pointer-events-none"></div>
+
+              <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 p-8 md:p-12">
+                <div className="flex-1 text-center md:text-left">
+                  <div className="inline-flex items-center justify-center gap-1.5 px-3 py-1 bg-red-100 text-red-600 rounded-full text-xs font-bold uppercase tracking-widest mb-4">
+                    <Star size={14} className="fill-red-600" />
+                    {cmsData.offer.badge}
+                  </div>
+                  <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight font-headline mb-3">
+                    {cmsData.offer.title}
+                  </h2>
+                  <p className="text-lg text-slate-600 font-medium">
+                    {cmsData.offer.description}
+                  </p>
+                </div>
+
+                <div className="flex flex-col items-center md:items-end shrink-0">
+                  <div className="flex items-center gap-3 mb-5">
+                    <span className="text-2xl text-slate-400 font-bold line-through decoration-red-400/50 decoration-2">
+                      {cmsData.offer.originalPrice}
+                    </span>
+                    <span className="text-5xl font-black text-[#fba70c] drop-shadow-sm">
+                      {cmsData.offer.offerPrice}
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => setShowInquiryModal(true)}
+                    className="w-full md:w-auto px-8 py-4 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold font-headline text-[1.1rem] shadow-xl hover:shadow-2xl transition-all hover:-translate-y-1"
+                  >
+                    {cmsData.offer.cta}
+                  </button>
+                  <p className="text-xs text-slate-400 font-medium mt-3 text-center md:text-right">
+                    {cmsData.offer.note}
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          </section>
+        )}
+
+        {/* Tailored Guidance For You */}
+        <section className="py-16 sm:py-24 px-4 sm:px-6 relative overflow-hidden" id="about">
           {/* Blurred Background Image Container */}
-          <div 
+          <div
             className="absolute inset-0 z-0 bg-center bg-cover bg-no-repeat"
-            style={{ 
+            style={{
               backgroundImage: "url('/TailoredGuidance.png')",
               maskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent), linear-gradient(to bottom, transparent, black 10%, black 75%, transparent)",
               maskComposite: "intersect",
@@ -583,7 +645,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
                   }
                 }
               ].map((card, idx) => (
-                <motion.div 
+                <motion.div
                   key={idx}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -594,14 +656,14 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
                 >
                   <div className={`absolute top-0 right-0 w-32 h-32 ${card.themeMap.bgDecor} rounded-bl-[100px] -mr-16 -mt-16 transition-transform duration-500 group-hover:scale-[1.5] ${card.themeMap.bgDecorHover}`}></div>
                   <div className="absolute inset-0 bg-gradient-to-b from-transparent to-slate-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-                  
+
                   <div className={`w-14 h-14 ${card.themeMap.iconBg} ${card.themeMap.iconText} rounded-xl flex items-center justify-center mb-8 relative z-10 transition-colors duration-300 ${card.themeMap.iconBgHover} ${card.themeMap.iconTextHover}`}>
                     {card.icon}
                   </div>
-                  
+
                   <h3 className={`text-2xl font-extrabold mb-4 relative z-10 transition-colors duration-300 ${card.themeMap.titleHover}`}>{card.title}</h3>
                   <p className="text-slate-500 mb-8 leading-relaxed relative z-10">{card.desc}</p>
-                  
+
                   <ul className="space-y-3 mb-10 relative z-10">
                     {card.features.map((feature, fIdx) => (
                       <li key={fIdx} className="flex items-center gap-2 text-sm font-semibold text-slate-700">
@@ -609,8 +671,8 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
                       </li>
                     ))}
                   </ul>
-                  
-                  <button 
+
+                  <button
                     onClick={() => alert("Feature coming soon!")}
                     className="relative z-10 text-primary font-bold flex items-center gap-2 transition-all cursor-pointer mt-auto group/btn hover:text-accent"
                   >
@@ -623,11 +685,11 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
         </section>
 
         {/* Methodology Section */}
-        <section className="py-24 px-8 mt-12 relative overflow-hidden">
+        <section className="py-16 sm:py-24 px-4 sm:px-6 md:px-8 mt-8 sm:mt-12 relative overflow-hidden">
           {/* Faded Background Image Container */}
-          <div 
+          <div
             className="absolute inset-0 z-0 bg-center bg-cover bg-no-repeat pointer-events-none"
-            style={{ 
+            style={{
               backgroundImage: "url('/PsychologicalJourney.png')",
               maskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent), linear-gradient(to bottom, transparent, black 10%, black 75%, transparent)",
               maskComposite: "intersect",
@@ -637,19 +699,19 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
           >
             <div className="absolute inset-0 bg-surface/40 backdrop-blur-[2px]"></div>
           </div>
-          
+
           <div className="max-w-7xl mx-auto relative z-10">
-            <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-4">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-20 gap-4">
               <div className="max-w-xl">
                 <span className="text-primary font-bold tracking-widest uppercase text-xs mb-2 block">Our Methodology</span>
-                <h2 className="text-4xl md:text-5xl font-extrabold">The Psychological Journey</h2>
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold">The Psychological Journey</h2>
               </div>
               <p className="text-on-surface-variant max-w-sm font-medium mb-1">We move you from confusion to confidence through three core scientific stages.</p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-16 relative mt-16">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 md:gap-16 relative mt-10 md:mt-16">
               {/* Connecting Line (Desktop only) */}
               <div className="hidden md:block absolute top-[2rem] left-[12.5%] right-[12.5%] h-[2px] bg-gradient-to-r from-tertiary/30 via-primary/30 to-accent/30 -z-10"></div>
-              
+
               {[
                 {
                   icon: <Users className="w-8 h-8" />,
@@ -685,7 +747,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
                   delay: 0.4
                 }
               ].map((step, idx) => (
-                <motion.div 
+                <motion.div
                   key={idx}
                   initial={{ opacity: 0, scale: 0.9, y: 20 }}
                   whileInView={{ opacity: 1, scale: 1, y: 0 }}
@@ -694,7 +756,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
                   className={`relative text-center group ${step.isSpecial ? 'p-6 rounded-3xl bg-accent/5 border-2 border-accent/20 shadow-xl mt-[-1.5rem]' : ''}`}
                 >
                   {step.isSpecial && (
-                    <motion.div 
+                    <motion.div
                       initial={{ opacity: 0, y: -10 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.8 }}
@@ -703,7 +765,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
                       Core Platform Feature
                     </motion.div>
                   )}
-                  <motion.div 
+                  <motion.div
                     whileHover={{ scale: 1.1, rotate: 5 }}
                     transition={{ type: "spring" }}
                     className={`w-16 h-16 ${step.color} ${step.textColor} rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-xl relative z-10`}
@@ -721,73 +783,73 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
         </section>
 
         {/* Why CareerDisha Bento Grid */}
-        <section className="py-32 bg-slate-200">
-          <div className="max-w-7xl mx-auto px-8">
-            <div className="text-center mb-20 flex flex-col items-center">
+        <section className="py-16 sm:py-24 md:py-32 bg-slate-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+            <div className="text-center mb-10 sm:mb-16 md:mb-20 flex flex-col items-center">
               <img src={LOGO_URL} alt="Careerदिशा Logo" className="h-16 md:h-20 mb-6 object-contain" referrerPolicy="no-referrer" />
-              <h2 className="text-4xl md:text-5xl font-extrabold mb-6">Why Choose Our Career Guidance</h2>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold mb-6">Why Choose Our Career Guidance</h2>
               <p className="max-w-2xl mx-auto text-on-surface-variant text-lg">We combine human psychology with advanced intelligence to provide career counselling and professional career guidance that actually helps you choose the right career.</p>            </div>            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 h-auto md:h-[600px]">
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, scale: 0.95, y: 30 }}
                 whileInView={{ opacity: 1, scale: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.5, delay: 0.1 }}
                 whileHover={{ scale: 0.98 }}
-                className="md:col-span-7 bg-primary-container p-12 rounded-[2rem] flex flex-col justify-between text-on-primary-container relative overflow-hidden group"
+                className="md:col-span-7 bg-primary-container p-6 sm:p-8 md:p-12 rounded-[2rem] flex flex-col justify-between text-on-primary-container relative overflow-hidden group"
               >
                 <div className="relative z-10">
                   <motion.div className="inline-block transform origin-center transition-transform" whileHover={{ rotate: 10, scale: 1.1 }}><Award className="w-12 h-12 mb-6" /></motion.div>
-                  <h3 className="text-3xl font-bold mb-4">Psychologically Grounded</h3>
+                  <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4">Psychologically Grounded</h3>
                   <p className="text-on-primary-container/80 text-lg max-w-md">Our assessments aren't just tests; they are deep-dives into personality frameworks used by top career psychologists globally.</p>
                 </div>
                 <div className="absolute right-[-50px] bottom-[-50px] opacity-10 group-hover:scale-110 transition-transform duration-700">
                   <ShieldCheck className="w-[300px] h-[300px]" />
                 </div>
               </motion.div>
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, scale: 0.95, y: 30 }}
                 whileInView={{ opacity: 1, scale: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.5, delay: 0.2 }}
                 whileHover={{ scale: 1.02 }}
-                className="md:col-span-5 bg-secondary-container p-12 rounded-[2rem] flex flex-col justify-center text-on-secondary-container group"
+                className="md:col-span-5 bg-secondary-container p-6 sm:p-8 md:p-12 rounded-[2rem] flex flex-col justify-center text-on-secondary-container group"
               >
                 <div className="bg-white/20 p-4 rounded-2xl w-fit mb-6 transition-transform group-hover:-rotate-6 group-hover:scale-110 duration-300">
                   <Bot className="w-10 h-10" />
                 </div>
-                <h3 className="text-3xl font-bold mb-4">Expert Career Advice</h3>
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4">Expert Career Advice</h3>
                 <p className="text-on-secondary-container/80 text-lg">24/7 access to career advice for students that helps decode complex career path guidance based on your unique profile.</p>
               </motion.div>
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, scale: 0.95, y: 30 }}
                 whileInView={{ opacity: 1, scale: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.5, delay: 0.3 }}
                 whileHover={{ scale: 1.02 }}
-                className="md:col-span-5 bg-tertiary-fixed p-12 rounded-[2rem] flex flex-col justify-center text-on-tertiary-fixed group"
+                className="md:col-span-5 bg-tertiary-fixed p-6 sm:p-8 md:p-12 rounded-[2rem] flex flex-col justify-center text-on-tertiary-fixed group"
               >
-                <h3 className="text-3xl font-bold mb-4 flex items-center gap-3 flex-wrap">
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 flex items-center gap-3 flex-wrap">
                   Actionable Career Plans
                   <Route className="w-8 h-8 opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all duration-300" />
                 </h3>
                 <p className="text-on-tertiary-fixed-variant text-lg">No generic career advice. We provide structured career planning, targeted dates, links to courses, and specific jobs to aim for.</p>
               </motion.div>
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, scale: 0.95, y: 30 }}
                 whileInView={{ opacity: 1, scale: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.5, delay: 0.4 }}
-                className="md:col-span-7 bg-indigo-50 border border-indigo-100 p-12 rounded-[2rem] flex flex-col justify-center relative overflow-hidden"
+                className="md:col-span-7 bg-indigo-50 border border-indigo-100 p-6 sm:p-8 md:p-12 rounded-[2rem] flex flex-col justify-center relative overflow-hidden"
               >
                 <div className="flex items-center gap-6">
                   <div className="flex -space-x-4">
-                    <motion.div animate={{ y: [0, -5, 0] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }} className="w-14 h-14 rounded-full border-4 border-white bg-indigo-200"></motion.div>
-                    <motion.div animate={{ y: [0, -5, 0] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0.2 }} className="w-14 h-14 rounded-full border-4 border-white bg-indigo-300"></motion.div>
-                    <motion.div animate={{ y: [0, -5, 0] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0.4 }} className="w-14 h-14 rounded-full border-4 border-white bg-indigo-400"></motion.div>
+                    <motion.div animate={{ y: [0, -5, 0] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }} className="w-10 h-10 sm:w-14 sm:h-14 rounded-full border-4 border-white bg-indigo-200"></motion.div>
+                    <motion.div animate={{ y: [0, -5, 0] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0.2 }} className="w-10 h-10 sm:w-14 sm:h-14 rounded-full border-4 border-white bg-indigo-300"></motion.div>
+                    <motion.div animate={{ y: [0, -5, 0] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0.4 }} className="w-10 h-10 sm:w-14 sm:h-14 rounded-full border-4 border-white bg-indigo-400"></motion.div>
                   </div>
                   <div>
-                    <p className="text-3xl font-extrabold text-indigo-900">10,000+</p>
-                    <p className="text-indigo-700 text-lg font-semibold mt-1">Careers transformed this year</p>
+                    <p className="text-2xl sm:text-3xl font-extrabold text-indigo-900">10,000+</p>
+                    <p className="text-indigo-700 text-sm sm:text-lg font-semibold mt-1">Careers transformed this year</p>
                   </div>
                 </div>
               </motion.div>
@@ -796,26 +858,26 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
         </section>
 
         {/* Testimonials Section */}
-        <section className="relative py-24 px-8 overflow-hidden" id="testimonials">
+        <section className="relative py-16 sm:py-24 px-4 sm:px-6 md:px-8 overflow-hidden" id="testimonials">
           {/* Decorative Gradients & Soft Fading Background */}
-          <div 
+          <div
             className="absolute inset-0 pointer-events-none shadow-inner"
-            style={{ 
-              maskImage: "linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)", 
-              WebkitMaskImage: "linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)" 
+            style={{
+              maskImage: "linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)",
+              WebkitMaskImage: "linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)"
             }}
           >
             <div className="absolute inset-0 bg-slate-50"></div>
             <div className="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] rounded-full bg-blue-400/40 blur-[100px]"></div>
             <div className="absolute bottom-[0%] -right-[10%] w-[60%] h-[60%] rounded-full bg-yellow-400/40 blur-[100px]"></div>
           </div>
-          
+
           <div className="max-w-7xl mx-auto relative z-10">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-5xl font-extrabold text-on-surface">What our Lumineers say</h2>
             </div>
             <div className="relative group">
-              <button 
+              <button
                 onClick={() => {
                   const container = document.getElementById('testimonials-container');
                   if (container) container.scrollBy({ left: -400, behavior: 'smooth' });
@@ -826,33 +888,34 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
                 <ChevronLeft className="w-6 h-6 text-slate-600" />
               </button>
 
-              <div id="testimonials-container" className="flex gap-8 overflow-x-auto pb-10 pt-4 no-scrollbar snap-x scroll-smooth px-4">
+              <div id="testimonials-container" className="flex items-stretch gap-8 overflow-x-auto pb-10 pt-4 no-scrollbar snap-x scroll-smooth px-4">
                 {cmsData.testimonials.map((testimonial) => (
-                  <div key={testimonial.id} className="min-w-[320px] md:min-w-[400px] bg-white/60 backdrop-blur-lg p-10 rounded-3xl snap-center shadow-sm border border-white/50 hover:-translate-y-2 hover:shadow-xl transition-all duration-300">
+                  <div key={testimonial.id} className="min-w-[280px] sm:min-w-[320px] md:min-w-[400px] bg-white/60 backdrop-blur-lg p-6 sm:p-8 md:p-10 rounded-3xl snap-center shadow-sm border border-white/50 hover:-translate-y-2 hover:shadow-xl transition-all duration-300 flex flex-col h-auto">
                     <div className="flex gap-1 text-accent mb-6">
                       {[...Array(testimonial.rating || 5)].map((_, i) => (
                         <Star key={i} className="w-5 h-5 fill-accent" />
                       ))}
                     </div>
-                    <p className="text-slate-600 text-lg italic mb-10 leading-relaxed drop-shadow-sm">"{testimonial.quote}"</p>
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-full bg-slate-200 overflow-hidden ring-2 ring-white">
-                        <img 
-                          alt={testimonial.name} 
+                    <p className="text-slate-600 text-base sm:text-lg italic mb-6 sm:mb-10 leading-relaxed drop-shadow-sm">"{testimonial.quote}"</p>
+                    <div className="flex items-center gap-4 text-left mt-auto">
+                      <div className="w-12 h-12 rounded-full bg-slate-200 overflow-hidden ring-2 ring-white shrink-0 flex items-center justify-center">
+                        <img
+                          alt={testimonial.name}
                           src={testimonial.image}
                           referrerPolicy="no-referrer"
+                          className="w-full h-full object-cover"
                         />
                       </div>
-                      <div>
-                        <h4 className="font-bold text-on-surface">{testimonial.name}</h4>
-                        <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">{testimonial.role}</p>
+                      <div className="flex flex-col justify-center">
+                        <h4 className="font-bold text-on-surface leading-tight">{testimonial.name}</h4>
+                        <p className="text-xs text-slate-500 font-bold uppercase tracking-wider mt-1">{testimonial.role}</p>
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
 
-              <button 
+              <button
                 onClick={() => {
                   const container = document.getElementById('testimonials-container');
                   if (container) container.scrollBy({ left: 400, behavior: 'smooth' });
@@ -870,22 +933,22 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
         <ComparisonSection />
 
         {/* Final CTA Section */}
-        <section className="py-24 px-8">
-          <div className="max-w-7xl mx-auto rounded-[3rem] bg-slate-900 overflow-hidden relative">
+        <section className="py-16 sm:py-24 px-4 sm:px-6 md:px-8">
+          <div className="max-w-7xl mx-auto rounded-2xl sm:rounded-[3rem] bg-slate-900 overflow-hidden relative">
             <div className="absolute inset-0 opacity-20">
               <div className="absolute top-0 left-0 w-96 h-96 bg-primary blur-[120px] rounded-full -translate-x-1/2 -translate-y-1/2"></div>
               <div className="absolute bottom-0 right-0 w-96 h-96 bg-accent blur-[120px] rounded-full translate-x-1/2 translate-y-1/2"></div>
             </div>
-            <div className="relative z-10 px-8 py-20 text-center">
-              <h2 className="text-4xl md:text-6xl font-extrabold text-white mb-6">Ready to find your career direction?</h2>
-              <p className="text-slate-400 text-xl max-w-2xl mx-auto mb-12">Join 5,000+ others who have engaged with our professional career guidance and found their calling with Careerदिशा's unique psychological approach to career planning.</p>
+            <div className="relative z-10 px-4 sm:px-6 md:px-8 py-12 sm:py-16 md:py-20 text-center">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold text-white mb-4 sm:mb-6">Ready to find your career direction?</h2>
+              <p className="text-slate-400 text-base sm:text-lg md:text-xl max-w-2xl mx-auto mb-8 sm:mb-12">Join 5,000+ others who have engaged with our professional career guidance and found their calling with Careerदिशा's unique psychological approach to career planning.</p>
               <motion.div
                 animate={{ y: [-8, 8, -8] }}
                 transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
               >
-                <button 
+                <button
                   onClick={() => alert("Feature coming soon!")}
-                  className="bg-accent hover:bg-accent/90 text-slate-900 font-extrabold text-lg px-12 py-5 rounded-full shadow-[0_0_30px_rgba(255,215,0,0.3)] transition-all hover:scale-105 active:scale-95"
+                  className="bg-accent hover:bg-accent/90 text-slate-900 font-extrabold text-base sm:text-lg px-8 sm:px-12 py-4 sm:py-5 rounded-full shadow-[0_0_30px_rgba(255,215,0,0.3)] transition-all hover:scale-105 active:scale-95"
                 >
                   START ASSESSMENT NOW
                 </button>
@@ -895,9 +958,9 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
         </section>
 
         {/* Visionaries / Founder Section */}
-        <section className="relative py-24 px-8 bg-surface overflow-hidden">
+        <section className="relative py-16 sm:py-24 px-4 sm:px-6 md:px-8 bg-surface overflow-hidden">
           {/* Background Image with fading edges and translucent effect */}
-          <div 
+          <div
             className="absolute inset-0 z-0 pointer-events-none"
             style={{
               backgroundImage: "url('/MeetTheVisionaries.png')",
@@ -914,7 +977,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
               <div className="h-1 w-20 bg-primary mx-auto rounded-full mb-6"></div>
               <p className="text-on-surface-variant max-w-2xl mx-auto font-medium">The experts ensuring you receive unmatched value and professional career guidance.</p>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <ProfileCard
                 name="Mr. Gunjan Tewari"
@@ -951,7 +1014,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
         </section>
 
         {/* Meet Our Counsellors Section */}
-        <section className="relative py-24 px-8 bg-slate-50 overflow-hidden" id="counsellors">
+        <section className="relative py-16 sm:py-24 px-4 sm:px-6 md:px-8 bg-slate-50 overflow-hidden" id="counsellors">
           <div className="max-w-7xl mx-auto relative z-10">
             <div className="text-center mb-16">
               <span className="text-primary font-bold tracking-widest uppercase text-xs mb-2 block">Expert Guidance</span>
@@ -966,17 +1029,17 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
               <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-slate-50 to-transparent z-10 pointer-events-none"></div>
               <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-slate-50 to-transparent z-10 pointer-events-none"></div>
 
-              <div 
+              <div
                 className="overflow-hidden"
                 onMouseEnter={handleCounsellorMouseEnter}
                 onMouseLeave={handleCounsellorMouseLeave}
               >
-                <div ref={scrollRef} className="flex gap-8" style={{ width: 'max-content' }}>
+                <div ref={scrollRef} className="flex gap-4 sm:gap-6 md:gap-8" style={{ width: 'max-content' }}>
                   {/* Duplicate cards for seamless loop */}
                   {[...Array(2)].map((_, setIndex) => (
-                    <div key={setIndex} className="flex gap-8 shrink-0">
+                    <div key={setIndex} className="flex gap-4 sm:gap-6 md:gap-8 shrink-0">
                       {/* Nishtha Vyas */}
-                      <div className="w-[420px] bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100 hover:shadow-2xl transition-shadow duration-300 shrink-0 group">
+                      <div className="w-[280px] sm:w-[340px] md:w-[380px] lg:w-[420px] bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100 hover:shadow-2xl transition-shadow duration-300 shrink-0 group">
                         <div className="relative h-72 overflow-hidden">
                           <img
                             src="/NishthaVyas.jpg"
@@ -1015,7 +1078,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
                       </div>
 
                       {/* Milli Tewari */}
-                      <div className="w-[420px] bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100 hover:shadow-2xl transition-shadow duration-300 shrink-0 group">
+                      <div className="w-[280px] sm:w-[340px] md:w-[380px] lg:w-[420px] bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100 hover:shadow-2xl transition-shadow duration-300 shrink-0 group">
                         <div className="relative h-72 overflow-hidden">
                           <img
                             src="/MilliTewari.jpg"
@@ -1054,7 +1117,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
                       </div>
 
                       {/* Shruti Bhardwaj */}
-                      <div className="w-[420px] bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100 hover:shadow-2xl transition-shadow duration-300 shrink-0 group">
+                      <div className="w-[280px] sm:w-[340px] md:w-[380px] lg:w-[420px] bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100 hover:shadow-2xl transition-shadow duration-300 shrink-0 group">
                         <div className="relative h-72 overflow-hidden">
                           <img
                             src="/Shruti_bhardwaj.jpg"
@@ -1093,7 +1156,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
                       </div>
 
                       {/* Dr. Anjali Bhardwaj */}
-                      <div className="w-[420px] bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100 hover:shadow-2xl transition-shadow duration-300 shrink-0 group">
+                      <div className="w-[280px] sm:w-[340px] md:w-[380px] lg:w-[420px] bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100 hover:shadow-2xl transition-shadow duration-300 shrink-0 group">
                         <div className="relative h-72 overflow-hidden">
                           <img
                             src="/Anjali_Bhardwaj.png" alt="Dr. Anjali Bhardwaj" className="w-full h-full object-cover object-[50%_25%] group-hover:scale-105 transition-transform duration-500"
@@ -1142,41 +1205,41 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
       </main>
 
       {/* Footer */}
-      <footer className="bg-slate-900 w-full py-12 px-8">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+      <footer className="bg-slate-900 w-full py-8 sm:py-12 px-4 sm:px-6 md:px-8">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
           <div className="flex flex-col gap-4">
             <span className="font-headline font-bold text-white text-xl flex items-center gap-2">
-              <img 
-                  alt="Careerदिशा Logo" 
-                  className="h-10 md:h-12 w-auto brightness-0 invert" 
+              <img
+                alt="Careerदिशा Logo"
+                className="h-10 md:h-12 w-auto brightness-0 invert"
                 src={LOGO_URL}
                 referrerPolicy="no-referrer"
               />
               Careerदिशा
-              </span>
-              <p className="text-slate-400 text-sm leading-relaxed mb-1">C2, Block-C, 2nd floor, Sector 2, Noida, Uttar Pradesh 201301</p>
-              <p className="text-slate-400 text-sm leading-relaxed">Delivering expert career counselling and career planning to guide the next generation in choosing the right career.</p>
-              
-              <div className="flex items-center justify-start gap-3 pt-4 flex-wrap">
-                <a href="https://www.facebook.com/ZeOptoitservices" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="w-10 h-10 bg-slate-800 rounded-full shadow-sm border border-slate-700 flex items-center justify-center text-blue-400 hover:bg-blue-600 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-facebook w-5 h-5" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
-                </a>
-                <a href="https://www.instagram.com/ZeOptoitservices/?igsh=MTBkYThwNG8wY2F5ZA%3D%3D#" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="w-10 h-10 bg-slate-800 rounded-full shadow-sm border border-slate-700 flex items-center justify-center text-pink-400 hover:bg-pink-600 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-instagram w-5 h-5" aria-hidden="true"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg>
-                </a>
-                <a href="https://www.linkedin.com/company/ZeOpto-it-services/?viewAsMember=true" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="w-10 h-10 bg-slate-800 rounded-full shadow-sm border border-slate-700 flex items-center justify-center text-blue-400 hover:bg-blue-700 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-linkedin w-5 h-5" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg>
-                </a>
-                <a href="https://www.whatsapp.com/channel/0029Vb5aVHkDzgT8eqtO4p3n" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="w-10 h-10 bg-slate-800 rounded-full shadow-sm border border-slate-700 flex items-center justify-center text-green-400 hover:bg-green-500 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-message-circle w-5 h-5" aria-hidden="true"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"></path></svg>
-                </a>
-                <a href="https://youtube.com/@ZeOpto?si=k0Oijwu3wG1AhtNR" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="w-10 h-10 bg-slate-800 rounded-full shadow-sm border border-slate-700 flex items-center justify-center text-red-500 hover:bg-red-600 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-youtube w-5 h-5" aria-hidden="true"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"></path><path d="m10 15 5-3-5-3z"></path></svg>
-                </a>
-              </div>
+            </span>
+            <p className="text-slate-400 text-sm leading-relaxed mb-1">C2, Block-C, 2nd floor, Sector 2, Noida, Uttar Pradesh 201301</p>
+            <p className="text-slate-400 text-sm leading-relaxed">Delivering expert career counselling and career planning to guide the next generation in choosing the right career.</p>
+
+            <div className="flex items-center justify-start gap-3 pt-4 flex-wrap">
+              <a href="https://www.facebook.com/ZeOptoitservices" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="w-10 h-10 bg-slate-800 rounded-full shadow-sm border border-slate-700 flex items-center justify-center text-blue-400 hover:bg-blue-600 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-facebook w-5 h-5" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+              </a>
+              <a href="https://www.instagram.com/ZeOptoitservices/?igsh=MTBkYThwNG8wY2F5ZA%3D%3D#" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="w-10 h-10 bg-slate-800 rounded-full shadow-sm border border-slate-700 flex items-center justify-center text-pink-400 hover:bg-pink-600 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-instagram w-5 h-5" aria-hidden="true"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg>
+              </a>
+              <a href="https://www.linkedin.com/company/ZeOpto-it-services/?viewAsMember=true" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="w-10 h-10 bg-slate-800 rounded-full shadow-sm border border-slate-700 flex items-center justify-center text-blue-400 hover:bg-blue-700 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-linkedin w-5 h-5" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+              </a>
+              <a href="https://www.whatsapp.com/channel/0029Vb5aVHkDzgT8eqtO4p3n" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="w-10 h-10 bg-slate-800 rounded-full shadow-sm border border-slate-700 flex items-center justify-center text-green-400 hover:bg-green-500 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-message-circle w-5 h-5" aria-hidden="true"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"></path></svg>
+              </a>
+              <a href="https://youtube.com/@ZeOpto?si=k0Oijwu3wG1AhtNR" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="w-10 h-10 bg-slate-800 rounded-full shadow-sm border border-slate-700 flex items-center justify-center text-red-500 hover:bg-red-600 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-youtube w-5 h-5" aria-hidden="true"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"></path><path d="m10 15 5-3-5-3z"></path></svg>
+              </a>
             </div>
-            <div className="flex flex-col gap-4">
-              <h4 className="text-xs uppercase tracking-widest font-bold text-slate-100">Explore</h4>
+          </div>
+          <div className="flex flex-col gap-4">
+            <h4 className="text-xs uppercase tracking-widest font-bold text-slate-100">Explore</h4>
             <ul className="space-y-2">
               <li><a href="#testimonials" onClick={() => setView('landing')} className="block text-slate-400 text-sm hover:text-primary transition-colors text-left w-full">Testimonials</a></li>
               <li><button onClick={() => setView('insights')} className="text-slate-400 text-sm hover:text-primary transition-colors text-left w-full">Resources</button></li>
@@ -1195,9 +1258,9 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
           <div className="flex flex-col gap-4">
             <h4 className="text-xs uppercase tracking-widest font-bold text-slate-100">Newsletter</h4>
             <div className="flex gap-2">
-              <input 
-                className="bg-slate-800 border-none rounded-lg p-2 text-sm w-full text-white placeholder-slate-400 focus:ring-2 focus:ring-primary outline-none" 
-                placeholder="Email address" 
+              <input
+                className="bg-slate-800 border-none rounded-lg p-2 text-sm w-full text-white placeholder-slate-400 focus:ring-2 focus:ring-primary outline-none"
+                placeholder="Email address"
                 type="email"
               />
               <button className="bg-primary text-white p-2 rounded-lg hover:opacity-90 transition-opacity">
@@ -1226,18 +1289,18 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
 
       {/* Floating WhatsApp Icon */}
       <div className="fixed bottom-10 right-5 z-[1000]">
-        <motion.a 
-          href="https://wa.me/919289191164" 
-          target="_blank" 
+        <motion.a
+          href="https://wa.me/919289191164"
+          target="_blank"
           rel="noopener noreferrer"
           className="block hover:scale-110 hover:drop-shadow-[0_0_15px_rgba(37,211,102,0.6)] transition-all duration-300"
           title="WhatsApp Chat"
           animate={{ y: [-6, 6, -6] }}
           transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
         >
-          <img 
-            src="/Whatsapp.png" 
-            alt="WhatsApp Icon" 
+          <img
+            src="/Whatsapp.png"
+            alt="WhatsApp Icon"
             className="w-20 h-20 md:w-24 md:h-24 object-contain drop-shadow-lg"
           />
         </motion.a>

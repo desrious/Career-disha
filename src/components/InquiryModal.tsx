@@ -60,7 +60,7 @@ const InquiryModal: React.FC<InquiryModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-md p-4">
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl overflow-hidden relative flex flex-col md:flex-row">
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg lg:max-w-4xl overflow-hidden relative flex flex-col lg:flex-row">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 z-10 text-gray-500 hover:text-gray-800 bg-white rounded-full p-1 shadow-md"
@@ -68,7 +68,7 @@ const InquiryModal: React.FC<InquiryModalProps> = ({
           <X className="w-6 h-6" />
         </button>
 
-        <div className="hidden md:block md:w-1/2 bg-gray-100">
+        <div className="hidden lg:block lg:w-1/2 bg-gray-100">
           <img
             src="images/about-service.jpg"
             alt="Inquiry"
@@ -79,7 +79,7 @@ const InquiryModal: React.FC<InquiryModalProps> = ({
           />
         </div>
 
-        <div className="w-full md:w-1/2 p-8 overflow-y-auto max-h-[90vh]">
+        <div className="w-full lg:w-1/2 p-6 sm:p-8 overflow-y-auto max-h-[90vh]">
           <h4 className="text-2xl font-bold mb-6 text-center text-slate-800">{heading}</h4>
 
           <form onSubmit={handleSubmit} className="space-y-4">
