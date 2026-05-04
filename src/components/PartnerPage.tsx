@@ -1,19 +1,36 @@
 /**
  * PartnerPage — Full "Partner With Us" page.
  * Composed of: PartnerHero, Services grid, PathSelector, Why Partner section, and CTA.
+ * All content is CMS-driven via the `data` prop.
  */
 import { ArrowLeft, GraduationCap, School, Building2, Code2, ShieldCheck, Headphones, Rocket, Award, ArrowRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import { LOGO_URL, COPYRIGHT_TEXT } from '../data/constants';
+import type { CmsPartner } from '../data/cms';
 import PartnerHero from './partner/PartnerHero';
 import ServiceCard from './partner/ServiceCard';
 import PathSelector from './partner/PathSelector';
 
 interface PartnerPageProps {
   onBack: () => void;
+  data: CmsPartner;
 }
 
-export default function PartnerPage({ onBack }: PartnerPageProps) {
+const serviceIconMap: Record<string, React.ReactNode> = {
+  'career-counsellor': <GraduationCap className="w-7 h-7" />,
+  'school-labs': <School className="w-7 h-7" />,
+  'corporate': <Building2 className="w-7 h-7" />,
+  'cobranded': <Code2 className="w-7 h-7" />,
+};
+
+const whyIconMap: Record<string, React.ReactNode> = {
+  'training': <Award className="w-8 h-8" />,
+  'tech': <Code2 className="w-8 h-8" />,
+  'support': <Headphones className="w-8 h-8" />,
+  'launch': <Rocket className="w-8 h-8" />,
+};
+
+export default function PartnerPage({ onBack, data }: PartnerPageProps) {
 
   const scrollToContact = () => {
     const el = document.getElementById('partner-contact');
@@ -36,11 +53,10 @@ export default function PartnerPage({ onBack }: PartnerPageProps) {
 
       <div className="pt-16">
         {/* Hero Section */}
-        <PartnerHero onCTAClick={scrollToContact} />
+        <PartnerHero data={data.hero} onCTAClick={scrollToContact} />
 
         {/* Services Section */}
         <section className="py-20 sm:py-28 px-4 sm:px-6 md:px-8 bg-white relative overflow-hidden" id="services">
-          {/* Subtle background pattern */}
           <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 20.5V18H0v-2h20v-2H0v-2h20v-2H0V8h20V6H0V4h20V2H0V0h22v20h2V0h2v20h2V0h2v20h2V0h2v20h2V0h2v20.5z' fill='%23000' fill-opacity='1' fill-rule='evenodd'/%3E%3C/svg%3E\")" }}></div>
 
           <div className="max-w-7xl mx-auto relative z-10">
@@ -58,48 +74,24 @@ export default function PartnerPage({ onBack }: PartnerPageProps) {
             </motion.div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              <ServiceCard
-                icon={<GraduationCap className="w-7 h-7" />}
-                title="Career Counsellor Course"
-                description="Get internationally certified as a Career Analyst. Comprehensive training covering psychometric assessments, counselling frameworks, and business setup to launch your practice."
-                highlight="500+ Certified Annually"
-                badge="High Demand"
-                accentColor="bg-blue-600"
-                delay={0}
-              />
-              <ServiceCard
-                icon={<School className="w-7 h-7" />}
-                title="School Careerदिशा Labs"
-                description="Transform schools with dedicated AI-powered career guidance labs. A CSR-eligible initiative that embeds career planning directly into the academic ecosystem."
-                highlight="CSR Project"
-                badge="Social Impact"
-                accentColor="bg-emerald-600"
-                delay={0.1}
-              />
-              <ServiceCard
-                icon={<Building2 className="w-7 h-7" />}
-                title="Corporate Assessments"
-                description="Offer workforce evaluation solutions to enterprises through our HR Miles platform. Ideal for recruitment screening, competency mapping, and leadership development."
-                highlight="B2B Enterprise Focus"
-                badge="HR Miles"
-                accentColor="bg-red-500"
-                delay={0.2}
-              />
-              <ServiceCard
-                icon={<Code2 className="w-7 h-7" />}
-                title="Co-branded Technology"
-                description="Leverage our world-class career assessment platform with your institutional branding. A ready-to-deploy solution for counselling centres and educational institutions."
-                highlight="24hr Deployment"
-                badge="Tech Partner"
-                accentColor="bg-[#fba70c]"
-                delay={0.3}
-              />
+              {data.services.map((service, idx) => (
+                <ServiceCard
+                  key={service.id}
+                  icon={serviceIconMap[service.id] ?? <GraduationCap className="w-7 h-7" />}
+                  title={service.title}
+                  description={service.description}
+                  highlight={service.highlight}
+                  badge={service.badge}
+                  accentColor={service.accentColor}
+                  delay={idx * 0.1}
+                />
+              ))}
             </div>
           </div>
         </section>
 
         {/* Select Your Path */}
-        <PathSelector />
+        <PathSelector paths={data.paths} />
 
         {/* Why Partner with Us */}
         <section className="py-20 sm:py-28 px-4 sm:px-6 md:px-8 bg-white relative overflow-hidden">
@@ -117,14 +109,9 @@ export default function PartnerPage({ onBack }: PartnerPageProps) {
             </motion.div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              {[
-                { icon: <Award className="w-8 h-8" />, title: "Training & Certification", desc: "Structured learning pathways with globally recognized credentials to build your professional credibility.", color: "bg-blue-600" },
-                { icon: <Code2 className="w-8 h-8" />, title: "Assessment Technology", desc: "AI-powered psychometric tools, dashboards, reports, and career planning systems — all in one platform.", color: "bg-[#fba70c]" },
-                { icon: <Headphones className="w-8 h-8" />, title: "Dedicated Support", desc: "Step-by-step partner guidance, technical onboarding, and ongoing assistance to ensure your success.", color: "bg-emerald-600" },
-                { icon: <Rocket className="w-8 h-8" />, title: "Launch Ecosystem", desc: "Marketing collateral, lead generation support, and operational resources to help you start and scale fast.", color: "bg-red-500" },
-              ].map((item, idx) => (
+              {data.whyPartner.map((item, idx) => (
                 <motion.div
-                  key={idx}
+                  key={item.id}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
@@ -136,10 +123,10 @@ export default function PartnerPage({ onBack }: PartnerPageProps) {
                     transition={{ type: "spring" }}
                     className={`w-16 h-16 ${item.color} text-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg`}
                   >
-                    {item.icon}
+                    {whyIconMap[item.id] ?? <Award className="w-8 h-8" />}
                   </motion.div>
                   <h3 className="text-lg font-bold text-slate-900 mb-3 group-hover:text-blue-700 transition-colors">{item.title}</h3>
-                  <p className="text-slate-500 text-sm leading-relaxed">{item.desc}</p>
+                  <p className="text-slate-500 text-sm leading-relaxed">{item.description}</p>
                 </motion.div>
               ))}
             </div>
@@ -156,7 +143,6 @@ export default function PartnerPage({ onBack }: PartnerPageProps) {
               transition={{ duration: 0.6 }}
               className="rounded-[2rem] bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 overflow-hidden relative"
             >
-              {/* Decorative blobs */}
               <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-blue-500/15 blur-[100px] pointer-events-none"></div>
               <div className="absolute bottom-0 left-0 w-60 h-60 rounded-full bg-[#fba70c]/15 blur-[80px] pointer-events-none"></div>
 
@@ -170,12 +156,12 @@ export default function PartnerPage({ onBack }: PartnerPageProps) {
                   Verified Partner Program
                 </motion.div>
 
-                <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white mb-6">Ready to Transform Careers at Scale?</h2>
-                <p className="text-blue-200/60 text-lg max-w-2xl mx-auto mb-10 font-medium">Join the Careerदिशा partner ecosystem today. Get the technology, training, and brand support you need to make a real impact.</p>
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white mb-6">{data.cta.heading}</h2>
+                <p className="text-blue-200/60 text-lg max-w-2xl mx-auto mb-10 font-medium">{data.cta.description}</p>
 
                 <div className="flex flex-col sm:flex-row justify-center gap-4">
                   <motion.a
-                    href="https://wa.me/919289191164?text=Hi%2C%20I%20am%20interested%20in%20the%20Career%20Disha%20Partner%20Program"
+                    href={data.cta.whatsappUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     whileHover={{ scale: 1.05, y: -2 }}
@@ -186,7 +172,7 @@ export default function PartnerPage({ onBack }: PartnerPageProps) {
                     <ArrowRight className="w-5 h-5" />
                   </motion.a>
                   <motion.a
-                    href="mailto:hr@zeopto.com?subject=Partner%20Inquiry%20-%20Career%20Disha"
+                    href={`mailto:${data.cta.emailAddress}?subject=Partner%20Inquiry%20-%20Career%20Disha`}
                     whileHover={{ scale: 1.05 }}
                     className="inline-flex items-center justify-center gap-2 border-2 border-white/20 hover:border-white/40 text-white font-semibold text-lg px-10 py-5 rounded-xl transition-all duration-300 hover:bg-white/5"
                   >
@@ -200,7 +186,7 @@ export default function PartnerPage({ onBack }: PartnerPageProps) {
           </div>
         </section>
 
-        {/* Simple Footer */}
+        {/* Footer */}
         <footer className="bg-slate-900 py-8 px-4 sm:px-6">
           <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-3">

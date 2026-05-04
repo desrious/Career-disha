@@ -1,130 +1,235 @@
 /**
- * PartnerHero — Hero section for the Partner page with gradient background,
- * animated abstract shapes, and a CTA button.
+ * PartnerHero — Hero section for the Partner page with background image,
+ * left-side content, and a right-side "Schedule Free Demo" form card.
+ * Reads content from CMS. Form submits to Supabase + WhatsApp.
  */
+import { useState, type FormEvent } from 'react';
 import { motion } from 'motion/react';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles, Users, Globe, Target, ChevronDown, CheckCircle2, Loader2 } from 'lucide-react';
+import type { CmsPartnerHero } from '../../data/cms';
+import { savePartnerInquiry } from '../../data/cms';
 
 interface PartnerHeroProps {
+  data: CmsPartnerHero;
   onCTAClick: () => void;
 }
 
-export default function PartnerHero({ onCTAClick }: PartnerHeroProps) {
-  return (
-    <section className="relative min-h-[85vh] flex items-center overflow-hidden">
-      {/* Gradient Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900"></div>
+const statIcons = [
+  <Users className="w-6 h-6 text-blue-400" />,
+  <Globe className="w-6 h-6 text-[#fba70c]" />,
+  <Target className="w-6 h-6 text-emerald-400" />,
+];
 
-      {/* Animated Abstract Shapes */}
+export default function PartnerHero({ data, onCTAClick }: PartnerHeroProps) {
+  const [formData, setFormData] = useState({
+    interestedIn: '',
+    name: '',
+    email: '',
+    phone: '',
+  });
+  const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!formData.interestedIn || !formData.name || !formData.email || !formData.phone) return;
+
+    setSubmitting(true);
+
+    // Save to Supabase
+    try {
+      await savePartnerInquiry({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        interested_in: formData.interestedIn,
+      });
+    } catch (error) {
+      console.warn('Partner inquiry save failed (Supabase may not be configured).', error);
+    }
+
+    // Build WhatsApp message
+    const message = `Hi, I'm interested in the *${formData.interestedIn}* partner program.\n\nName: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone}`;
+    const waUrl = `https://wa.me/919289191164?text=${encodeURIComponent(message)}`;
+
+    setSubmitting(false);
+    setSubmitted(true);
+    window.open(waUrl, '_blank');
+
+    // Reset after 4 seconds
+    setTimeout(() => {
+      setSubmitted(false);
+      setFormData({ interestedIn: '', name: '', email: '', phone: '' });
+    }, 4000);
+  };
+
+  return (
+    <section className="relative min-h-[90vh] flex items-center overflow-hidden">
+      {/* Background image */}
+      <div className="absolute inset-0">
+        <img src="/partner-bg.png" alt="" className="w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-900/95 via-slate-900/80 to-slate-900/60"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent"></div>
+      </div>
+
+      {/* Animated abstract accents */}
       <motion.div
         animate={{ x: [0, 30, 0], y: [0, -20, 0], scale: [1, 1.1, 1] }}
         transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-[10%] right-[10%] w-[500px] h-[500px] rounded-full bg-blue-500/10 blur-[100px] pointer-events-none"
+        className="absolute top-[10%] right-[10%] w-[400px] h-[400px] rounded-full bg-blue-500/8 blur-[100px] pointer-events-none"
       />
       <motion.div
         animate={{ x: [0, -20, 0], y: [0, 30, 0], scale: [1, 1.15, 1] }}
         transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute bottom-[10%] left-[5%] w-[400px] h-[400px] rounded-full bg-[#fba70c]/10 blur-[100px] pointer-events-none"
-      />
-      <motion.div
-        animate={{ rotate: [0, 360] }}
-        transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-        className="absolute top-[20%] left-[15%] w-[300px] h-[300px] rounded-full border border-white/5 pointer-events-none"
-      />
-      <motion.div
-        animate={{ rotate: [360, 0] }}
-        transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
-        className="absolute bottom-[20%] right-[15%] w-[250px] h-[250px] rounded-full border border-blue-400/10 pointer-events-none"
+        className="absolute bottom-[10%] left-[5%] w-[300px] h-[300px] rounded-full bg-[#fba70c]/8 blur-[100px] pointer-events-none"
       />
 
-      {/* Grid pattern overlay */}
-      <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23fff' stroke-width='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E\")" }}></div>
+      {/* Content Grid */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 md:px-8 w-full py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+          {/* ── LEFT SIDE ── */}
+          <div>
+            <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-500/10 border border-blue-400/20 rounded-full text-blue-300 text-sm font-semibold tracking-wider uppercase mb-8">
+                <Sparkles className="w-4 h-4" />
+                {data.badge}
+              </div>
+            </motion.div>
 
-      {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 md:px-8 w-full">
-        <div className="max-w-3xl">
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.15 }}
+              className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white leading-[1.1] mb-6 tracking-tight"
+            >
+              {data.heading}{' '}
+              <span className="relative inline-block">
+                <span className="relative z-10 bg-gradient-to-r from-blue-400 via-blue-300 to-[#fba70c] bg-clip-text text-transparent">{data.highlight}</span>
+                <motion.span
+                  initial={{ width: "0%" }}
+                  animate={{ width: "100%" }}
+                  transition={{ delay: 0.8, duration: 0.8 }}
+                  className="absolute bottom-1 md:bottom-2 left-0 h-2 md:h-3 bg-[#fba70c]/30 rounded-full z-0"
+                />
+              </span>{' '}
+              Partner
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="text-lg sm:text-xl text-blue-100/70 mb-10 leading-relaxed max-w-xl font-medium"
+            >
+              {data.description}
+            </motion.p>
+
+            {/* Stats row */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.45 }}
+              className="grid grid-cols-3 gap-6 max-w-md"
+            >
+              {data.stats.map((stat, idx) => (
+                <div key={idx} className="flex items-center gap-3">
+                  <div className="shrink-0">{statIcons[idx % statIcons.length]}</div>
+                  <div>
+                    <p className="text-2xl font-extrabold text-white leading-none">{stat.value}</p>
+                    <p className="text-blue-300/50 text-xs font-semibold uppercase tracking-wider mt-1">{stat.label}</p>
+                  </div>
+                </div>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* ── RIGHT SIDE — FORM ── */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            initial={{ opacity: 0, y: 40, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="w-full max-w-md mx-auto lg:ml-auto"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-500/10 border border-blue-400/20 rounded-full text-blue-300 text-sm font-semibold tracking-wider uppercase mb-8">
-              <Sparkles className="w-4 h-4" />
-              Partnership Program
+            <div className="bg-white rounded-2xl shadow-2xl shadow-black/20 overflow-hidden border border-white/20">
+              <div className="px-8 pt-8 pb-4">
+                <div className="flex items-center gap-2 mb-1">
+                  <div className="w-8 h-1 bg-blue-600 rounded-full"></div>
+                  <span className="text-blue-600 font-bold text-xs uppercase tracking-widest">Book Demo</span>
+                </div>
+                <h3 className="text-2xl font-extrabold text-slate-900 mt-3">Schedule Free Demo</h3>
+                <p className="text-slate-400 text-sm font-medium mt-1">Get a walkthrough of our platform</p>
+              </div>
+
+              <div className="px-8 pb-8">
+                {submitted ? (
+                  <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="py-12 text-center">
+                    <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 200, delay: 0.1 }}>
+                      <CheckCircle2 className="w-16 h-16 text-emerald-500 mx-auto mb-4" />
+                    </motion.div>
+                    <h4 className="text-xl font-bold text-slate-900 mb-2">Success!</h4>
+                    <p className="text-slate-500 text-sm font-medium">We'll contact you shortly.</p>
+                  </motion.div>
+                ) : (
+                  <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+                    {/* Interested In */}
+                    <div>
+                      <label className="block text-sm font-bold text-slate-700 mb-1.5">Interested In</label>
+                      <div className="relative">
+                        <button
+                          type="button"
+                          onClick={() => setDropdownOpen(!dropdownOpen)}
+                          className={`w-full text-left px-4 py-3 border-2 rounded-xl font-medium text-sm transition-all duration-200 flex items-center justify-between ${
+                            formData.interestedIn ? 'border-blue-200 text-slate-900 bg-white' : 'border-slate-200 text-slate-400 bg-slate-50/50'
+                          } hover:border-blue-300 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100`}
+                        >
+                          <span>{formData.interestedIn || `Select from ${data.programs.length} Partner Programs`}</span>
+                          <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${dropdownOpen ? 'rotate-180' : ''}`} />
+                        </button>
+                        {dropdownOpen && (
+                          <motion.div initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} className="absolute top-full left-0 right-0 mt-1 bg-white border-2 border-slate-200 rounded-xl shadow-xl z-30 overflow-hidden">
+                            {data.programs.map((program) => (
+                              <button
+                                key={program}
+                                type="button"
+                                onClick={() => { setFormData({ ...formData, interestedIn: program }); setDropdownOpen(false); }}
+                                className={`w-full text-left px-4 py-3 text-sm font-medium transition-colors hover:bg-blue-50 hover:text-blue-700 ${formData.interestedIn === program ? 'bg-blue-50 text-blue-700' : 'text-slate-700'}`}
+                              >
+                                {program}
+                              </button>
+                            ))}
+                          </motion.div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div>
+                      <input type="text" placeholder="Your Name" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl font-medium text-sm text-slate-900 placeholder-slate-400 bg-slate-50/50 hover:border-blue-300 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all duration-200" required />
+                    </div>
+
+                    <div>
+                      <input type="email" placeholder="Email Address" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl font-medium text-sm text-slate-900 placeholder-slate-400 bg-slate-50/50 hover:border-blue-300 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all duration-200" required />
+                    </div>
+
+                    <div>
+                      <input type="tel" placeholder="Phone Number" value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl font-medium text-sm text-slate-900 placeholder-slate-400 bg-slate-50/50 hover:border-blue-300 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all duration-200" required />
+                    </div>
+
+                    <motion.button
+                      type="submit"
+                      disabled={submitting}
+                      whileHover={{ scale: 1.02, y: -1 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="w-full flex items-center justify-center gap-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-extrabold text-base py-4 rounded-xl shadow-lg shadow-blue-600/25 transition-all duration-300 mt-2"
+                    >
+                      {submitting ? (<><Loader2 className="w-5 h-5 animate-spin" />Submitting...</>) : (<>Get Started Now<ArrowRight className="w-5 h-5" /></>)}
+                    </motion.button>
+                  </form>
+                )}
+              </div>
             </div>
-          </motion.div>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.15, ease: "easeOut" }}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-[1.1] mb-6 tracking-tight"
-          >
-            Partner With{' '}
-            <span className="relative inline-block">
-              <span className="relative z-10 bg-gradient-to-r from-blue-400 via-blue-300 to-[#fba70c] bg-clip-text text-transparent">Careerदिशा</span>
-              <motion.span
-                initial={{ width: "0%" }}
-                animate={{ width: "100%" }}
-                transition={{ delay: 0.8, duration: 0.8, ease: "easeOut" }}
-                className="absolute bottom-1 md:bottom-2 left-0 h-2 md:h-3 bg-[#fba70c]/30 rounded-full z-0"
-              />
-            </span>
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-            className="text-lg sm:text-xl text-blue-100/70 mb-10 leading-relaxed max-w-2xl font-medium"
-          >
-            Join India's fastest-growing career guidance ecosystem. Collaborate with us to transform careers at scale — from schools to corporates — powered by cutting-edge AI technology and psychology-driven assessments.
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.45, ease: "easeOut" }}
-            className="flex flex-col sm:flex-row gap-4"
-          >
-            <motion.button
-              onClick={onCTAClick}
-              whileHover={{ scale: 1.03, y: -2 }}
-              whileTap={{ scale: 0.97 }}
-              className="group inline-flex items-center justify-center gap-3 bg-[#fba70c] hover:bg-[#d97706] text-slate-900 font-extrabold text-lg px-8 py-4 rounded-xl shadow-[0_0_30px_rgba(251,167,12,0.25)] transition-all duration-300"
-            >
-              Become a Partner
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </motion.button>
-            <motion.a
-              href="#services"
-              whileHover={{ scale: 1.03 }}
-              className="inline-flex items-center justify-center gap-2 border-2 border-white/20 hover:border-white/40 text-white font-semibold text-lg px-8 py-4 rounded-xl transition-all duration-300 hover:bg-white/5"
-            >
-              Explore Programs
-            </motion.a>
           </motion.div>
         </div>
-
-        {/* Stats row */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="mt-16 sm:mt-20 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 max-w-3xl"
-        >
-          {[
-            { value: "10K+", label: "Careers Guided" },
-            { value: "50+", label: "Partner Institutions" },
-            { value: "4", label: "Partnership Models" },
-            { value: "15+", label: "Years Experience" },
-          ].map((stat, idx) => (
-            <div key={idx} className="text-center sm:text-left">
-              <p className="text-2xl sm:text-3xl font-extrabold text-white mb-1">{stat.value}</p>
-              <p className="text-blue-300/60 text-sm font-semibold tracking-wider uppercase">{stat.label}</p>
-            </div>
-          ))}
-        </motion.div>
       </div>
     </section>
   );

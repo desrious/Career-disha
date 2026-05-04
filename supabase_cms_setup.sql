@@ -263,3 +263,113 @@ grant execute on function public.save_cms_settings(uuid, jsonb) to anon;
 grant execute on function public.list_expert_advice_inquiries(uuid) to anon;
 grant execute on function public.delete_expert_advice_inquiry(uuid, uuid) to anon;
 grant execute on function public.delete_all_expert_advice_inquiries(uuid) to anon;
+
+-- ═══════════════════════════════════════════════════════
+-- Partner Inquiries
+-- ═══════════════════════════════════════════════════════
+
+create table if not exists public.partner_inquiries (
+  id uuid primary key default extensions.gen_random_uuid(),
+  name text not null,
+  email text not null,
+  phone text not null,
+  interested_in text not null,
+  created_at timestamptz not null default now()
+);
+
+alter table public.partner_inquiries enable row level security;
+
+drop policy if exists "Public can create partner inquiries" on public.partner_inquiries;
+create policy "Public can create partner inquiries"
+on public.partner_inquiries
+for insert
+to anon
+with check (true);
+
+create or replace function public.list_partner_inquiries(p_session_token uuid)
+returns setof public.partner_inquiries
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_admin_id uuid;
+begin
+  select public.admin_sessions.admin_user_id
+  into v_admin_id
+  from public.admin_sessions
+  join public.admin_users on public.admin_users.id = public.admin_sessions.admin_user_id
+  where public.admin_sessions.session_token = p_session_token
+    and public.admin_sessions.expires_at > now()
+    and public.admin_users.is_active = true
+  limit 1;
+
+  if v_admin_id is null then
+    raise exception 'Invalid admin session' using errcode = '28000';
+  end if;
+
+  return query
+  select *
+  from public.partner_inquiries
+  order by public.partner_inquiries.created_at desc;
+end;
+$$;
+
+create or replace function public.delete_partner_inquiry(p_session_token uuid, p_inquiry_id uuid)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_admin_id uuid;
+begin
+  select public.admin_sessions.admin_user_id
+  into v_admin_id
+  from public.admin_sessions
+  join public.admin_users on public.admin_users.id = public.admin_sessions.admin_user_id
+  where public.admin_sessions.session_token = p_session_token
+    and public.admin_sessions.expires_at > now()
+    and public.admin_users.is_active = true
+  limit 1;
+
+  if v_admin_id is null then
+    raise exception 'Invalid admin session' using errcode = '28000';
+  end if;
+
+  delete from public.partner_inquiries
+  where public.partner_inquiries.id = p_inquiry_id;
+end;
+$$;
+
+create or replace function public.delete_all_partner_inquiries(p_session_token uuid)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_admin_id uuid;
+begin
+  select public.admin_sessions.admin_user_id
+  into v_admin_id
+  from public.admin_sessions
+  join public.admin_users on public.admin_users.id = public.admin_sessions.admin_user_id
+  where public.admin_sessions.session_token = p_session_token
+    and public.admin_sessions.expires_at > now()
+    and public.admin_users.is_active = true
+  limit 1;
+
+  if v_admin_id is null then
+    raise exception 'Invalid admin session' using errcode = '28000';
+  end if;
+
+  delete from public.partner_inquiries;
+end;
+$$;
+
+revoke all on public.partner_inquiries from anon;
+grant insert on public.partner_inquiries to anon;
+grant execute on function public.list_partner_inquiries(uuid) to anon;
+grant execute on function public.delete_partner_inquiry(uuid, uuid) to anon;
+grant execute on function public.delete_all_partner_inquiries(uuid) to anon;

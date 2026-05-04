@@ -8,14 +8,18 @@ import {
   CmsInsightVideo,
   CmsTestimonial,
   ExpertAdviceInquiry,
+  PartnerInquiry,
   SupabaseCmsError,
   SupabaseConnectionStatus,
   checkSupabaseConnection,
   defaultCmsData,
   deleteAllExpertAdviceInquiries,
   deleteExpertAdviceInquiry,
+  deleteAllPartnerInquiries,
+  deletePartnerInquiry,
   loginAdmin,
   loadExpertAdviceInquiries,
+  loadPartnerInquiries,
   logoutAdmin,
   saveCmsData,
   verifyAdminSession,
@@ -26,7 +30,7 @@ type AdminProps = {
   onDataChange: (data: CmsData) => void;
 };
 
-type SectionKey = 'offer' | 'expert' | 'insights' | 'testimonials' | 'counsellors' | 'contact';
+type SectionKey = 'offer' | 'expert' | 'insights' | 'testimonials' | 'counsellors' | 'contact' | 'partner';
 
 const sections: { key: SectionKey; label: string }[] = [
   { key: 'offer', label: 'Offer' },
@@ -35,6 +39,7 @@ const sections: { key: SectionKey; label: string }[] = [
   { key: 'testimonials', label: 'Testimonials' },
   { key: 'counsellors', label: 'Counsellors' },
   { key: 'contact', label: 'Contact Info' },
+  { key: 'partner', label: 'Partner With Us' },
 ];
 
 const emptyTestimonial = (): CmsTestimonial => ({
@@ -250,10 +255,14 @@ export default function Admin({ data, onDataChange }: AdminProps) {
   const [draft, setDraft] = useState<CmsData>(data);
   const latestDraftRef = useRef<CmsData>(data);
   const [inquiries, setInquiries] = useState<ExpertAdviceInquiry[]>([]);
+  const [partnerInquiries, setPartnerInquiries] = useState<PartnerInquiry[]>([]);
   const [isSaving, setIsSaving] = useState(false);
   const [isDeletingInquiries, setIsDeletingInquiries] = useState(false);
   const [isRefreshingInquiries, setIsRefreshingInquiries] = useState(false);
   const [deletingInquiryId, setDeletingInquiryId] = useState<string | null>(null);
+  const [isDeletingPartnerInquiries, setIsDeletingPartnerInquiries] = useState(false);
+  const [isRefreshingPartnerInquiries, setIsRefreshingPartnerInquiries] = useState(false);
+  const [deletingPartnerInquiryId, setDeletingPartnerInquiryId] = useState<string | null>(null);
   const [isDirty, setIsDirty] = useState(false);
   const [message, setMessage] = useState('');
   const [connection, setConnection] = useState<SupabaseConnectionStatus>({
@@ -307,6 +316,9 @@ export default function Admin({ data, onDataChange }: AdminProps) {
       loadExpertAdviceInquiries().then((nextInquiries) => {
         if (active) setInquiries(nextInquiries);
       });
+      loadPartnerInquiries().then((nextPartnerInquiries) => {
+        if (active) setPartnerInquiries(nextPartnerInquiries);
+      });
     };
 
     refreshConnection();
@@ -342,6 +354,18 @@ export default function Admin({ data, onDataChange }: AdminProps) {
       setMessage('Unable to refresh inquiries right now. Please try again.');
     } finally {
       setIsRefreshingInquiries(false);
+    }
+  };
+
+  const refreshPartnerInquiries = async () => {
+    setIsRefreshingPartnerInquiries(true);
+    try {
+      const next = await loadPartnerInquiries();
+      setPartnerInquiries(next);
+    } catch {
+      setMessage('Unable to refresh partner inquiries right now.');
+    } finally {
+      setIsRefreshingPartnerInquiries(false);
     }
   };
 
@@ -730,6 +754,220 @@ export default function Admin({ data, onDataChange }: AdminProps) {
                 </div>
               )}
             />
+          )}
+
+          {active === 'partner' && (
+            <div className="space-y-8">
+              {/* Partner Hero Content */}
+              <div className="space-y-4">
+                <h2 className="text-xl font-extrabold">Hero Section</h2>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <Field label="Badge Text" value={draft.partner.hero.badge} onChange={(badge) => updateDraft({ ...draft, partner: { ...draft.partner, hero: { ...draft.partner.hero, badge } } })} />
+                  <Field label="Heading" value={draft.partner.hero.heading} onChange={(heading) => updateDraft({ ...draft, partner: { ...draft.partner, hero: { ...draft.partner.hero, heading } } })} />
+                  <Field label="Highlight (gradient text)" value={draft.partner.hero.highlight} onChange={(highlight) => updateDraft({ ...draft, partner: { ...draft.partner, hero: { ...draft.partner.hero, highlight } } })} />
+                  <div className="md:col-span-2">
+                    <TextArea label="Description" value={draft.partner.hero.description} onChange={(description) => updateDraft({ ...draft, partner: { ...draft.partner, hero: { ...draft.partner.hero, description } } })} />
+                  </div>
+                  <div className="md:col-span-2">
+                    <TextArea label="Partner Programs (one per line — shown in form dropdown)" value={draft.partner.hero.programs.join('\n')} onChange={(value) => updateDraft({ ...draft, partner: { ...draft.partner, hero: { ...draft.partner.hero, programs: value.split('\n').filter(Boolean) } } })} />
+                  </div>
+                </div>
+                <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500 pt-2">Stats</h3>
+                {draft.partner.hero.stats.map((stat, idx) => (
+                  <div key={idx} className="grid grid-cols-2 gap-4 rounded-lg bg-slate-50 p-3">
+                    <Field label={`Stat ${idx + 1} Value`} value={stat.value} onChange={(value) => { const stats = [...draft.partner.hero.stats]; stats[idx] = { ...stats[idx], value }; updateDraft({ ...draft, partner: { ...draft.partner, hero: { ...draft.partner.hero, stats } } }); }} />
+                    <Field label={`Stat ${idx + 1} Label`} value={stat.label} onChange={(label) => { const stats = [...draft.partner.hero.stats]; stats[idx] = { ...stats[idx], label }; updateDraft({ ...draft, partner: { ...draft.partner, hero: { ...draft.partner.hero, stats } } }); }} />
+                  </div>
+                ))}
+              </div>
+
+              <div className="h-px bg-slate-200"></div>
+
+              {/* Service Cards */}
+              <div className="space-y-4">
+                <h2 className="text-xl font-extrabold">Service Cards</h2>
+                {draft.partner.services.map((svc) => (
+                  <div key={svc.id} className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                    <h3 className="font-bold mb-3">{svc.title}</h3>
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <Field label="Title" value={svc.title} onChange={(title) => updateDraft({ ...draft, partner: { ...draft.partner, services: draft.partner.services.map((s) => s.id === svc.id ? { ...s, title } : s) } })} />
+                      <Field label="Highlight" value={svc.highlight} onChange={(highlight) => updateDraft({ ...draft, partner: { ...draft.partner, services: draft.partner.services.map((s) => s.id === svc.id ? { ...s, highlight } : s) } })} />
+                      <Field label="Badge" value={svc.badge} onChange={(badge) => updateDraft({ ...draft, partner: { ...draft.partner, services: draft.partner.services.map((s) => s.id === svc.id ? { ...s, badge } : s) } })} />
+                      <Field label="Accent Color Class" value={svc.accentColor} onChange={(accentColor) => updateDraft({ ...draft, partner: { ...draft.partner, services: draft.partner.services.map((s) => s.id === svc.id ? { ...s, accentColor } : s) } })} />
+                      <div className="md:col-span-2">
+                        <TextArea label="Description" value={svc.description} onChange={(description) => updateDraft({ ...draft, partner: { ...draft.partner, services: draft.partner.services.map((s) => s.id === svc.id ? { ...s, description } : s) } })} />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="h-px bg-slate-200"></div>
+
+              {/* Path Cards */}
+              <div className="space-y-4">
+                <h2 className="text-xl font-extrabold">Select Your Path Cards</h2>
+                {draft.partner.paths.map((path) => (
+                  <div key={path.id} className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                    <h3 className="font-bold mb-3">{path.title} — {path.subtitle}</h3>
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <Field label="Title" value={path.title} onChange={(title) => updateDraft({ ...draft, partner: { ...draft.partner, paths: draft.partner.paths.map((p) => p.id === path.id ? { ...p, title } : p) } })} />
+                      <Field label="Subtitle" value={path.subtitle} onChange={(subtitle) => updateDraft({ ...draft, partner: { ...draft.partner, paths: draft.partner.paths.map((p) => p.id === path.id ? { ...p, subtitle } : p) } })} />
+                      <Field label="Stat Badge" value={path.stat} onChange={(stat) => updateDraft({ ...draft, partner: { ...draft.partner, paths: draft.partner.paths.map((p) => p.id === path.id ? { ...p, stat } : p) } })} />
+                      <Field label="Stat Label" value={path.statLabel} onChange={(statLabel) => updateDraft({ ...draft, partner: { ...draft.partner, paths: draft.partner.paths.map((p) => p.id === path.id ? { ...p, statLabel } : p) } })} />
+                      <div className="md:col-span-2">
+                        <TextArea label="Description" value={path.description} onChange={(description) => updateDraft({ ...draft, partner: { ...draft.partner, paths: draft.partner.paths.map((p) => p.id === path.id ? { ...p, description } : p) } })} />
+                      </div>
+                      <div className="md:col-span-2">
+                        <TextArea label="Benefits (one per line)" rows={5} value={path.benefits.join('\n')} onChange={(value) => updateDraft({ ...draft, partner: { ...draft.partner, paths: draft.partner.paths.map((p) => p.id === path.id ? { ...p, benefits: value.split('\n').filter(Boolean) } : p) } })} />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="h-px bg-slate-200"></div>
+
+              {/* Why Partner */}
+              <div className="space-y-4">
+                <h2 className="text-xl font-extrabold">Why Partner Section</h2>
+                {draft.partner.whyPartner.map((item) => (
+                  <div key={item.id} className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <Field label="Title" value={item.title} onChange={(title) => updateDraft({ ...draft, partner: { ...draft.partner, whyPartner: draft.partner.whyPartner.map((w) => w.id === item.id ? { ...w, title } : w) } })} />
+                      <Field label="Color Class" value={item.color} onChange={(color) => updateDraft({ ...draft, partner: { ...draft.partner, whyPartner: draft.partner.whyPartner.map((w) => w.id === item.id ? { ...w, color } : w) } })} />
+                      <div className="md:col-span-2">
+                        <TextArea label="Description" value={item.description} onChange={(description) => updateDraft({ ...draft, partner: { ...draft.partner, whyPartner: draft.partner.whyPartner.map((w) => w.id === item.id ? { ...w, description } : w) } })} />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="h-px bg-slate-200"></div>
+
+              {/* CTA Section */}
+              <div className="space-y-4">
+                <h2 className="text-xl font-extrabold">CTA Section</h2>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <Field label="Heading" value={draft.partner.cta.heading} onChange={(heading) => updateDraft({ ...draft, partner: { ...draft.partner, cta: { ...draft.partner.cta, heading } } })} />
+                  <Field label="Email Address" value={draft.partner.cta.emailAddress} onChange={(emailAddress) => updateDraft({ ...draft, partner: { ...draft.partner, cta: { ...draft.partner.cta, emailAddress } } })} />
+                  <div className="md:col-span-2">
+                    <TextArea label="Description" value={draft.partner.cta.description} onChange={(description) => updateDraft({ ...draft, partner: { ...draft.partner, cta: { ...draft.partner.cta, description } } })} />
+                  </div>
+                  <div className="md:col-span-2">
+                    <Field label="WhatsApp URL" value={draft.partner.cta.whatsappUrl} onChange={(whatsappUrl) => updateDraft({ ...draft, partner: { ...draft.partner, cta: { ...draft.partner.cta, whatsappUrl } } })} />
+                  </div>
+                </div>
+              </div>
+
+              <div className="h-px bg-slate-200"></div>
+
+              {/* Partner Inquiries */}
+              <div className="space-y-4">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <h2 className="text-xl font-extrabold">Partner Demo Inquiries</h2>
+                    <p className="text-sm text-slate-500">Form submissions from the Partner page. Refreshes automatically every 5 seconds.</p>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <button
+                      onClick={async () => {
+                        if (partnerInquiries.length === 0) return;
+                        const confirmed = window.confirm('Delete all partner inquiries? This action cannot be undone.');
+                        if (!confirmed) return;
+                        setIsDeletingPartnerInquiries(true);
+                        try {
+                          await deleteAllPartnerInquiries();
+                          setPartnerInquiries([]);
+                          setMessage('All partner inquiries deleted.');
+                        } catch (error) {
+                          try {
+                            const deletable = partnerInquiries.filter((item) => item.id);
+                            await Promise.all(deletable.map((item) => deletePartnerInquiry(String(item.id))));
+                            setPartnerInquiries([]);
+                            setMessage('All partner inquiries deleted.');
+                          } catch {
+                            const errorMessage = error instanceof Error ? error.message : 'unknown error';
+                            setMessage(`Unable to delete all partner inquiries (${errorMessage}).`);
+                          }
+                        } finally {
+                          setIsDeletingPartnerInquiries(false);
+                        }
+                      }}
+                      disabled={isDeletingPartnerInquiries || partnerInquiries.length === 0}
+                      className="rounded-lg border border-red-200 bg-white px-4 py-2 text-sm font-bold text-red-600 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      {isDeletingPartnerInquiries ? 'Deleting...' : 'Delete All'}
+                    </button>
+                    <button
+                      onClick={refreshPartnerInquiries}
+                      disabled={isDeletingPartnerInquiries || isRefreshingPartnerInquiries}
+                      className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-bold hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      {isRefreshingPartnerInquiries ? 'Refreshing...' : 'Refresh'}
+                    </button>
+                  </div>
+                </div>
+                {partnerInquiries.length === 0 ? (
+                  <p className="rounded-xl bg-slate-50 p-5 text-sm font-semibold text-slate-500">No partner inquiries found yet.</p>
+                ) : (
+                  <div className="overflow-hidden rounded-xl border border-slate-200">
+                    <table className="w-full min-w-[700px] text-left text-sm">
+                      <thead className="bg-slate-50 text-xs uppercase tracking-wider text-slate-500">
+                        <tr>
+                          <th className="px-4 py-3">Date</th>
+                          <th className="px-4 py-3">Name</th>
+                          <th className="px-4 py-3">Email</th>
+                          <th className="px-4 py-3">Phone</th>
+                          <th className="px-4 py-3">Interested In</th>
+                          <th className="px-4 py-3 text-right">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100">
+                        {partnerInquiries.map((inq) => (
+                          <tr key={inq.id ?? `${inq.email}-${inq.phone}`}>
+                            <td className="px-4 py-3 text-slate-500">{inq.created_at ? new Date(inq.created_at).toLocaleString() : '-'}</td>
+                            <td className="px-4 py-3 font-bold">{inq.name}</td>
+                            <td className="px-4 py-3">{inq.email}</td>
+                            <td className="px-4 py-3">{inq.phone}</td>
+                            <td className="px-4 py-3">
+                              <span className="inline-flex rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-bold text-blue-700">{inq.interested_in}</span>
+                            </td>
+                            <td className="px-4 py-3 text-right">
+                              <button
+                                onClick={async () => {
+                                  if (!inq.id) return;
+                                  const confirmed = window.confirm('Delete this inquiry?');
+                                  if (!confirmed) return;
+                                  setDeletingPartnerInquiryId(inq.id);
+                                  setIsDeletingPartnerInquiries(true);
+                                  try {
+                                    await deletePartnerInquiry(inq.id);
+                                    setPartnerInquiries((prev) => prev.filter((item) => item.id !== inq.id));
+                                    setMessage('Partner inquiry deleted.');
+                                  } catch {
+                                    setMessage('Unable to delete inquiry.');
+                                  } finally {
+                                    setIsDeletingPartnerInquiries(false);
+                                    setDeletingPartnerInquiryId(null);
+                                  }
+                                }}
+                                disabled={isDeletingPartnerInquiries || !inq.id}
+                                className="inline-flex items-center gap-1 rounded-lg border border-red-200 bg-white px-3 py-1.5 text-xs font-bold text-red-600 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
+                              >
+                                <Trash2 className="h-3.5 w-3.5" />
+                                {deletingPartnerInquiryId === inq.id ? 'Deleting...' : 'Delete'}
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            </div>
           )}
 
           {active === 'contact' && (

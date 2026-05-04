@@ -81,6 +81,62 @@ export type CmsInsights = {
   videos: CmsInsightVideo[];
 };
 
+export type CmsPartnerStat = {
+  value: string;
+  label: string;
+};
+
+export type CmsPartnerHero = {
+  badge: string;
+  heading: string;
+  highlight: string;
+  description: string;
+  stats: CmsPartnerStat[];
+  programs: string[];
+};
+
+export type CmsPartnerService = {
+  id: string;
+  title: string;
+  description: string;
+  highlight: string;
+  badge: string;
+  accentColor: string;
+};
+
+export type CmsPartnerPath = {
+  id: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  benefits: string[];
+  stat: string;
+  statLabel: string;
+  color: string;
+};
+
+export type CmsPartnerCTA = {
+  heading: string;
+  description: string;
+  whatsappUrl: string;
+  emailAddress: string;
+};
+
+export type CmsPartnerWhy = {
+  id: string;
+  title: string;
+  description: string;
+  color: string;
+};
+
+export type CmsPartner = {
+  hero: CmsPartnerHero;
+  services: CmsPartnerService[];
+  paths: CmsPartnerPath[];
+  whyPartner: CmsPartnerWhy[];
+  cta: CmsPartnerCTA;
+};
+
 export type CmsData = {
   offer: CmsOffer;
   testimonials: CmsTestimonial[];
@@ -89,6 +145,7 @@ export type CmsData = {
   contact: CmsContact;
   footer: CmsFooter;
   insights: CmsInsights;
+  partner: CmsPartner;
 };
 
 export type ExpertAdviceInquiry = {
@@ -98,6 +155,15 @@ export type ExpertAdviceInquiry = {
   mobile: string;
   service: string;
   message?: string;
+  created_at?: string;
+};
+
+export type PartnerInquiry = {
+  id?: string;
+  name: string;
+  email: string;
+  phone: string;
+  interested_in: string;
   created_at?: string;
 };
 
@@ -295,6 +361,49 @@ export const defaultCmsData: CmsData = {
       },
     ],
   },
+  partner: {
+    hero: {
+      badge: "India's Most Trusted Career Tech Partner Program",
+      heading: 'Become',
+      highlight: 'Careerदिशा',
+      description: 'Your growth partner in Career Counselling, Career Tech & the Global Education ecosystem. World-class career guidance technology built for partners.',
+      stats: [
+        { value: '10K+', label: 'Active Partners' },
+        { value: '50+', label: 'Locations' },
+        { value: '4', label: 'Partner Programs' },
+      ],
+      programs: [
+        'Career Counsellor Course',
+        'School Careerदिशा Labs',
+        'Corporate Assessments',
+        'Co-branded Technology',
+      ],
+    },
+    services: [
+      { id: 'career-counsellor', title: 'Career Counsellor Course', description: 'Get internationally certified as a Career Analyst. Comprehensive training covering psychometric assessments, counselling frameworks, and business setup to launch your practice.', highlight: '500+ Certified Annually', badge: 'High Demand', accentColor: 'bg-blue-600' },
+      { id: 'school-labs', title: 'School Careerदिशा Labs', description: 'Transform schools with dedicated AI-powered career guidance labs. A CSR-eligible initiative that embeds career planning directly into the academic ecosystem.', highlight: 'CSR Project', badge: 'Social Impact', accentColor: 'bg-emerald-600' },
+      { id: 'corporate', title: 'Corporate Assessments', description: 'Offer workforce evaluation solutions to enterprises through our HR Miles platform. Ideal for recruitment screening, competency mapping, and leadership development.', highlight: 'B2B Enterprise Focus', badge: 'HR Miles', accentColor: 'bg-red-500' },
+      { id: 'cobranded', title: 'Co-branded Technology', description: 'Leverage our world-class career assessment platform with your institutional branding. A ready-to-deploy solution for counselling centres and educational institutions.', highlight: '24hr Deployment', badge: 'Tech Partner', accentColor: 'bg-[#fba70c]' },
+    ],
+    paths: [
+      { id: 'schools', title: 'Schools', subtitle: 'K-12 Institutions', description: 'Transform your school into a career-ready institution. Our Careerदिशा Labs integrate seamlessly into your academic structure, providing students with AI-powered career assessments starting from Class 8.', benefits: ['AI-powered career labs for students', 'Teacher training & certification', 'Parent engagement workshops', 'Annual career readiness reports', 'CSR project eligibility'], stat: '200+ Schools', statLabel: 'Already Partnered', color: 'blue' },
+      { id: 'individuals', title: 'Individuals', subtitle: 'Career Counsellors & Coaches', description: 'Launch or scale your career counselling practice with our globally recognized certification program. Get access to world-class assessment technology, training modules, and a ready-to-use business model.', benefits: ['Certified Career Analyst (CCA) credential', 'Full assessment technology access', 'Business setup & marketing support', 'Client management dashboard', 'Community of 500+ counsellors'], stat: 'CCA Certified', statLabel: 'Global Recognition', color: 'amber' },
+      { id: 'corporates', title: 'Corporates', subtitle: 'HR & Talent Teams', description: 'Elevate your HR function with data-driven competency assessments. Our HR Miles program helps you hire better, develop smarter, and retain longer through psychometric-backed evaluation frameworks.', benefits: ['Pre-hiring competency assessments', 'Employee development mapping', 'Leadership potential identification', 'Team dynamics analysis', 'Custom report branding'], stat: 'B2B Focus', statLabel: 'Enterprise Ready', color: 'red' },
+      { id: 'institutions', title: 'Institutions', subtitle: 'Universities & Training Centers', description: 'Embed career guidance into your curriculum. Our co-branded technology platform lets you offer premium career assessments under your institutional brand, enhancing student outcomes and placement rates.', benefits: ['Co-branded assessment platform', 'White-label options available', 'Placement readiness programs', 'Faculty development modules', 'Student engagement analytics'], stat: '24hr Setup', statLabel: 'Quick Deployment', color: 'emerald' },
+    ],
+    whyPartner: [
+      { id: 'training', title: 'Training & Certification', description: 'Structured learning pathways with globally recognized credentials to build your professional credibility.', color: 'bg-blue-600' },
+      { id: 'tech', title: 'Assessment Technology', description: 'AI-powered psychometric tools, dashboards, reports, and career planning systems — all in one platform.', color: 'bg-[#fba70c]' },
+      { id: 'support', title: 'Dedicated Support', description: 'Step-by-step partner guidance, technical onboarding, and ongoing assistance to ensure your success.', color: 'bg-emerald-600' },
+      { id: 'launch', title: 'Launch Ecosystem', description: 'Marketing collateral, lead generation support, and operational resources to help you start and scale fast.', color: 'bg-red-500' },
+    ],
+    cta: {
+      heading: 'Ready to Transform Careers at Scale?',
+      description: 'Join the Careerदिशा partner ecosystem today. Get the technology, training, and brand support you need to make a real impact.',
+      whatsappUrl: 'https://wa.me/919289191164?text=Hi%2C%20I%20am%20interested%20in%20the%20Career%20Disha%20Partner%20Program',
+      emailAddress: 'hr@zeopto.com',
+    },
+  },
 };
 
 const supabaseEnv = (import.meta as unknown as { env?: Record<string, string | undefined> }).env ?? {};
@@ -367,6 +476,9 @@ function mergeCmsData(parsed: Partial<CmsData>): CmsData {
   const hasInsightsVideos = Array.isArray(parsed.insights?.videos);
   const hasTestimonials = Array.isArray(parsed.testimonials);
   const hasCounsellors = Array.isArray(parsed.counsellors);
+  const hasPartnerServices = Array.isArray(parsed.partner?.services);
+  const hasPartnerPaths = Array.isArray(parsed.partner?.paths);
+  const hasPartnerWhy = Array.isArray(parsed.partner?.whyPartner);
 
   return {
     ...defaultCmsData,
@@ -387,6 +499,15 @@ function mergeCmsData(parsed: Partial<CmsData>): CmsData {
     },
     testimonials: hasTestimonials ? parsed.testimonials! : defaultCmsData.testimonials,
     counsellors: hasCounsellors ? parsed.counsellors! : defaultCmsData.counsellors,
+    partner: {
+      ...defaultCmsData.partner,
+      ...parsed.partner,
+      hero: { ...defaultCmsData.partner.hero, ...parsed.partner?.hero },
+      cta: { ...defaultCmsData.partner.cta, ...parsed.partner?.cta },
+      services: hasPartnerServices ? parsed.partner!.services! : defaultCmsData.partner.services,
+      paths: hasPartnerPaths ? parsed.partner!.paths! : defaultCmsData.partner.paths,
+      whyPartner: hasPartnerWhy ? parsed.partner!.whyPartner! : defaultCmsData.partner.whyPartner,
+    },
   };
 }
 
@@ -486,6 +607,55 @@ export async function deleteAllExpertAdviceInquiries() {
   }
 
   await supabaseRpc('delete_all_expert_advice_inquiries', {
+    p_session_token: sessionToken,
+  });
+}
+
+// ─── Partner Inquiries ───────────────────────────────────────
+
+export async function savePartnerInquiry(inquiry: PartnerInquiry) {
+  return supabaseRequest<PartnerInquiry[]>('partner_inquiries', {
+    method: 'POST',
+    headers: {
+      Prefer: 'return=minimal',
+    },
+    body: JSON.stringify(inquiry),
+  });
+}
+
+export async function loadPartnerInquiries() {
+  const sessionToken = window.sessionStorage.getItem(ADMIN_SESSION_STORAGE_KEY);
+  if (!sessionToken) return [];
+
+  try {
+    return await supabaseRpc<PartnerInquiry[]>('list_partner_inquiries', {
+      p_session_token: sessionToken,
+    });
+  } catch (error) {
+    console.warn('Supabase partner inquiry load failed.', error);
+    return [];
+  }
+}
+
+export async function deletePartnerInquiry(inquiryId: string) {
+  const sessionToken = window.sessionStorage.getItem(ADMIN_SESSION_STORAGE_KEY);
+  if (!sessionToken) {
+    throw new SupabaseCmsError('Admin session missing', 401);
+  }
+
+  await supabaseRpc('delete_partner_inquiry', {
+    p_session_token: sessionToken,
+    p_inquiry_id: inquiryId,
+  });
+}
+
+export async function deleteAllPartnerInquiries() {
+  const sessionToken = window.sessionStorage.getItem(ADMIN_SESSION_STORAGE_KEY);
+  if (!sessionToken) {
+    throw new SupabaseCmsError('Admin session missing', 401);
+  }
+
+  await supabaseRpc('delete_all_partner_inquiries', {
     p_session_token: sessionToken,
   });
 }
