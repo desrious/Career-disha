@@ -38,7 +38,7 @@ export default function PartnerPage({ onBack, data }: PartnerPageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-white font-body text-on-surface">
+    <div className="min-h-screen bg-slate-50 font-body text-on-surface">
       {/* Top Navbar */}
       <header className="fixed top-0 w-full h-16 bg-white/90 backdrop-blur-md border-b border-slate-100 flex items-center justify-between px-4 sm:px-6 z-50 shadow-sm">
         <div className="flex items-center gap-3">
@@ -56,7 +56,7 @@ export default function PartnerPage({ onBack, data }: PartnerPageProps) {
         <PartnerHero data={data.hero} onCTAClick={scrollToContact} />
 
         {/* Services Section */}
-        <section className="py-20 sm:py-28 px-4 sm:px-6 md:px-8 bg-white relative overflow-hidden" id="services">
+        <section className="py-20 sm:py-28 px-4 sm:px-6 md:px-8 relative overflow-hidden" id="services">
           <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 20.5V18H0v-2h20v-2H0v-2h20v-2H0V8h20V6H0V4h20V2H0V0h22v20h2V0h2v20h2V0h2v20h2V0h2v20h2V0h2v20.5z' fill='%23000' fill-opacity='1' fill-rule='evenodd'/%3E%3C/svg%3E\")" }}></div>
 
           <div className="max-w-7xl mx-auto relative z-10">
@@ -94,7 +94,7 @@ export default function PartnerPage({ onBack, data }: PartnerPageProps) {
         <PathSelector paths={data.paths} />
 
         {/* Why Partner with Us */}
-        <section className="py-20 sm:py-28 px-4 sm:px-6 md:px-8 bg-white relative overflow-hidden">
+        <section className="py-20 sm:py-28 px-4 sm:px-6 md:px-8 relative overflow-hidden">
           <div className="max-w-7xl mx-auto relative z-10">
             <motion.div
               initial={{ opacity: 0, y: 20 }}

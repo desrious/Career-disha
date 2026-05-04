@@ -7,6 +7,8 @@ export type CmsOffer = {
   note: string;
   cta: string;
   visible: boolean;
+  show_countdown?: boolean;
+  valid_upto?: string; // ISO datetime string
 };
 
 export type CmsTestimonial = {

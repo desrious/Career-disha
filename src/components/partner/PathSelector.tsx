@@ -32,7 +32,7 @@ export default function PathSelector({ paths }: PathSelectorProps) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   return (
-    <section className="py-20 sm:py-28 px-4 sm:px-6 md:px-8 bg-slate-50 relative overflow-hidden">
+    <section className="py-20 sm:py-28 px-4 sm:px-6 md:px-8 relative overflow-hidden">
       <div className="absolute top-0 left-0 w-[500px] h-[500px] rounded-full bg-blue-500/5 blur-[120px] pointer-events-none"></div>
       <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full bg-[#fba70c]/5 blur-[120px] pointer-events-none"></div>
 

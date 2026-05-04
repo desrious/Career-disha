@@ -2,6 +2,7 @@
 import { Star } from 'lucide-react';
 import { motion } from 'motion/react';
 import type { CmsData } from '../../data/cms';
+import { FlipCountdownTimer } from './FlipCountdownTimer';
 
 interface OfferSectionProps {
   offer: CmsData['offer'];
@@ -32,6 +33,7 @@ export default function OfferSection({ offer, onCTAClick }: OfferSectionProps) {
             <p className="text-lg text-slate-600 font-medium">{offer.description}</p>
           </div>
           <div className="flex flex-col items-center md:items-end shrink-0">
+            <FlipCountdownTimer validUpto={offer.valid_upto} showCountdown={offer.show_countdown} />
             <div className="flex items-center gap-3 mb-5">
               <span className="text-2xl text-slate-400 font-bold line-through decoration-red-400/50 decoration-2">{offer.originalPrice}</span>
               <span className="text-5xl font-black text-[#fba70c] drop-shadow-sm">{offer.offerPrice}</span>

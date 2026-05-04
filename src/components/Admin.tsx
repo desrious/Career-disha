@@ -506,6 +506,27 @@ export default function Admin({ data, onDataChange }: AdminProps) {
                 />
                 Show offer on website
               </label>
+              <label className="flex items-center gap-3 rounded-lg bg-slate-50 p-3 text-sm font-bold">
+                <input
+                  type="checkbox"
+                  checked={!!draft.offer.show_countdown}
+                  onChange={(event) => updateDraft({ ...draft, offer: { ...draft.offer, show_countdown: event.target.checked } })}
+                />
+                Enable Countdown Timer
+              </label>
+              {(draft.offer.show_countdown === true) && (
+                <div className="md:col-span-2">
+                  <label className="block">
+                    <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Valid Upto</span>
+                    <input
+                      type="datetime-local"
+                      value={draft.offer.valid_upto || ''}
+                      onChange={(event) => updateDraft({ ...draft, offer: { ...draft.offer, valid_upto: event.target.value } })}
+                      className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+                    />
+                  </label>
+                </div>
+              )}
               <Field label="Badge" value={draft.offer.badge} onChange={(badge) => updateDraft({ ...draft, offer: { ...draft.offer, badge } })} />
               <Field label="Title" value={draft.offer.title} onChange={(title) => updateDraft({ ...draft, offer: { ...draft.offer, title } })} />
               <Field label="CTA" value={draft.offer.cta} onChange={(cta) => updateDraft({ ...draft, offer: { ...draft.offer, cta } })} />

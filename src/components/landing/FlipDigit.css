@@ -1,0 +1,121 @@
+.flip-digit-container {
+  display: inline-block;
+  position: relative;
+  width: 40px;
+  height: 60px;
+  background-color: #1e293b;
+  border-radius: 6px;
+  font-size: 32px;
+  font-weight: bold;
+  color: white;
+  line-height: 60px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+  perspective: 400px;
+  margin: 0 2px;
+}
+
+@media (min-width: 768px) {
+  .flip-digit-container {
+    width: 48px;
+    height: 72px;
+    font-size: 40px;
+    line-height: 72px;
+    border-radius: 8px;
+  }
+}
+
+.flip-digit-top,
+.flip-digit-bottom,
+.flip-digit-flap {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  overflow: hidden;
+  background-color: #1e293b;
+  border-radius: 6px;
+  color: #fff;
+}
+
+@media (min-width: 768px) {
+  .flip-digit-top,
+  .flip-digit-bottom,
+  .flip-digit-flap {
+    border-radius: 8px;
+  }
+}
+
+.flip-digit-top,
+.flip-digit-flap-top {
+  top: 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  transform-origin: bottom center;
+}
+
+.flip-digit-bottom,
+.flip-digit-flap-bottom {
+  bottom: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  transform-origin: top center;
+  line-height: 0;
+}
+
+.flip-digit-bottom {
+  background-color: #0f172a;
+}
+
+.flip-digit-top {
+   background-color: #0f172a;
+}
+
+.flip-digit-flap-top {
+  z-index: 2;
+  background-color: #1e293b;
+}
+
+.flip-digit-flap-bottom {
+  z-index: 1;
+  background-color: #1e293b;
+  transform: rotateX(90deg);
+}
+
+.flip-digit-container.flipping .flip-digit-flap-top {
+  animation: flipTop 0.3s ease-in forwards;
+}
+
+.flip-digit-container.flipping .flip-digit-flap-bottom {
+  animation: flipBottom 0.3s ease-out 0.3s forwards;
+}
+
+@keyframes flipTop {
+  0% {
+    transform: rotateX(0);
+  }
+  100% {
+    transform: rotateX(-90deg);
+  }
+}
+
+@keyframes flipBottom {
+  0% {
+    transform: rotateX(90deg);
+  }
+  100% {
+    transform: rotateX(0);
+  }
+}
+
+.flip-digit-container::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: rgba(0, 0, 0, 0.4);
+  margin-top: -1px;
+  z-index: 5;
+}

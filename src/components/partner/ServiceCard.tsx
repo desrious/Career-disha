@@ -39,8 +39,8 @@ export default function ServiceCard({ icon, title, description, highlight, badge
 
       <div className="p-8">
         {/* Icon */}
-        <div className={`w-14 h-14 ${accentColor}/10 rounded-xl flex items-center justify-center mb-6 transition-all duration-300 group-hover:${accentColor} group-hover:text-white group-hover:shadow-lg group-hover:scale-110`}>
-          <div className={`${accentColor.replace('bg-', 'text-')} group-hover:text-white transition-colors duration-300`}>
+        <div className={`w-14 h-14 ${accentColor.replace('bg-', 'bg-')}/10 rounded-xl flex items-center justify-center mb-6 transition-all duration-300 group-hover:scale-110 group-hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)]`}>
+          <div className={`${accentColor.replace('bg-', 'text-')} transition-colors duration-300`}>
             {icon}
           </div>
         </div>
