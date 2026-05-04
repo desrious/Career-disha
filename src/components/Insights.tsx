@@ -1,5 +1,4 @@
-import { useRef } from 'react';
-import { ArrowLeft, Play, Youtube, BookOpen, ExternalLink, ChevronLeft, ChevronRight, Phone, Mail, Globe } from 'lucide-react';
+import { ArrowLeft, Youtube, BookOpen, ExternalLink, Phone, Mail, Globe } from 'lucide-react';
 import { motion } from 'motion/react';
 import { LOGO_URL, COPYRIGHT_TEXT } from '../data/constants';
 import { CmsInsights, defaultCmsData } from '../data/cms';
@@ -9,91 +8,7 @@ interface InsightsProps {
   insights?: CmsInsights;
 }
 
-const videos = [
-  { id: '2RBDdsniaHw', title: 'Career Guidance Session 1' },
-  { id: 'U2QHNZmi-XY', title: 'SAP Consulting Insights' },
-  { id: 'zkBlpi7JYnw', title: 'Future of Work' },
-  { id: 'aEpR8tV8q4M', title: 'Industry Trends 2024' },
-  { id: 'K0YPVQ86Evc', title: 'Professional Training' },
-  { id: 'u88FY029G38', title: 'Career Pivot Strategies' },
-  { id: 'OzB5Pnxmi04', title: 'Digital Transformation' },
-  { id: 'exDfZcx_Hbc', title: 'Mentorship Matters' },
-  { id: 'qVb1SwMaJk4', title: 'Skill Development' },
-  { id: 'Bo3Ptle_m7U', title: 'Career Roadmap Guide' },
-  { id: 'nReiaWKEtBI', title: 'Success Stories' },
-  { id: '3NKy0EwZ_9Q', title: 'Leadership & Vision' },
-  { id: 'Bc0JIM4utyM', title: 'CareerSaathi Overview' },
-];
-
-const mockBlogs = [
-  {
-    title: "Is adopting career in SAP is viable Opt...",
-    excerpt: "Is Adopting a Career in SAP for Fresher Graduates a Viable Option? In toda...",
-    date: "7-Sep-2025",
-    category: "Career Advice",
-    image: "https://www.zeopto.com/img/ChatGPT%20Image%20Sep%207,%202025,%2012_54_10%20PM.png",
-    link: "https://ZeOpto.com/blog-details.php?slug=is-adopting-career-in-sap-is-viable-option-"
-  },
-  {
-    title: "ZeOpto Workshop at Amrapali University -...",
-    excerpt: "Learning is always special when it connects with real-world opportunities. Our recent SAP Worksho...",
-    date: "30-Sep-2025",
-    category: "Workshop",
-    image: "https://www.zeopto.com/img/Amrapali%20Workshop.png",
-    link: "https://ZeOpto.com/blog-details.php?slug=ZeOpto-workshop-at-amrapali-university---a-journey-of-learning-growth"
-  },
-  {
-    title: "Best SAP FICO Training Institute | ZeOpt...",
-    excerpt: "SAP FICO Training. Choosing the right SAP FICO training institute in Noida can shape your ca...",
-    date: "6-Nov-2025",
-    category: "Training",
-    image: "https://www.zeopto.com/img/SAP%20FICO%20Training%20(1).png",
-    link: "https://ZeOpto.com/blog-details.php?slug=best-sap-fico-training-institute-ZeOpto"
-  },
-  {
-    title: "Best SAP MM Training Institute in Noida ...",
-    excerpt: "SAP MM is one of the most important modules in the SAP system and is widely used in industries th...",
-    date: "16-Nov-2025",
-    category: "Training",
-    image: "https://www.zeopto.com/img/SAP%20MM%20Training%20ZeOpto.png",
-    link: "https://ZeOpto.com/blog-details.php?slug=best-sap-mm-training-institute-in-noida-ZeOpto"
-  },
-  {
-    title: "Best SAP Training Institute in Noida | Z...",
-    excerpt: "Best SAP Training Institute in Noida. SAP is one of the most widely used business software...",
-    date: "15-Dec-2025",
-    category: "Education",
-    image: "https://www.zeopto.com/img/Thumbnail%20.png",
-    link: "https://ZeOpto.com/blog-details.php?slug=best-sap-training-institute-in-noida-ZeOpto"
-  },
-  {
-    title: "ZeOpto Workshop at Graphic Era Universit...",
-    excerpt: "ZeOpto Workshop at Graphic Era University – Industry-Focused Learning Experience...",
-    date: "5-Feb-2026",
-    category: "Workshop",
-    image: "https://www.zeopto.com/img/Untitled%20design%20(59).png",
-    link: "https://ZeOpto.com/blog-details.php?slug=ZeOpto-workshop-at-graphic-era-university-empowering-students-with-industry-ready-it-sap-skills"
-  },
-  {
-    title: "SAP Classes in Noida...",
-    excerpt: "SAP Classes in Noida: Learn SAP with Practical Training at ZeOpto. Today, com...",
-    date: "5-Feb-2026",
-    category: "Training",
-    image: "https://www.zeopto.com/img/Best%20SAP%20CLasses%20in%20Noida.png",
-    link: "https://ZeOpto.com/blog-details.php?slug=sap-classes-in-noida"
-  }
-];
-
 export default function Insights({ onBack, insights = defaultCmsData.insights }: InsightsProps) {
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  const scroll = (direction: 'left' | 'right') => {
-    if (scrollRef.current) {
-      const { scrollLeft, clientWidth } = scrollRef.current;
-      const scrollTo = direction === 'left' ? scrollLeft - clientWidth : scrollLeft + clientWidth;
-      scrollRef.current.scrollTo({ left: scrollTo, behavior: 'smooth' });
-    }
-  };
 
   return (
     <div className="min-h-screen bg-surface font-body text-on-surface flex flex-col">
