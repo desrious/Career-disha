@@ -6,7 +6,7 @@ import { Phone, Mail, Globe, Menu, X, ChevronDown, ArrowRight } from 'lucide-rea
 import { motion, AnimatePresence } from 'motion/react';
 import { LOGO_URL } from '../../data/constants';
 
-type ViewType = 'landing' | 'about' | 'insights' | 'contact-us' | 'partner' | 'high-school' | 'plus-two' | 'graduates' | 'working-professional';
+type ViewType = 'landing' | 'about' | 'insights' | 'contact-us' | 'partner' | 'brochure' | 'high-school' | 'plus-two' | 'graduates' | 'working-professional' | 'terms' | 'privacy';
 
 interface HeaderProps {
   setView: (view: ViewType) => void;

@@ -13,7 +13,7 @@ export default function WhatsAppFAB() {
         animate={{ y: [-6, 6, -6] }}
         transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
       >
-        <img src="/Whatsapp.png" alt="WhatsApp Icon" className="w-20 h-20 md:w-24 md:h-24 object-contain drop-shadow-lg" />
+        <img src="/Whatsapp.png" alt="WhatsApp Icon" className="w-20 h-20 md:w-24 md:h-24 object-contain drop-shadow-xl brightness-90 contrast-125 saturate-110" />
       </motion.a>
     </div>
   );

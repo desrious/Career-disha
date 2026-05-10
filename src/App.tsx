@@ -17,6 +17,8 @@ import InquiryModal from './components/InquiryModal';
 import FollowCursor from './components/FollowCursor';
 import ComparisonSection from './components/ComparisonSection';
 import BrochurePage from './components/BrochurePage';
+import TermsPage from './components/TermsPage';
+import PrivacyPage from './components/PrivacyPage';
 
 // Landing page sections
 import Header from './components/landing/Header';
@@ -37,12 +39,12 @@ import WhatsAppFAB from './components/shared/WhatsAppFAB';
 import { CMS_STORAGE_KEY, CMS_UPDATED_EVENT, CmsData, loadCmsData, loadCmsDataSync } from './data/cms';
 import { highSchoolData, plusTwoData, graduatesData, workingProfessionalData } from './data/servicePageData';
 
-type ViewType = 'landing' | 'about' | 'insights' | 'contact-us' | 'partner' | 'brochure' | 'high-school' | 'plus-two' | 'graduates' | 'working-professional';
+type ViewType = 'landing' | 'about' | 'insights' | 'contact-us' | 'partner' | 'brochure' | 'high-school' | 'plus-two' | 'graduates' | 'working-professional' | 'terms' | 'privacy';
 
 function MainApp({ cmsData }: { cmsData: CmsData }) {
   const [view, setViewLocal] = useState<ViewType>(() => {
     const path = window.location.pathname.replace(/^\/+/, '').replace(/\/+$/, '');
-    const validViews: ViewType[] = ['landing', 'about', 'insights', 'contact-us', 'partner', 'brochure', 'high-school', 'plus-two', 'graduates', 'working-professional'];
+    const validViews: ViewType[] = ['landing', 'about', 'insights', 'contact-us', 'partner', 'brochure', 'high-school', 'plus-two', 'graduates', 'working-professional', 'terms', 'privacy'];
     return validViews.includes(path as ViewType) ? (path as ViewType) : 'landing';
   });
 
@@ -56,7 +58,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
   useEffect(() => {
     const handlePopState = () => {
       const path = window.location.pathname.replace(/^\/+/, '').replace(/\/+$/, '');
-      const validViews: ViewType[] = ['landing', 'about', 'insights', 'contact-us', 'partner', 'brochure', 'high-school', 'plus-two', 'graduates', 'working-professional'];
+      const validViews: ViewType[] = ['landing', 'about', 'insights', 'contact-us', 'partner', 'brochure', 'high-school', 'plus-two', 'graduates', 'working-professional', 'terms', 'privacy'];
       setViewLocal(validViews.includes(path as ViewType) ? (path as ViewType) : 'landing');
     };
     window.addEventListener('popstate', handlePopState);
@@ -82,6 +84,8 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
   if (view === 'plus-two') return <ServicePage data={plusTwoData} onBack={() => setView('landing')} />;
   if (view === 'graduates') return <ServicePage data={graduatesData} onBack={() => setView('landing')} />;
   if (view === 'working-professional') return <ServicePage data={workingProfessionalData} onBack={() => setView('landing')} />;
+  if (view === 'terms') return <TermsPage onBack={() => setView('landing')} />;
+  if (view === 'privacy') return <PrivacyPage onBack={() => setView('landing')} />;
 
   // ─── Landing page ─────────────────────────────────────────
   return (
