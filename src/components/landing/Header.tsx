@@ -30,7 +30,7 @@ export default function Header({
       {/* Top Info Bar */}
       <div className="w-full bg-slate-900 text-white py-1.5 px-3 sm:px-6 flex justify-center md:justify-end gap-3 sm:gap-6 text-[9px] sm:text-xs font-semibold tracking-wider">
         <a href="tel:+919289191164" className="flex items-center gap-1 sm:gap-2 hover:text-primary transition-colors">
-          <Phone size={12} /> <span className="hidden sm:inline">+91-</span>9289191164
+          <Phone size={12} /> <span><span className="hidden sm:inline">+91-</span>9289191164</span>
         </a>
         <a href="mailto:hr@zeopto.com" className="hidden sm:flex items-center gap-2 hover:text-primary transition-colors">
           <Mail size={12} /> hr@zeopto.com
@@ -76,14 +76,12 @@ export default function Header({
             Insights
           </button>
 
-          <a
+          <button
+            onClick={() => setView('brochure')}
             className="text-on-surface-variant hover:text-primary font-headline tracking-tight font-semibold hover:opacity-80 transition-opacity duration-300"
-            href="/brochure.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
           >
             Download Brochure
-          </a>
+          </button>
           <button
             onClick={() => setView('partner')}
             className="text-on-surface-variant hover:text-primary font-headline tracking-tight font-semibold hover:opacity-80 transition-opacity duration-300"
@@ -155,7 +153,7 @@ export default function Header({
                 </AnimatePresence>
               </div>
               <button onClick={() => { setView('insights'); setMobileMenuOpen(false); }} className="text-left px-4 py-3 text-on-surface-variant font-headline font-semibold rounded-lg hover:bg-slate-50 transition-colors">Insights</button>
-              <a href="/brochure.pdf" target="_blank" rel="noopener noreferrer" className="text-left px-4 py-3 text-on-surface-variant font-headline font-semibold rounded-lg hover:bg-slate-50 transition-colors">Download Brochure</a>
+              <button onClick={() => { setView('brochure'); setMobileMenuOpen(false); }} className="text-left px-4 py-3 text-on-surface-variant font-headline font-semibold rounded-lg hover:bg-slate-50 transition-colors">Download Brochure</button>
               <button onClick={() => { setView('partner'); setMobileMenuOpen(false); }} className="text-left px-4 py-3 text-on-surface-variant font-headline font-semibold rounded-lg hover:bg-slate-50 transition-colors">Partner With Us</button>
               <button onClick={() => { setView('contact-us'); setMobileMenuOpen(false); }} className="text-left px-4 py-3 text-on-surface-variant font-headline font-semibold rounded-lg hover:bg-slate-50 transition-colors">Contact Us</button>
               <button

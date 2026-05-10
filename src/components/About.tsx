@@ -38,30 +38,10 @@ export default function About({ onBack }: AboutProps) {
   const cardRef = useRef<HTMLDivElement>(null);
 
   const counsellorsList = [
-    {
-      name: 'Nishtha Vyas',
-      role: 'Senior Career Counsellor',
-      image: '/NishthaVyas.jpg',
-      summary: 'Empowering students with data-driven insights to navigate global career paths successfully.'
-    },
-    {
-      name: 'Milli Tewari',
-      role: 'Lead Career Strategist',
-      image: '/MilliTewari.jpg',
-      summary: 'Building future-proof career paths through personalized strategy and market intelligence.'
-    },
-    {
-      name: 'Shruti Bhardwaj',
-      role: 'Career Dev Specialist',
-      image: '/Shruti_bhardwaj.jpg',
-      summary: 'Bridging the gap between academic potential and professional success via personalized mentorship.'
-    },
-    {
-      name: 'Dr. Anjali Bhardwaj',
-      role: 'Counselling Psychologist',
-      image: '/Anjali_Bhardwaj.png',
-      summary: 'Empowering individuals with mental resilience and clarity through expert psychological career guidance.'
-    }
+    { name: 'Nishtha Vyas', role: 'Senior Career Counsellor', image: '/NishthaVyas.jpg', quote: '"Empowering students through data-driven insights and strategic foresight to navigate global career paths."', accentColor: 'border-primary/30', roleColor: 'text-blue-300', bullets: [{ label: 'Experience:', value: '10 years in career development & mentorship', color: 'bg-primary' }, { label: 'Specialization:', value: 'Emerging industry trends & career architecture', color: 'bg-secondary' }, { label: 'Strategy:', value: 'Global job market expertise for future-ready decisions', color: 'bg-accent' }, { label: 'Approach:', value: 'Building clarity through high-impact guidance', color: 'bg-red-500' }] },
+    { name: 'Milli Tewari', role: 'Lead Career Strategist', image: '/MilliTewari.jpg', quote: '"Building agile and future-proof career paths through personalized strategy and market intelligence."', accentColor: 'border-secondary/30', roleColor: 'text-green-300', bullets: [{ label: 'Experience:', value: '8 years in career strategy & mentorship', color: 'bg-primary' }, { label: 'Core Focus:', value: 'Modern industry shifts & global job markets', color: 'bg-secondary' }, { label: 'Methodology:', value: 'Simplifying complex trends into actionable plans', color: 'bg-accent' }, { label: 'Goal:', value: 'Strategic mindset for long-term excellence', color: 'bg-red-500' }] },
+    { name: 'Shruti Bhardwaj', role: 'Career Development Specialist', image: '/Shruti_bhardwaj.jpg', quote: '"Dedicated to bridging the gap between academic potential and professional success through personalized mentorship."', accentColor: 'border-accent/30', roleColor: 'text-amber-300', bullets: [{ label: 'Experience:', value: '3 years in student career counseling & skill development', color: 'bg-primary' }, { label: 'Focus:', value: 'Discovering core strengths & aligning career paths', color: 'bg-secondary' }, { label: 'Approach:', value: 'Relatable one-on-one guidance for early-career transitions', color: 'bg-accent' }, { label: 'Commitment:', value: 'Building a strong foundation for professional entry', color: 'bg-red-500' }] },
+    { name: 'Dr. Anjali Bhardwaj', role: 'Senior Counselling Psychologist', image: '/Anjali_Bhardwaj.png', quote: '"Integrating psychological insights with career guidance to empower individuals with mental resilience and emotional clarity."', accentColor: 'border-purple-500/30', roleColor: 'text-purple-300', imgPosition: 'object-[50%_25%]', bullets: [{ label: 'Experience:', value: '15 years in clinical counselling, behavioural therapy, and mental wellness.', color: 'bg-primary' }, { label: 'Specialization:', value: 'Expert in psychometric assessments, personality mapping, and managing academic or career-related stress.', color: 'bg-secondary' }, { label: 'Methodology:', value: "Combining empathetic listening with scientific psychological frameworks to uncover an individual's true potential.", color: 'bg-purple-500' }, { label: 'Focus:', value: 'Dedicated to helping students and professionals overcome internal barriers, anxiety, and decision-making blocks.', color: 'bg-red-500' }, { label: 'Vision:', value: 'Committed to ensuring every individual achieves a harmonious balance between professional success and personal well-being.', color: 'bg-orange-500' }] },
   ];
 
   // Handle responsive visible count and card width
@@ -348,14 +328,14 @@ export default function About({ onBack }: AboutProps) {
               </div>
               <div className="flex gap-3 mt-8 pt-6 border-t border-outline-variant/10">
                 <button onClick={() => setIsContactModalOpen(true)} className="px-6 py-2 bg-yellow-500 text-white rounded-full font-bold hover:bg-opacity-90 transition-colors">Contact</button>
-                <a href="https://in.linkedin.com/in/abhijit-vyas-696640216" target="_blank" rel="noopener noreferrer" className="px-6 py-2 border-2 border-yellow-500 text-yellow-600 rounded-full font-bold hover:bg-yellow-500/10 transition-colors">LinkedIn</a>
+                <a href="https://www.linkedin.com/in/abhijit-v-696640216?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app" target="_blank" rel="noopener noreferrer" className="px-6 py-2 border-2 border-yellow-500 text-yellow-600 rounded-full font-bold hover:bg-yellow-500/10 transition-colors">LinkedIn</a>
               </div>
             </div>
           </div>
         </section>
 
         {/* Our Counsellors */}
-        <section className="mb-24 relative max-w-[1400px] mx-auto px-4 md:px-12">
+        <section className="mb-24 relative max-w-[1400px] mx-auto px-4 md:px-12 perspective-[1000px]">
           <h2 className="text-3xl font-extrabold font-headline mb-12 text-center">Our Counsellors</h2>
           
           <div className="relative">
@@ -391,32 +371,47 @@ export default function About({ onBack }: AboutProps) {
               >
                 {counsellorsList.map((counsellor, index) => {
                   const isVisible = index >= currentIndex && index < currentIndex + visibleCount;
+                  const isLeft = index < currentIndex;
+                  const isRight = index >= currentIndex + visibleCount;
                   
                   return (
                     <div 
                       key={index} 
                       ref={index === 0 ? cardRef : null}
-                      className={`shrink-0 flex transition-all duration-500 ease-in-out origin-center
-                        ${isVisible ? 'opacity-100 scale-100' : 'opacity-40 scale-90 blur-[1px]'}
+                      className={`shrink-0 flex transition-all duration-700 ease-in-out
+                        ${isVisible ? 'opacity-100 scale-100 [transform:rotateY(0deg)] z-10' : ''}
+                        ${isLeft ? 'opacity-30 scale-[0.8] [transform:rotateY(20deg)] blur-[3px] -z-10 origin-right' : ''}
+                        ${isRight ? 'opacity-30 scale-[0.8] [transform:rotateY(-20deg)] blur-[3px] -z-10 origin-left' : ''}
                       `}
                       style={{
                         width: visibleCount === 1 ? '100%' : visibleCount === 2 ? 'calc((100% - 24px) / 2)' : 'calc((100% - 48px) / 3)'
                       }}
                     >
-                      <div className="bg-gradient-to-br from-blue-50 via-white to-yellow-50 rounded-[2rem] overflow-hidden shadow-md hover:shadow-2xl hover:shadow-blue-500/20 border border-blue-100 hover:border-blue-300 transition-all duration-500 ease-in-out flex flex-col w-full h-full group">
-                        <div className="h-[280px] w-full overflow-hidden shrink-0">
+                      <div className="bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100 hover:shadow-2xl hover:border-slate-300 transition-all duration-300 flex flex-col w-full group">
+                        <div className="relative h-72 overflow-hidden shrink-0">
                           <img 
                             src={counsellor.image} 
                             alt={counsellor.name} 
                             className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 ${counsellor.name === 'Dr. Anjali Bhardwaj' ? 'object-[50%_25%]' : 'object-top'}`}
                           />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-90 group-hover:opacity-100 transition-opacity"></div>
+                          <div className="absolute bottom-4 left-6 right-6">
+                            <h3 className="text-2xl font-bold text-white mb-1 group-hover:translate-x-1 transition-transform">{counsellor.name}</h3>
+                            <p className={`text-sm font-semibold uppercase tracking-wider drop-shadow-md hover:text-white transition-colors cursor-default ${counsellor.roleColor}`}>{counsellor.role}</p>
+                          </div>
                         </div>
-                        <div className="p-8 flex flex-col flex-grow text-center items-center bg-transparent">
-                          <h3 className="text-xl font-bold text-slate-900 mb-2">{counsellor.name}</h3>
-                          <p className="text-xs font-bold text-blue-800 uppercase tracking-wider mb-5 bg-blue-100 px-4 py-1.5 rounded-full border border-blue-200">{counsellor.role}</p>
-                          <p className="text-slate-600 text-sm leading-relaxed mt-auto max-w-[260px]">
-                            {counsellor.summary}
+                        <div className="p-6 flex flex-col flex-grow bg-slate-50/50 backdrop-blur-sm">
+                          <p className={`text-slate-600 italic text-sm mb-5 leading-relaxed border-l-4 ${counsellor.accentColor} pl-4 relative group-hover:bg-slate-100/50 p-2 rounded-r-lg transition-colors`}>
+                            {counsellor.quote}
                           </p>
+                          <ul className="space-y-2.5 text-sm">
+                            {counsellor.bullets.map((b, bIdx) => (
+                              <li key={bIdx} className="flex items-start gap-2 hover:translate-x-1 transition-transform">
+                                <span className={`w-1.5 h-1.5 rounded-full ${b.color} mt-1.5 shrink-0 shadow-sm`}></span>
+                                <span className="text-slate-700"><strong className="text-slate-900 group-hover:text-primary transition-colors">{b.label}</strong> {b.value}</span>
+                              </li>
+                            ))}
+                          </ul>
                         </div>
                       </div>
                     </div>

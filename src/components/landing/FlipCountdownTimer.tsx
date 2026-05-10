@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useCountdown } from './useCountdown';
 import { useInView } from './useInView';
 import { FlipDigit } from './FlipDigit';
@@ -17,16 +17,16 @@ export const FlipCountdownTimer: React.FC<FlipCountdownTimerProps> = ({ validUpt
   useEffect(() => {
     if (isInView && !hasAnimated && !isExpired && showCountdown) {
       setHasAnimated(true);
-      // Generate some rapid random fake values for 3 seconds
+
       let interval: ReturnType<typeof setInterval>;
       let timeElapsed = 0;
       const animationDuration = 3000;
-      
+
       const doFakeTick = () => {
         timeElapsed += 150;
         if (timeElapsed >= animationDuration) {
           clearInterval(interval);
-          setFakeValues(null); // Return to real values
+          setFakeValues(null);
         } else {
           setFakeValues({
             hours: Math.floor(Math.random() * 99),
@@ -34,7 +34,7 @@ export const FlipCountdownTimer: React.FC<FlipCountdownTimerProps> = ({ validUpt
           });
         }
       };
-      
+
       interval = setInterval(doFakeTick, 150);
       doFakeTick();
 
@@ -43,7 +43,7 @@ export const FlipCountdownTimer: React.FC<FlipCountdownTimerProps> = ({ validUpt
   }, [isInView, hasAnimated, isExpired, showCountdown]);
 
   if (!showCountdown) return null;
-  
+
   if (isExpired) {
     return (
       <div className="flex items-center justify-center p-4 bg-slate-900 rounded-xl mb-4">
@@ -52,8 +52,12 @@ export const FlipCountdownTimer: React.FC<FlipCountdownTimerProps> = ({ validUpt
     );
   }
 
-  const displayHours = fakeValues ? fakeValues.hours : hours;
-  const displayMinutes = fakeValues ? fakeValues.minutes : minutes;
+  // ✅ FIX: normalize values
+  const rawHours = fakeValues ? fakeValues.hours : hours;
+  const rawMinutes = fakeValues ? fakeValues.minutes : minutes;
+
+  const displayHours = Math.max(0, Math.floor(rawHours));
+  const displayMinutes = Math.max(0, Math.floor(rawMinutes % 60));
 
   const hourDigits = displayHours.toString().padStart(2, '0').split('').map(Number);
   const minuteDigits = displayMinutes.toString().padStart(2, '0').split('').map(Number);
@@ -63,7 +67,7 @@ export const FlipCountdownTimer: React.FC<FlipCountdownTimerProps> = ({ validUpt
       <span className="text-[13px] font-bold uppercase tracking-widest text-slate-500 opacity-80 mb-2">
         Remaining
       </span>
-      
+
       <div className="flex items-center justify-center gap-1">
         <div className="flex flex-col items-center">
           <div className="flex">
@@ -73,9 +77,9 @@ export const FlipCountdownTimer: React.FC<FlipCountdownTimerProps> = ({ validUpt
           </div>
           <span className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mt-2">Hr</span>
         </div>
-        
+
         <span className="text-2xl font-black text-slate-800 pb-6 px-1 animate-pulse">:</span>
-        
+
         <div className="flex flex-col items-center">
           <div className="flex">
             {minuteDigits.map((digit, i) => (

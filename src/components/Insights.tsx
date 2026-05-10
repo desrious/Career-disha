@@ -167,9 +167,9 @@ export default function Insights({ onBack, insights = defaultCmsData.insights }:
               <Phone className="w-6 h-6 text-primary" />
               <span className="font-bold">+91-9289191164</span>
             </div>
-            <a href="mailto:hr@ZeOpto.com" className="flex items-center justify-center gap-4 bg-white/5 p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
+            <a href="mailto:hr@zeopto.com" className="flex items-center justify-center gap-4 bg-white/5 p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
               <Mail className="w-6 h-6 text-secondary" />
-              <span className="font-bold">hr@ZeOpto.com</span>
+              <span className="font-bold">hr@zeopto.com</span>
             </a>
             <a href="https://ZeOpto.com/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-4 bg-white/5 p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors group">
               <Globe className="w-6 h-6 text-tertiary group-hover:rotate-12 transition-transform" />

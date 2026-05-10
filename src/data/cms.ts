@@ -271,9 +271,9 @@ export const defaultCmsData: CmsData = {
     phones: ['+91-9289191164', '+91-9289191165'],
     email: 'hr@zeopto.com',
     website: 'https://ZeOpto.com',
-    address: 'C2, Block-C, 2nd floor, Sector 2, Noida, Uttar Pradesh 201301',
+    address: 'B-102, 1st Floor, Sector 6, Noida, 201301',
     whatsapp: 'https://wa.me/919953280036',
-    mapQuery: 'ZeOpto IT Services, Sector 4, Noida',
+    mapQuery: 'B-102, 1st Floor, Sector 6, Noida, 201301',
     socials: {
       facebook: 'https://www.facebook.com/ZeOptoitservices',
       instagram: 'https://www.instagram.com/ZeOptoitservices/?igsh=MTBkYThwNG8wY2F5ZA%3D%3D#',
