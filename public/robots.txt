@@ -1,0 +1,10 @@
+# ─── Careerदिशा — robots.txt ─────────────────────────────────
+# Production crawling rules for https://mycareerdisha.com
+
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+# Sitemap location
+Sitemap: https://mycareerdisha.com/sitemap.xml
