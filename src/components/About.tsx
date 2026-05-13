@@ -31,11 +31,11 @@ export default function About({ onBack }: AboutProps) {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const logoUrl = "/CareerDishaLogo.png";
 
-  // Carousel State
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [visibleCount, setVisibleCount] = useState(3);
-  const [cardWidth, setCardWidth] = useState(0);
-  const cardRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const scrollPosRef = useRef(0);
+  const speedRef = useRef(1.5);
+  const targetSpeedRef = useRef(1.5);
+  const animationRef = useRef<number | null>(null);
 
   const counsellorsList = [
     { name: 'Nishtha Vyas', role: 'Senior Career Counsellor', image: '/NishthaVyas.jpg', quote: '"Empowering students through data-driven insights and strategic foresight to navigate global career paths."', accentColor: 'border-primary/30', roleColor: 'text-blue-300', bullets: [{ label: 'Experience:', value: '10 years in career development & mentorship', color: 'bg-primary' }, { label: 'Specialization:', value: 'Emerging industry trends & career architecture', color: 'bg-secondary' }, { label: 'Strategy:', value: 'Global job market expertise for future-ready decisions', color: 'bg-accent' }, { label: 'Approach:', value: 'Building clarity through high-impact guidance', color: 'bg-red-500' }] },
@@ -44,39 +44,23 @@ export default function About({ onBack }: AboutProps) {
     { name: 'Dr. Anjali Bhardwaj', role: 'Senior Counselling Psychologist', image: '/Anjali_Bhardwaj.png', quote: '"Integrating psychological insights with career guidance to empower individuals with mental resilience and emotional clarity."', accentColor: 'border-purple-500/30', roleColor: 'text-purple-300', imgPosition: 'object-[50%_25%]', bullets: [{ label: 'Experience:', value: '15 years in clinical counselling, behavioural therapy, and mental wellness.', color: 'bg-primary' }, { label: 'Specialization:', value: 'Expert in psychometric assessments, personality mapping, and managing academic or career-related stress.', color: 'bg-secondary' }, { label: 'Methodology:', value: "Combining empathetic listening with scientific psychological frameworks to uncover an individual's true potential.", color: 'bg-purple-500' }, { label: 'Focus:', value: 'Dedicated to helping students and professionals overcome internal barriers, anxiety, and decision-making blocks.', color: 'bg-red-500' }, { label: 'Vision:', value: 'Committed to ensuring every individual achieves a harmonious balance between professional success and personal well-being.', color: 'bg-orange-500' }] },
   ];
 
-  // Handle responsive visible count and card width
   useEffect(() => {
-    const handleResize = () => {
-      // Update visible count based on window width
-      if (window.innerWidth < 640) setVisibleCount(1);
-      else if (window.innerWidth < 1024) setVisibleCount(2);
-      else setVisibleCount(3);
-
-      // Update card width for precise translation
-      if (cardRef.current) {
-        setCardWidth(cardRef.current.offsetWidth);
+    const animateScroll = () => {
+      speedRef.current += (targetSpeedRef.current - speedRef.current) * 0.05;
+      scrollPosRef.current += speedRef.current;
+      if (scrollRef.current) {
+        const halfWidth = scrollRef.current.scrollWidth / 2;
+        if (scrollPosRef.current >= halfWidth) scrollPosRef.current -= halfWidth;
+        scrollRef.current.style.transform = `translateX(-${scrollPosRef.current}px)`;
       }
+      animationRef.current = requestAnimationFrame(animateScroll);
     };
-    
-    // Initial call
-    handleResize();
-    
-    // Add listener
-    window.addEventListener('resize', handleResize);
-    
-    // Short delay to ensure DOM is rendered properly for width calculation
-    const timeoutId = setTimeout(handleResize, 100);
-    
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      clearTimeout(timeoutId);
-    };
+    animationRef.current = requestAnimationFrame(animateScroll);
+    return () => { if (animationRef.current) cancelAnimationFrame(animationRef.current); };
   }, []);
 
-  const maxIndex = Math.max(0, counsellorsList.length - visibleCount);
-
-  const scrollNext = () => setCurrentIndex(prev => Math.min(prev + 1, maxIndex));
-  const scrollPrev = () => setCurrentIndex(prev => Math.max(prev - 1, 0));
+  const handleMouseEnter = () => { targetSpeedRef.current = 0; };
+  const handleMouseLeave = () => { targetSpeedRef.current = 1.5; };
 
   return (
     <div className="min-h-screen bg-surface font-body text-on-surface overflow-x-hidden">
@@ -335,59 +319,25 @@ export default function About({ onBack }: AboutProps) {
         </section>
 
         {/* Our Counsellors */}
-        <section className="mb-24 relative max-w-[1400px] mx-auto px-4 md:px-12 perspective-[1000px]">
+        <section className="mb-24 relative w-[100vw] max-w-[100vw] ml-[calc(50%-50vw)] px-4 md:px-12">
           <h2 className="text-3xl font-extrabold font-headline mb-12 text-center">Our Counsellors</h2>
           
           <div className="relative">
             {/* Left Fade Gradient */}
-            <div className={`absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r from-surface to-transparent z-10 pointer-events-none transition-opacity duration-500 ${currentIndex > 0 ? 'opacity-100' : 'opacity-0'}`}></div>
+            <div className="absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r from-surface to-transparent z-10 pointer-events-none"></div>
             
             {/* Right Fade Gradient */}
-            <div className={`absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-surface to-transparent z-10 pointer-events-none transition-opacity duration-500 ${currentIndex < maxIndex ? 'opacity-100' : 'opacity-0'}`}></div>
+            <div className="absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-surface to-transparent z-10 pointer-events-none"></div>
 
-            {/* Navigation Buttons */}
-            <button 
-              onClick={scrollPrev}
-              disabled={currentIndex === 0}
-              className={`absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 md:-translate-x-1/3 z-20 p-4 rounded-full bg-white border border-outline-variant/20 shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 text-primary flex items-center justify-center ${currentIndex === 0 ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
-              aria-label="Previous counsellors"
-            >
-              <ChevronLeft className="w-6 h-6" />
-            </button>
-            <button 
-              onClick={scrollNext}
-              disabled={currentIndex === maxIndex}
-              className={`absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 md:translate-x-1/3 z-20 p-4 rounded-full bg-white border border-outline-variant/20 shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 text-primary flex items-center justify-center ${currentIndex === maxIndex ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
-              aria-label="Next counsellors"
-            >
-              <ChevronRight className="w-6 h-6" />
-            </button>
-
-            {/* Carousel Track Container */}
-            <div className="overflow-visible px-4">
-              <div 
-                className="flex gap-6 transition-transform duration-500 ease-in-out w-full"
-                style={{ transform: `translateX(-${currentIndex * (cardWidth + 24)}px)` }}
-              >
-                {counsellorsList.map((counsellor, index) => {
-                  const isVisible = index >= currentIndex && index < currentIndex + visibleCount;
-                  const isLeft = index < currentIndex;
-                  const isRight = index >= currentIndex + visibleCount;
-                  
-                  return (
-                    <div 
-                      key={index} 
-                      ref={index === 0 ? cardRef : null}
-                      className={`shrink-0 flex transition-all duration-700 ease-in-out
-                        ${isVisible ? 'opacity-100 scale-100 [transform:rotateY(0deg)] z-10' : ''}
-                        ${isLeft ? 'opacity-30 scale-[0.8] [transform:rotateY(20deg)] blur-[3px] -z-10 origin-right' : ''}
-                        ${isRight ? 'opacity-30 scale-[0.8] [transform:rotateY(-20deg)] blur-[3px] -z-10 origin-left' : ''}
-                      `}
-                      style={{
-                        width: visibleCount === 1 ? '100%' : visibleCount === 2 ? 'calc((100% - 24px) / 2)' : 'calc((100% - 48px) / 3)'
-                      }}
-                    >
-                      <div className="bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100 hover:shadow-2xl hover:border-slate-300 transition-all duration-300 flex flex-col w-full group">
+            <div className="overflow-hidden" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+              <div ref={scrollRef} className="flex gap-4 sm:gap-6 md:gap-8" style={{ width: 'max-content' }}>
+                {[...Array(2)].map((_, setIndex) => (
+                  <div key={setIndex} className="flex gap-4 sm:gap-6 md:gap-8 shrink-0">
+                    {counsellorsList.map((counsellor, index) => (
+                      <div 
+                        key={index}
+                        className="w-[280px] sm:w-[340px] md:w-[380px] lg:w-[420px] bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100 hover:shadow-2xl hover:border-slate-300 transition-all duration-300 flex flex-col shrink-0 group"
+                      >
                         <div className="relative h-72 overflow-hidden shrink-0">
                           <img 
                             src={counsellor.image} 
@@ -414,9 +364,9 @@ export default function About({ onBack }: AboutProps) {
                           </ul>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    ))}
+                  </div>
+                ))}
               </div>
             </div>
           </div>

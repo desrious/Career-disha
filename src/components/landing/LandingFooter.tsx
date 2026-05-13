@@ -2,7 +2,7 @@
 import { Send, Globe, Users, Share2 } from 'lucide-react';
 import { LOGO_URL, COPYRIGHT_TEXT } from '../../data/constants';
 
-type ViewType = 'landing' | 'about' | 'insights' | 'contact-us' | 'high-school' | 'plus-two' | 'graduates' | 'working-professional' | 'terms' | 'privacy';
+type ViewType = 'landing' | 'about' | 'insights' | 'contact-us' | 'high-school' | 'plus-two' | 'graduates' | 'working-professional' | 'terms' | 'privacy' | 'refund';
 
 interface LandingFooterProps {
   setView: (view: ViewType) => void;
@@ -51,6 +51,7 @@ export default function LandingFooter({ setView }: LandingFooterProps) {
           <h4 className="text-xs uppercase tracking-widest font-bold text-slate-100">Legal</h4>
           <ul className="space-y-2">
             <li><button onClick={() => setView('privacy')} className="text-slate-400 text-sm hover:text-primary transition-colors text-left w-full">Privacy and Policy</button></li>
+            <li><button onClick={() => setView('refund')} className="text-slate-400 text-sm hover:text-primary transition-colors text-left w-full">Refund and Cancellation Policy</button></li>
             <li><button onClick={() => setView('terms')} className="text-slate-400 text-sm hover:text-primary transition-colors text-left w-full">Terms and conditions</button></li>
           </ul>
         </div>

@@ -3,7 +3,7 @@ import { Mail, Phone, MapPin, Send, MessageSquare, Facebook, Instagram, Linkedin
 import { CmsContact, defaultCmsData } from '../data/cms';
 
 export default function ContactUs({ onBack, contact = defaultCmsData.contact }: { onBack: () => void; contact?: CmsContact }) {
-  const mapSrc = `https://maps.google.com/maps?q=${encodeURIComponent(contact.mapQuery || contact.address)}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+  const mapSrc = "https://maps.google.com/maps?q=ZeOpto+IT+Services,+Sector+2,+Noida&t=&z=17&ie=UTF8&iwloc=&output=embed";
 
   return (
     <section 
@@ -111,7 +111,20 @@ export default function ContactUs({ onBack, contact = defaultCmsData.contact }: 
                 </div>
                 <div>
                   <h3 className="font-bold text-slate-900 text-lg mb-1">Corporate Office</h3>
-                  <p className="text-slate-600">{contact.address}</p>
+                  <p className="text-slate-600">C2, Block-C, 2nd Floor, Sector 2, Noida, Uttar Pradesh, 201301.</p>
+                </div>
+              </motion.div>
+
+              <motion.div 
+                whileHover={{ scale: 1.02 }}
+                className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-start gap-4 hover:shadow-md transition-all"
+              >
+                <div className="w-12 h-12 bg-teal-50 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <MapPin className="w-6 h-6 text-teal-600" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-slate-900 text-lg mb-1">Registered Office</h3>
+                  <p className="text-slate-600">B-102, 1st floor, Sector 6, Noida.</p>
                 </div>
               </motion.div>
 
