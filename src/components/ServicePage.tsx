@@ -56,9 +56,9 @@ export default function ServicePage({ data, onBack }: ServicePageProps) {
                 {data.heroDescription}
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <button className="px-8 py-4 text-base font-bold rounded-full bg-gradient-to-r from-amber-400 to-amber-500 text-blue-950 shadow-lg shadow-amber-500/30 hover:shadow-amber-500/50 hover:-translate-y-1 transition-all duration-300">
+                <a href="https://lifemap.mycareerdisha.com/" target="_blank" rel="noopener noreferrer" aria-label={data.ctaText} className="px-8 py-4 text-base font-bold rounded-full bg-gradient-to-r from-amber-400 to-amber-500 text-blue-950 shadow-lg shadow-amber-500/30 hover:shadow-amber-500/50 hover:-translate-y-1 transition-all duration-300 inline-block">
                   {data.ctaText}
-                </button>
+                </a>
               </div>
             </div>
           </div>
@@ -255,9 +255,9 @@ export default function ServicePage({ data, onBack }: ServicePageProps) {
             <p className="text-xl text-blue-100 mb-10 font-bold relative z-10 max-w-2xl mx-auto">
               Take the first step towards a fulfilling academic and professional journey.
             </p>
-            <button className="px-10 py-5 text-lg font-bold rounded-full bg-amber-400 text-blue-950 shadow-xl hover:shadow-[0_0_20px_rgba(251,191,36,0.4)] hover:-translate-y-1 hover:scale-105 transition-all duration-300 inline-flex items-center gap-3 relative z-10 group/btn">
+            <a href="https://lifemap.mycareerdisha.com/" target="_blank" rel="noopener noreferrer" aria-label="Start Your Journey Today - Career Discovery" className="px-10 py-5 text-lg font-bold rounded-full bg-amber-400 text-blue-950 shadow-xl hover:shadow-[0_0_20px_rgba(251,191,36,0.4)] hover:-translate-y-1 hover:scale-105 transition-all duration-300 inline-flex items-center gap-3 relative z-10 group/btn">
               Start Your Journey Today <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
-            </button>
+            </a>
           </div>
         </div>
       </section>

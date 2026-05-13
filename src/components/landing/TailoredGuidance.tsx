@@ -53,9 +53,9 @@ export default function TailoredGuidance() {
                   </li>
                 ))}
               </ul>
-              <button onClick={() => alert("Feature coming soon!")} className="relative z-10 text-primary font-bold flex items-center gap-2 transition-all cursor-pointer mt-auto group/btn hover:text-accent">
+              <a href="https://lifemap.mycareerdisha.com/" target="_blank" rel="noopener noreferrer" aria-label={`Start your journey - ${card.title}`} className="relative z-10 text-primary font-bold flex items-center gap-2 transition-all cursor-pointer mt-auto group/btn hover:text-accent">
                 Start your Journey <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
-              </button>
+              </a>
             </motion.div>
           ))}
         </div>

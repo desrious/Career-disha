@@ -120,8 +120,11 @@ export default function HeroSection() {
               animate={{ y: [-8, 8, -8] }}
               transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
             >
-              <motion.button
-                onClick={() => alert("Feature coming soon!")}
+              <motion.a
+                href="https://lifemap.mycareerdisha.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Start Assessment - Career Discovery"
                 whileHover={{ x: 4, y: -4 }}
                 whileTap={{ scale: 0.95 }}
                 className="group bg-yellow-400 text-black border-2 border-black rounded-full font-bold text-sm sm:text-base md:text-lg px-5 sm:px-6 md:px-8 py-3 sm:py-4 flex items-center justify-center gap-2 transition-all duration-300 hover:shadow-[-8px_8px_0_0_rgba(255,255,255,1)]"
@@ -133,7 +136,7 @@ export default function HeroSection() {
                 >
                   <ArrowRight className="w-5 h-5 text-red-500 transition-colors" />
                 </motion.div>
-              </motion.button>
+              </motion.a>
             </motion.div>
           </motion.div>
         </motion.div>

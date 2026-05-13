@@ -371,6 +371,26 @@ export default function Admin({ data, onDataChange }: AdminProps) {
 
   const save = async () => {
     const latestDraft = latestDraftRef.current;
+
+    // Validate countdown configuration before saving
+    if (latestDraft.offer.show_countdown) {
+      if (!latestDraft.offer.valid_upto) {
+        setMessage('Cannot save: Countdown is enabled but no end date/time is set. Please pick a future date or disable the countdown.');
+        return;
+      }
+      const endTime = new Date(latestDraft.offer.valid_upto).getTime();
+      if (isNaN(endTime)) {
+        setMessage('Cannot save: The offer end date/time is invalid. Please correct it.');
+        return;
+      }
+      if (endTime <= Date.now()) {
+        const confirmed = window.confirm(
+          'The offer end date/time is in the past. The countdown will show "Offer Expired" on the website. Save anyway?'
+        );
+        if (!confirmed) return;
+      }
+    }
+
     setIsSaving(true);
     try {
       await saveCmsData(latestDraft);
@@ -497,48 +517,7 @@ export default function Admin({ data, onDataChange }: AdminProps) {
       <div className="mx-auto max-w-7xl px-6 py-8">
         <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
           {active === 'offer' && (
-            <div className="grid gap-4 md:grid-cols-2">
-              <label className="flex items-center gap-3 rounded-lg bg-slate-50 p-3 text-sm font-bold">
-                <input
-                  type="checkbox"
-                  checked={draft.offer.visible}
-                  onChange={(event) => updateDraft({ ...draft, offer: { ...draft.offer, visible: event.target.checked } })}
-                />
-                Show offer on website
-              </label>
-              <label className="flex items-center gap-3 rounded-lg bg-slate-50 p-3 text-sm font-bold">
-                <input
-                  type="checkbox"
-                  checked={!!draft.offer.show_countdown}
-                  onChange={(event) => updateDraft({ ...draft, offer: { ...draft.offer, show_countdown: event.target.checked } })}
-                />
-                Enable Countdown Timer
-              </label>
-              {(draft.offer.show_countdown === true) && (
-                <div className="md:col-span-2">
-                  <label className="block">
-                    <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Valid Upto</span>
-                    <input
-                      type="datetime-local"
-                      value={draft.offer.valid_upto || ''}
-                      onChange={(event) => updateDraft({ ...draft, offer: { ...draft.offer, valid_upto: event.target.value } })}
-                      className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
-                    />
-                  </label>
-                </div>
-              )}
-              <Field label="Badge" value={draft.offer.badge} onChange={(badge) => updateDraft({ ...draft, offer: { ...draft.offer, badge } })} />
-              <Field label="Title" value={draft.offer.title} onChange={(title) => updateDraft({ ...draft, offer: { ...draft.offer, title } })} />
-              <Field label="CTA" value={draft.offer.cta} onChange={(cta) => updateDraft({ ...draft, offer: { ...draft.offer, cta } })} />
-              <Field label="Original Price" value={draft.offer.originalPrice} onChange={(originalPrice) => updateDraft({ ...draft, offer: { ...draft.offer, originalPrice } })} />
-              <Field label="Offer Price" value={draft.offer.offerPrice} onChange={(offerPrice) => updateDraft({ ...draft, offer: { ...draft.offer, offerPrice } })} />
-              <div className="md:col-span-2">
-                <TextArea label="Description" value={draft.offer.description} onChange={(description) => updateDraft({ ...draft, offer: { ...draft.offer, description } })} />
-              </div>
-              <div className="md:col-span-2">
-                <Field label="Offer Note" value={draft.offer.note} onChange={(note) => updateDraft({ ...draft, offer: { ...draft.offer, note } })} />
-              </div>
-            </div>
+            <OfferEditor draft={draft} updateDraft={updateDraft} />
           )}
 
           {active === 'expert' && (
@@ -1011,6 +990,201 @@ export default function Admin({ data, onDataChange }: AdminProps) {
         </section>
       </div>
     </main>
+  );
+}
+
+// ─── Date/time helpers for 12-hour AM/PM offer editor ─────────────────────
+
+/** Build an ISO 8601 string with local timezone offset, e.g. "2026-05-15T14:30:00+05:30" */
+function buildIsoWithOffset(date: string, hour12: number, minute: number, ampm: 'AM' | 'PM'): string {
+  let hour24 = hour12 % 12;
+  if (ampm === 'PM') hour24 += 12;
+
+  const pad = (n: number) => n.toString().padStart(2, '0');
+
+  // Get the local timezone offset to embed in the ISO string
+  const offsetMinutes = -(new Date().getTimezoneOffset());
+  const offsetSign = offsetMinutes >= 0 ? '+' : '-';
+  const absOffset = Math.abs(offsetMinutes);
+  const offsetHours = pad(Math.floor(absOffset / 60));
+  const offsetMins = pad(absOffset % 60);
+
+  return `${date}T${pad(hour24)}:${pad(minute)}:00${offsetSign}${offsetHours}:${offsetMins}`;
+}
+
+/** Parse a stored valid_upto ISO string back into { date, hour12, minute, ampm } */
+function parseValidUpto(raw: string | undefined): { date: string; hour12: number; minute: number; ampm: 'AM' | 'PM' } | null {
+  if (!raw) return null;
+
+  const normalised = raw.includes('T') ? raw : raw.replace(' ', 'T');
+  const d = new Date(normalised);
+  if (isNaN(d.getTime())) return null;
+
+  const year = d.getFullYear();
+  const month = (d.getMonth() + 1).toString().padStart(2, '0');
+  const day = d.getDate().toString().padStart(2, '0');
+  const hour24 = d.getHours();
+  const minute = d.getMinutes();
+  const ampm: 'AM' | 'PM' = hour24 >= 12 ? 'PM' : 'AM';
+  const hour12 = hour24 === 0 ? 12 : hour24 > 12 ? hour24 - 12 : hour24;
+
+  return { date: `${year}-${month}-${day}`, hour12, minute, ampm };
+}
+
+/** Check if a given date + time is in the past */
+function isDateTimeInPast(date: string, hour12: number, minute: number, ampm: 'AM' | 'PM'): boolean {
+  const iso = buildIsoWithOffset(date, hour12, minute, ampm);
+  return new Date(iso).getTime() <= Date.now();
+}
+
+/** Format a date string + time into a human‑readable preview */
+function formatPreview(date: string, hour12: number, minute: number, ampm: 'AM' | 'PM'): string {
+  const d = new Date(date + 'T00:00:00');
+  if (isNaN(d.getTime())) return '';
+  const dayStr = d.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+  const pad = (n: number) => n.toString().padStart(2, '0');
+  return `${dayStr} at ${hour12}:${pad(minute)} ${ampm}`;
+}
+
+/** Get today's date as YYYY-MM-DD for the min attribute */
+function getTodayString(): string {
+  const d = new Date();
+  return `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}-${d.getDate().toString().padStart(2, '0')}`;
+}
+
+// ─── Offer Editor Component ──────────────────────────────────────────────
+
+function OfferEditor({ draft, updateDraft }: { draft: CmsData; updateDraft: (data: CmsData) => void }) {
+  const parsed = parseValidUpto(draft.offer.valid_upto);
+  const dateVal = parsed?.date || '';
+  const hour12Val = parsed?.hour12 || 12;
+  const minuteVal = parsed?.minute ?? 0;
+  const ampmVal = parsed?.ampm || 'AM';
+
+  const isPast = dateVal ? isDateTimeInPast(dateVal, hour12Val, minuteVal, ampmVal) : false;
+
+  const setDateTime = (date: string, hour12: number, minute: number, ampm: 'AM' | 'PM') => {
+    if (!date) {
+      updateDraft({ ...draft, offer: { ...draft.offer, valid_upto: '' } });
+      return;
+    }
+    const iso = buildIsoWithOffset(date, hour12, minute, ampm);
+    updateDraft({ ...draft, offer: { ...draft.offer, valid_upto: iso } });
+  };
+
+  return (
+    <div className="grid gap-4 md:grid-cols-2">
+      <label className="flex items-center gap-3 rounded-lg bg-slate-50 p-3 text-sm font-bold">
+        <input
+          type="checkbox"
+          checked={draft.offer.visible}
+          onChange={(event) => updateDraft({ ...draft, offer: { ...draft.offer, visible: event.target.checked } })}
+        />
+        Show offer on website
+      </label>
+      <label className="flex items-center gap-3 rounded-lg bg-slate-50 p-3 text-sm font-bold">
+        <input
+          type="checkbox"
+          checked={!!draft.offer.show_countdown}
+          onChange={(event) => updateDraft({ ...draft, offer: { ...draft.offer, show_countdown: event.target.checked } })}
+        />
+        Enable Countdown Timer
+      </label>
+
+      {draft.offer.show_countdown === true && (
+        <div className="md:col-span-2 space-y-3">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-500 block">Offer Valid Until</span>
+
+          {/* Date picker */}
+          <div className="flex flex-wrap gap-3 items-end">
+            <label className="block">
+              <span className="text-xs font-semibold text-slate-400 block mb-1">Date</span>
+              <input
+                type="date"
+                min={getTodayString()}
+                value={dateVal}
+                onChange={(e) => setDateTime(e.target.value, hour12Val, minuteVal, ampmVal)}
+                className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+              />
+            </label>
+
+            {/* Hour */}
+            <label className="block">
+              <span className="text-xs font-semibold text-slate-400 block mb-1">Hour</span>
+              <select
+                value={hour12Val}
+                onChange={(e) => setDateTime(dateVal, Number(e.target.value), minuteVal, ampmVal)}
+                className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+              >
+                {Array.from({ length: 12 }, (_, i) => i + 1).map((h) => (
+                  <option key={h} value={h}>{h}</option>
+                ))}
+              </select>
+            </label>
+
+            <span className="text-lg font-bold text-slate-400 pb-2">:</span>
+
+            {/* Minute */}
+            <label className="block">
+              <span className="text-xs font-semibold text-slate-400 block mb-1">Min</span>
+              <select
+                value={minuteVal}
+                onChange={(e) => setDateTime(dateVal, hour12Val, Number(e.target.value), ampmVal)}
+                className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+              >
+                {Array.from({ length: 60 }, (_, i) => i).map((m) => (
+                  <option key={m} value={m}>{m.toString().padStart(2, '0')}</option>
+                ))}
+              </select>
+            </label>
+
+            {/* AM/PM */}
+            <label className="block">
+              <span className="text-xs font-semibold text-slate-400 block mb-1">AM/PM</span>
+              <select
+                value={ampmVal}
+                onChange={(e) => setDateTime(dateVal, hour12Val, minuteVal, e.target.value as 'AM' | 'PM')}
+                className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-bold outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+              >
+                <option value="AM">AM</option>
+                <option value="PM">PM</option>
+              </select>
+            </label>
+          </div>
+
+          {/* Preview + validation */}
+          {dateVal && (
+            <div className="space-y-1">
+              <p className="text-xs font-semibold text-slate-500">
+                📅 {formatPreview(dateVal, hour12Val, minuteVal, ampmVal)}
+              </p>
+              {isPast && (
+                <p className="text-xs font-bold text-red-500 bg-red-50 rounded-lg px-3 py-2 inline-block">
+                  ⚠ The selected date/time is in the past. The countdown will show "Offer Expired" on the website.
+                </p>
+              )}
+            </div>
+          )}
+          {!dateVal && draft.offer.show_countdown && (
+            <p className="text-xs font-bold text-amber-600 bg-amber-50 rounded-lg px-3 py-2 inline-block">
+              ⚠ No end date selected. Please pick a future date/time for the countdown.
+            </p>
+          )}
+        </div>
+      )}
+
+      <Field label="Badge" value={draft.offer.badge} onChange={(badge) => updateDraft({ ...draft, offer: { ...draft.offer, badge } })} />
+      <Field label="Title" value={draft.offer.title} onChange={(title) => updateDraft({ ...draft, offer: { ...draft.offer, title } })} />
+      <Field label="CTA" value={draft.offer.cta} onChange={(cta) => updateDraft({ ...draft, offer: { ...draft.offer, cta } })} />
+      <Field label="Original Price" value={draft.offer.originalPrice} onChange={(originalPrice) => updateDraft({ ...draft, offer: { ...draft.offer, originalPrice } })} />
+      <Field label="Offer Price" value={draft.offer.offerPrice} onChange={(offerPrice) => updateDraft({ ...draft, offer: { ...draft.offer, offerPrice } })} />
+      <div className="md:col-span-2">
+        <TextArea label="Description" value={draft.offer.description} onChange={(description) => updateDraft({ ...draft, offer: { ...draft.offer, description } })} />
+      </div>
+      <div className="md:col-span-2">
+        <Field label="Offer Note" value={draft.offer.note} onChange={(note) => updateDraft({ ...draft, offer: { ...draft.offer, note } })} />
+      </div>
+    </div>
   );
 }
 

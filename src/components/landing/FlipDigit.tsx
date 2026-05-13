@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './FlipDigit.css';
 
 interface FlipDigitProps {
@@ -6,28 +6,31 @@ interface FlipDigitProps {
 }
 
 export const FlipDigit: React.FC<FlipDigitProps> = ({ digit }) => {
-  const [currentDigit, setCurrentDigit] = useState(digit);
-  const [nextDigit, setNextDigit] = useState(digit);
+  const [displayDigit, setDisplayDigit] = useState(digit);
   const [isFlipping, setIsFlipping] = useState(false);
+  const prevDigitRef = useRef(digit);
 
   useEffect(() => {
-    if (digit !== currentDigit) {
-      setNextDigit(digit);
+    // Only animate when the digit actually changes
+    if (digit !== prevDigitRef.current) {
       setIsFlipping(true);
+
       const timer = setTimeout(() => {
         setIsFlipping(false);
-        setCurrentDigit(digit);
-      }, 600); // matches animation duration
+        setDisplayDigit(digit);
+        prevDigitRef.current = digit;
+      }, 600); // matches CSS animation duration
+
       return () => clearTimeout(timer);
     }
-  }, [digit, currentDigit]);
+  }, [digit]);
 
   return (
     <div className={`flip-digit-container ${isFlipping ? 'flipping' : ''}`}>
-      <div className="flip-digit-top">{isFlipping ? nextDigit : currentDigit}</div>
-      <div className="flip-digit-bottom">{currentDigit}</div>
-      <div className="flip-digit-flap flip-digit-flap-top">{currentDigit}</div>
-      <div className="flip-digit-flap flip-digit-flap-bottom">{nextDigit}</div>
+      <div className="flip-digit-top">{isFlipping ? digit : displayDigit}</div>
+      <div className="flip-digit-bottom">{displayDigit}</div>
+      <div className="flip-digit-flap flip-digit-flap-top">{displayDigit}</div>
+      <div className="flip-digit-flap flip-digit-flap-bottom">{digit}</div>
     </div>
   );
 };
