@@ -78,7 +78,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
   // ─── Non-landing views ────────────────────────────────────
   if (view === 'about') return <About onBack={() => setView('landing')} />;
   if (view === 'insights') return <Insights onBack={() => setView('landing')} insights={cmsData.insights} />;
-  if (view === 'contact-us') return <ContactUs onBack={() => setView('landing')} />;
+  if (view === 'contact-us') return <ContactUs onBack={() => setView('landing')} contact={cmsData.contact} />;
   if (view === 'partner') return <PartnerPage onBack={() => setView('landing')} data={cmsData.partner} />;
   if (view === 'brochure') return <BrochurePage onBack={() => setView('landing')} />;
   if (view === 'high-school') return <ServicePage data={highSchoolData} onBack={() => setView('landing')} />;
@@ -117,7 +117,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
         <Counsellors />
       </main>
 
-      <LandingFooter setView={setView} />
+      <LandingFooter setView={setView} contact={cmsData.contact} />
       <WhatsAppFAB />
 
       {showInquiryModal && (

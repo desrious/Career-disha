@@ -98,15 +98,15 @@ export default function About({ onBack }: AboutProps) {
             src={logoUrl} 
             referrerPolicy="no-referrer" 
           />
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-extrabold font-headline text-on-surface tracking-tight mb-6 sm:mb-8 leading-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold font-headline text-on-surface tracking-tight mb-6 sm:mb-8">
             About <span className="text-primary">Careerदिशा</span>
           </h1>
-          <ElectricBorder color="#0057c2" speed={1} chaos={0.15} borderRadius={48} className="shadow-2xl">
-            <div className="bg-white rounded-[2rem] sm:rounded-[3rem] p-5 sm:p-8 md:p-12 text-left z-10 w-full h-full space-y-6">
-              <p className="text-lg md:text-xl text-on-surface-variant leading-relaxed text-left break-words">
-                Careerदिशा, powered by <span className="font-bold text-primary">ZeOpto</span>, is built to bridge the gap between ambition and the right career path. Backed by ZeOpto’s global expertise in consulting, cloud and AI-driven technology, operations optimization, and digital marketing, Careerदिशा brings together technology, mentorship, and real-world insights to guide individuals toward meaningful careers.
+          <ElectricBorder color="#F4C430" speed={1} chaos={0.15} borderRadius={48} className="shadow-2xl">
+            <div className="bg-slate-900 rounded-[2rem] sm:rounded-[3rem] p-5 sm:p-8 md:p-12 text-left z-10 w-full h-full space-y-6">
+              <p className="text-lg md:text-xl text-slate-300 leading-relaxed text-left break-words">
+                Careerदिशा, powered by <span className="font-bold text-blue-400">ZeOpto</span>, is built to bridge the gap between ambition and the right career path. Backed by ZeOpto's global expertise in consulting, cloud and AI-driven technology, operations optimization, and digital marketing, Careerदिशा brings together technology, mentorship, and real-world insights to guide individuals toward meaningful careers.
               </p>
-              <p className="text-lg md:text-xl text-on-surface-variant leading-relaxed text-left break-words">
+              <p className="text-lg md:text-xl text-slate-300 leading-relaxed text-left break-words">
                 ZeOpto has established itself as a trusted SAP services company, delivering high-performance solutions through consulting, implementation, and training. With a team of certified experts and a focus on innovation, efficiency, and quality, ZeOpto helps organizations streamline operations, reduce costs, and achieve sustainable growth. Careerदिशा extends this same expertise to students and professionals, making career guidance smarter, data-driven, and accessible.
               </p>
             </div>
