@@ -9,6 +9,7 @@ import {
   CmsTestimonial,
   ExpertAdviceInquiry,
   PartnerInquiry,
+  BrochureInquiry,
   SupabaseCmsError,
   SupabaseConnectionStatus,
   checkSupabaseConnection,
@@ -17,6 +18,9 @@ import {
   deleteExpertAdviceInquiry,
   deleteAllPartnerInquiries,
   deletePartnerInquiry,
+  deleteAllBrochureInquiries,
+  deleteBrochureInquiry,
+  loadBrochureInquiries,
   loginAdmin,
   loadExpertAdviceInquiries,
   loadPartnerInquiries,
@@ -302,6 +306,7 @@ export default function Admin({ data, onDataChange }: AdminProps) {
   const latestDraftRef = useRef<CmsData>(data);
   const [inquiries, setInquiries] = useState<ExpertAdviceInquiry[]>([]);
   const [partnerInquiries, setPartnerInquiries] = useState<PartnerInquiry[]>([]);
+  const [brochureInquiries, setBrochureInquiries] = useState<BrochureInquiry[]>([]);
   const [isSaving, setIsSaving] = useState(false);
   const [isDeletingInquiries, setIsDeletingInquiries] = useState(false);
   const [isRefreshingInquiries, setIsRefreshingInquiries] = useState(false);
@@ -309,6 +314,9 @@ export default function Admin({ data, onDataChange }: AdminProps) {
   const [isDeletingPartnerInquiries, setIsDeletingPartnerInquiries] = useState(false);
   const [isRefreshingPartnerInquiries, setIsRefreshingPartnerInquiries] = useState(false);
   const [deletingPartnerInquiryId, setDeletingPartnerInquiryId] = useState<string | null>(null);
+  const [isDeletingBrochureInquiries, setIsDeletingBrochureInquiries] = useState(false);
+  const [isRefreshingBrochureInquiries, setIsRefreshingBrochureInquiries] = useState(false);
+  const [deletingBrochureInquiryId, setDeletingBrochureInquiryId] = useState<string | null>(null);
   const [isDirty, setIsDirty] = useState(false);
   const [message, setMessage] = useState('');
   const [connection, setConnection] = useState<SupabaseConnectionStatus>({
@@ -365,6 +373,9 @@ export default function Admin({ data, onDataChange }: AdminProps) {
       loadPartnerInquiries().then((nextPartnerInquiries) => {
         if (active) setPartnerInquiries(nextPartnerInquiries);
       });
+      loadBrochureInquiries().then((nextBrochureInquiries) => {
+        if (active) setBrochureInquiries(nextBrochureInquiries);
+      });
     };
 
     refreshConnection();
@@ -412,6 +423,18 @@ export default function Admin({ data, onDataChange }: AdminProps) {
       setMessage('Unable to refresh partner inquiries right now.');
     } finally {
       setIsRefreshingPartnerInquiries(false);
+    }
+  };
+
+  const refreshBrochureInquiries = async () => {
+    setIsRefreshingBrochureInquiries(true);
+    try {
+      const next = await loadBrochureInquiries();
+      setBrochureInquiries(next);
+    } catch {
+      setMessage('Unable to refresh brochure inquiries right now.');
+    } finally {
+      setIsRefreshingBrochureInquiries(false);
     }
   };
 
@@ -565,15 +588,114 @@ export default function Admin({ data, onDataChange }: AdminProps) {
           {active === 'brochure' && (
             <div className="space-y-6">
               <h2 className="text-xl font-extrabold">Brochure Details</h2>
-              <p className="text-sm text-slate-500 font-medium">Provide a link to the PDF brochure, or upload one locally. If left empty, the website will show the "Brochure Coming Soon" page.</p>
-              <PdfInput 
-                value={draft.brochure?.pdfUrl || ''} 
-                onChange={(pdfUrl) => updateDraft({ ...draft, brochure: { ...draft.brochure, pdfUrl } })} 
-              />
-            </div>
-          )}
+                <p className="text-sm text-slate-500 font-medium">Configure your brochure page file upload.</p>
+                
+                <PdfInput 
+                  value={draft.brochure?.pdfUrl || ''} 
+                  onChange={(pdfUrl) => updateDraft({ ...draft, brochure: { ...draft.brochure, pdfUrl } })} 
+                />
 
-          {active === 'offer' && (
+                <div className="h-px bg-slate-200 mt-8 mb-4"></div>
+
+                <div className="space-y-4">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                      <h2 className="text-xl font-extrabold">Brochure Inquiries</h2>
+                      <p className="text-sm text-slate-500">People who downloaded the brochure.</p>
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={refreshBrochureInquiries}
+                        disabled={isRefreshingBrochureInquiries}
+                        className="inline-flex items-center gap-1 rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-bold text-slate-600 hover:bg-slate-200 disabled:opacity-50"
+                      >
+                        {isRefreshingBrochureInquiries ? 'Refreshing...' : 'Refresh'}
+                      </button>
+                      {brochureInquiries.length > 0 && (
+                        <button
+                          onClick={async () => {
+                            const confirmed = window.confirm('Delete all brochure downloads? This cannot be undone.');
+                            if (!confirmed) return;
+                            try {
+                              const deletable = brochureInquiries.filter((item) => item.id);
+                              await Promise.all(deletable.map((item) => deleteBrochureInquiry(String(item.id))));
+                              setBrochureInquiries([]);
+                              setMessage('All brochure downloads deleted.');
+                            } catch {
+                              setMessage('Unable to delete all brochure downloads.');
+                            }
+                          }}
+                          className="inline-flex items-center gap-1 rounded-lg border border-red-200 bg-white px-3 py-1.5 text-xs font-bold text-red-600 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                          Delete All
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                  
+                  {brochureInquiries.length > 0 ? (
+                    <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm scrollbar-thin">
+                      <table className="w-full text-left text-sm whitespace-nowrap">
+                        <thead className="bg-slate-50 text-slate-500 border-b border-slate-200">
+                          <tr>
+                            <th className="px-4 py-3 font-bold">Date</th>
+                            <th className="px-4 py-3 font-bold">Name</th>
+                            <th className="px-4 py-3 font-bold">Email</th>
+                            <th className="px-4 py-3 font-bold">Mobile</th>
+                            <th className="px-4 py-3 font-bold">Query</th>
+                            <th className="px-4 py-3 text-right font-bold">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100">
+                          {brochureInquiries.map((inq) => (
+                            <tr key={inq.id ?? `${inq.email}-${inq.mobile}`}>
+                              <td className="px-4 py-3 text-slate-500">{inq.created_at ? new Date(inq.created_at).toLocaleString() : '-'}</td>
+                              <td className="px-4 py-3 font-bold">{inq.name}</td>
+                              <td className="px-4 py-3 text-slate-600">{inq.email}</td>
+                              <td className="px-4 py-3 text-slate-600">{inq.mobile}</td>
+                              <td className="px-4 py-3 text-slate-600 whitespace-normal min-w-[200px]">{inq.query || '-'}</td>
+                              <td className="px-4 py-3 text-right">
+                                <button
+                                  onClick={async () => {
+                                    if (!inq.id) return;
+                                    const confirmed = window.confirm('Delete this record?');
+                                    if (!confirmed) return;
+                                    setDeletingBrochureInquiryId(inq.id);
+                                    setIsDeletingBrochureInquiries(true);
+                                    try {
+                                      await deleteBrochureInquiry(inq.id);
+                                      setBrochureInquiries((prev) => prev.filter((item) => item.id !== inq.id));
+                                      setMessage('Record deleted.');
+                                    } catch {
+                                      setMessage('Unable to delete record.');
+                                    } finally {
+                                      setIsDeletingBrochureInquiries(false);
+                                      setDeletingBrochureInquiryId(null);
+                                    }
+                                  }}
+                                  disabled={isDeletingBrochureInquiries || !inq.id}
+                                  className="inline-flex items-center gap-1 rounded-lg border border-red-200 bg-white px-3 py-1.5 text-xs font-bold text-red-600 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
+                                >
+                                  <Trash2 className="h-3.5 w-3.5" />
+                                  {deletingBrochureInquiryId === inq.id ? 'Deleting...' : 'Delete'}
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  ) : (
+                    <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50 py-12 text-center">
+                      <p className="text-sm font-medium text-slate-500">No brochure downloads yet.</p>
+                    </div>
+                  )}
+                </div>
+                        </div>
+            )}
+
+            {active === 'offer' && (
             <OfferEditor draft={draft} updateDraft={updateDraft} />
           )}
 
@@ -1280,3 +1402,5 @@ function CollectionEditor<T extends { id: string; name: string }>({
     </div>
   );
 }
+
+

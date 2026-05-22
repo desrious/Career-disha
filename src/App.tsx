@@ -50,31 +50,6 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
   });
 
   const setView = (newView: ViewType) => {
-    if (newView === 'brochure' && cmsData.brochure?.pdfUrl) {
-      const pdfUrl = cmsData.brochure.pdfUrl;
-      // Open a synchronous new tab to avoid popup blockers
-      const newTab = window.open('about:blank', '_blank');
-      
-      if (pdfUrl.startsWith('data:')) {
-        if (newTab) {
-          newTab.document.write('<div style="font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; color: #475569;">Opening brochure...</div>');
-          // Process base64 into a blob
-          fetch(pdfUrl).then(res => res.blob()).then(blob => {
-            const blobUrl = URL.createObjectURL(blob);
-            newTab.location.replace(blobUrl);
-          }).catch(err => {
-            console.error('Failed to parse local brochure', err);
-            newTab.close();
-          });
-        }
-      } else {
-        if (newTab) {
-          newTab.location.replace(pdfUrl);
-        }
-      }
-      return; // Do not actually change the local view, stay on the current page
-    }
-
     setViewLocal(newView);
     const newPath = newView === 'landing' ? '/' : `/${newView}`;
     window.history.pushState({}, '', newPath);
@@ -105,7 +80,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
   if (view === 'insights') return <Insights onBack={() => setView('landing')} insights={cmsData.insights} />;
   if (view === 'contact-us') return <ContactUs onBack={() => setView('landing')} contact={cmsData.contact} />;
   if (view === 'partner') return <PartnerPage onBack={() => setView('landing')} data={cmsData.partner} />;
-  if (view === 'brochure') return <BrochurePage onBack={() => setView('landing')} />;
+    if (view === 'brochure') return <BrochurePage onBack={() => setView('landing')} brochure={cmsData.brochure} />;
   if (view === 'high-school') return <ServicePage data={highSchoolData} onBack={() => setView('landing')} />;
   if (view === 'plus-two') return <ServicePage data={plusTwoData} onBack={() => setView('landing')} />;
   if (view === 'graduates') return <ServicePage data={graduatesData} onBack={() => setView('landing')} />;

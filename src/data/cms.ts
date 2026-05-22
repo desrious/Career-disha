@@ -140,6 +140,7 @@ export type CmsPartner = {
 };
 
 export type CmsBrochure = {
+  content: string; // HTML content or rich text for the brochure page
   pdfUrl: string;
 };
 
@@ -174,6 +175,15 @@ export type PartnerInquiry = {
   created_at?: string;
 };
 
+export type BrochureInquiry = {
+  id?: string;
+  name: string;
+  email: string;
+  mobile: string;
+  query?: string;
+  created_at?: string;
+};
+
 export const CMS_STORAGE_KEY = 'careerDishaCmsData_v2';
 export const CMS_UPDATED_EVENT = 'careerDishaCmsUpdated';
 export const CMS_UPDATED_AT_KEY = 'careerDishaCmsUpdatedAt';
@@ -182,6 +192,7 @@ const CMS_ROW_ID = 'site';
 
 export const defaultCmsData: CmsData = {
   brochure: {
+    content: '',
     pdfUrl: '',
   },
   offer: {
@@ -741,4 +752,51 @@ export async function checkSupabaseConnection(): Promise<SupabaseConnectionStatu
       message: 'Backend unavailable',
     };
   }
+}
+
+export async function saveBrochureInquiry(inquiry: BrochureInquiry) {
+  return supabaseRequest<BrochureInquiry[]>('brochure_inquiries', {
+    method: 'POST',
+    headers: {
+      Prefer: 'return=minimal',
+    },
+    body: JSON.stringify(inquiry),
+  });
+}
+
+export async function loadBrochureInquiries() {
+  const sessionToken = window.sessionStorage.getItem(ADMIN_SESSION_STORAGE_KEY);
+  if (!sessionToken) return [];
+
+  try {
+    return await supabaseRpc<BrochureInquiry[]>('list_brochure_inquiries', {
+      p_session_token: sessionToken,
+    });
+  } catch (error) {
+    console.warn('Supabase brochure inquiry load failed.', error);
+    return [];
+  }
+}
+
+export async function deleteBrochureInquiry(inquiryId: string) {
+  const sessionToken = window.sessionStorage.getItem(ADMIN_SESSION_STORAGE_KEY);
+  if (!sessionToken) {
+    throw new SupabaseCmsError('Admin session missing', 401);
+  }
+
+  await supabaseRpc('delete_brochure_inquiry', {
+    p_session_token: sessionToken,
+    p_inquiry_id: inquiryId,
+  });
+}
+
+export async function deleteAllBrochureInquiries() {
+  const sessionToken = window.sessionStorage.getItem(ADMIN_SESSION_STORAGE_KEY);
+  if (!sessionToken) {
+    throw new SupabaseCmsError('Admin session missing', 401);
+  }
+
+  await supabaseRpc('delete_all_brochure_inquiries', {
+    p_session_token: sessionToken,
+  });
 }

@@ -373,3 +373,84 @@ grant insert on public.partner_inquiries to anon;
 grant execute on function public.list_partner_inquiries(uuid) to anon;
 grant execute on function public.delete_partner_inquiry(uuid, uuid) to anon;
 grant execute on function public.delete_all_partner_inquiries(uuid) to anon;
+
+create table if not exists public.brochure_inquiries (
+  id uuid primary key default extensions.gen_random_uuid(),
+  name text not null,
+  mobile text not null,
+  email text not null,
+  query text,
+  created_at timestamptz not null default now()
+);
+
+alter table public.brochure_inquiries enable row level security;
+
+drop policy if exists "Public can create brochure inquiries" on public.brochure_inquiries;
+create policy "Public can create brochure inquiries"
+  on public.brochure_inquiries
+  for insert
+  with check (true);
+
+drop policy if exists "Public can read brochure inquiries" on public.brochure_inquiries;
+create policy "Public can read brochure inquiries"
+  on public.brochure_inquiries
+  for select
+  using (true);
+
+drop policy if exists "Public can delete brochure inquiries" on public.brochure_inquiries;
+create policy "Public can delete brochure inquiries"
+  on public.brochure_inquiries
+  for delete
+  using (true);
+
+create or replace function public.delete_all_brochure_inquiries()
+returns void
+language sql
+security definer
+as $body$
+  delete from public.brochure_inquiries;
+$body$;
+
+create or replace function public.list_brochure_inquiries(p_session_token uuid)
+returns setof public.brochure_inquiries
+language plpgsql
+security definer
+as $body$
+begin
+  if not public.verify_admin_session(p_session_token) then
+    raise exception 'Unauthorized';
+  end if;
+  return query select * from public.brochure_inquiries order by created_at desc;
+end;
+$body$;
+
+create or replace function public.delete_brochure_inquiry(p_session_token uuid, p_inquiry_id uuid)
+returns void
+language plpgsql
+security definer
+as $body$
+begin
+  if not public.verify_admin_session(p_session_token) then
+    raise exception 'Unauthorized';
+  end if;
+  delete from public.brochure_inquiries where id = p_inquiry_id;
+end;
+$body$;
+
+create or replace function public.delete_all_brochure_inquiries(p_session_token uuid)
+returns void
+language plpgsql
+security definer
+as $body$
+begin
+  if not public.verify_admin_session(p_session_token) then
+    raise exception 'Unauthorized';
+  end if;
+  delete from public.brochure_inquiries;
+end;
+$body$;
+
+grant insert on public.brochure_inquiries to anon;
+grant execute on function public.list_brochure_inquiries(uuid) to anon;
+grant execute on function public.delete_brochure_inquiry(uuid, uuid) to anon;
+grant execute on function public.delete_all_brochure_inquiries(uuid) to anon;
