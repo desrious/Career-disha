@@ -30,9 +30,10 @@ type AdminProps = {
   onDataChange: (data: CmsData) => void;
 };
 
-type SectionKey = 'offer' | 'expert' | 'insights' | 'testimonials' | 'counsellors' | 'contact' | 'partner';
+type SectionKey = 'brochure' | 'offer' | 'expert' | 'insights' | 'testimonials' | 'counsellors' | 'contact' | 'partner';
 
 const sections: { key: SectionKey; label: string }[] = [
+  { key: 'brochure', label: 'Brochure' },
   { key: 'offer', label: 'Offer' },
   { key: 'expert', label: 'Expert advice inquiry' },
   { key: 'insights', label: 'Insights' },
@@ -194,6 +195,51 @@ function SelectField({
         ))}
       </select>
     </label>
+  );
+}
+
+function PdfInput({ value, onChange }: { value: string; onChange: (value: string) => void }) {
+  const uploadId = useMemo(() => crypto.randomUUID(), []);
+
+  return (
+    <div className="space-y-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
+      <Field label="Brochure PDF URL" value={value} onChange={onChange} />
+      
+      <div className="flex items-center gap-4">
+        <span className="text-sm font-bold text-slate-400">OR</span>
+        <label
+          htmlFor={uploadId}
+          className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-700 hover:bg-slate-50 shadow-sm"
+        >
+          <Upload className="h-4 w-4" />
+          Upload Local PDF
+        </label>
+        <input
+          id={uploadId}
+          type="file"
+          accept="application/pdf"
+          className="hidden"
+          onChange={(event) => {
+            const file = event.target.files?.[0];
+            if (!file) return;
+            
+            if (file.size > 10 * 1024 * 1024) {
+              alert('PDF is too large. Max size is 10MB to ensure smooth database saving.');
+              return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = () => onChange(String(reader.result));
+            reader.readAsDataURL(file);
+          }}
+        />
+      </div>
+      {value && value.startsWith('data:application/pdf') && (
+        <span className="block text-xs font-bold text-green-700 bg-green-50 px-3 py-2 rounded-lg inline-block">
+          ✓ Local PDF file loaded. Click Save to publish.
+        </span>
+      )}
+    </div>
   );
 }
 
@@ -516,6 +562,17 @@ export default function Admin({ data, onDataChange }: AdminProps) {
 
       <div className="mx-auto max-w-7xl px-6 py-8">
         <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+          {active === 'brochure' && (
+            <div className="space-y-6">
+              <h2 className="text-xl font-extrabold">Brochure Details</h2>
+              <p className="text-sm text-slate-500 font-medium">Provide a link to the PDF brochure, or upload one locally. If left empty, the website will show the "Brochure Coming Soon" page.</p>
+              <PdfInput 
+                value={draft.brochure?.pdfUrl || ''} 
+                onChange={(pdfUrl) => updateDraft({ ...draft, brochure: { ...draft.brochure, pdfUrl } })} 
+              />
+            </div>
+          )}
+
           {active === 'offer' && (
             <OfferEditor draft={draft} updateDraft={updateDraft} />
           )}
@@ -733,6 +790,7 @@ export default function Admin({ data, onDataChange }: AdminProps) {
 
           {active === 'counsellors' && (
             <CollectionEditor
+              addButtonText="Add a councellor"
               items={draft.counsellors}
               onAdd={() => updateDraft({ ...draft, counsellors: [...draft.counsellors, emptyCounsellor()] })}
               onRemove={(id) => updateDraft({ ...draft, counsellors: draft.counsellors.filter((item) => item.id !== id) })}
@@ -1193,17 +1251,19 @@ function CollectionEditor<T extends { id: string; name: string }>({
   onAdd,
   onRemove,
   render,
+  addButtonText = 'Add Item',
 }: {
   items: T[];
   onAdd: () => void;
   onRemove: (id: string) => void;
   render: (item: T) => React.ReactNode;
+  addButtonText?: string;
 }) {
   return (
     <div className="space-y-5">
       <button onClick={onAdd} className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white hover:bg-primary-container">
         <Plus className="h-4 w-4" />
-        Add Item
+        {addButtonText}
       </button>
       {items.map((item) => (
         <div key={item.id} className="rounded-xl border border-slate-200 bg-slate-50 p-4">

@@ -139,6 +139,10 @@ export type CmsPartner = {
   cta: CmsPartnerCTA;
 };
 
+export type CmsBrochure = {
+  pdfUrl: string;
+};
+
 export type CmsData = {
   offer: CmsOffer;
   testimonials: CmsTestimonial[];
@@ -148,6 +152,7 @@ export type CmsData = {
   footer: CmsFooter;
   insights: CmsInsights;
   partner: CmsPartner;
+  brochure: CmsBrochure;
 };
 
 export type ExpertAdviceInquiry = {
@@ -176,6 +181,9 @@ export const ADMIN_SESSION_STORAGE_KEY = 'careerDishaAdminSessionToken';
 const CMS_ROW_ID = 'site';
 
 export const defaultCmsData: CmsData = {
+  brochure: {
+    pdfUrl: '',
+  },
   offer: {
     badge: 'Save Rs 700',
     title: 'Limited Time Early Bird Offer',
@@ -209,7 +217,7 @@ export const defaultCmsData: CmsData = {
       id: 'nishtha-vyas',
       name: 'Nishtha Vyas',
       title: 'Senior Career Counsellor',
-      image: '/ShrutiBhardwaj.jpg',
+      image: '/NishthaVyas.jpg',
       quote: 'Empowering students through data-driven insights and strategic foresight to navigate global career paths.',
       accent: 'border-primary/30 text-blue-300',
       bullets: [
@@ -223,7 +231,7 @@ export const defaultCmsData: CmsData = {
       id: 'milli-tewari',
       name: 'Milli Tewari',
       title: 'Lead Career Strategist',
-      image: '/NishthaVyas.jpg',
+      image: '/MilliTewari.jpg',
       quote: 'Building agile and future-proof career paths through personalized strategy and market intelligence.',
       accent: 'border-secondary/30 text-green-300',
       bullets: [
@@ -237,7 +245,7 @@ export const defaultCmsData: CmsData = {
       id: 'shruti-bhardwaj',
       name: 'Shruti Bhardwaj',
       title: 'Career Development Specialist',
-      image: '/MilliTewari.jpg',
+      image: '/Shruti_bhardwaj.jpg',
       quote: 'Dedicated to bridging the gap between academic potential and professional success through personalized mentorship.',
       accent: 'border-accent/30 text-amber-300',
       bullets: [
@@ -251,7 +259,7 @@ export const defaultCmsData: CmsData = {
       id: 'anjali-bhardwaj',
       name: 'Dr. Anjali Bhardwaj',
       title: 'Senior Counselling Psychologist',
-      image: '/Psychologist.png',
+      image: '/Anjali_Bhardwaj.png',
       quote: 'Integrating psychological insights with career guidance to empower individuals with mental resilience and emotional clarity.',
       accent: 'border-purple-500/30 text-purple-300',
       bullets: [
@@ -485,6 +493,7 @@ function mergeCmsData(parsed: Partial<CmsData>): CmsData {
   return {
     ...defaultCmsData,
     ...parsed,
+    brochure: { ...defaultCmsData.brochure, ...parsed.brochure },
     offer: { ...defaultCmsData.offer, ...parsed.offer },
     expertAdvice: { ...defaultCmsData.expertAdvice, ...parsed.expertAdvice },
     contact: {
