@@ -36,9 +36,10 @@ export default function About({ onBack, counsellors }: AboutProps) {
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const scrollPosRef = useRef(0);
-  const speedRef = useRef(1.5);
-  const targetSpeedRef = useRef(1.5);
+  const speedRef = useRef(1.0);
+  const targetSpeedRef = useRef(1.0);
   const animationRef = useRef<number | null>(null);
+  const isInteractingRef = useRef(false);
 
   const COLORS = ['bg-primary', 'bg-secondary', 'bg-accent', 'bg-red-500', 'bg-orange-500', 'bg-purple-500'];
 
@@ -59,13 +60,25 @@ export default function About({ onBack, counsellors }: AboutProps) {
   }
 
   useEffect(() => {
-    const animateScroll = () => {
-      speedRef.current += (targetSpeedRef.current - speedRef.current) * 0.05;
-      scrollPosRef.current += speedRef.current;
-      if (scrollRef.current) {
-        const halfWidth = scrollRef.current.scrollWidth / 2;
-        if (scrollPosRef.current >= halfWidth) scrollPosRef.current -= halfWidth;
-        scrollRef.current.style.transform = `translateX(-${scrollPosRef.current}px)`;
+    let lastTime = performance.now();
+    
+    const animateScroll = (time: number) => {
+      const delta = Math.min(time - lastTime, 50);
+      lastTime = time;
+
+      if (Math.abs(targetSpeedRef.current - speedRef.current) > 0.001) {
+        // Ultra-smooth deceleration using an even smaller factor
+        speedRef.current += (targetSpeedRef.current - speedRef.current) * 0.008;
+      } else {
+        speedRef.current = targetSpeedRef.current;
+      }
+
+      if (scrollRef.current && Math.abs(speedRef.current) > 0) {
+        scrollRef.current.scrollLeft += speedRef.current * (delta / 16);
+        const maxScroll = scrollRef.current.scrollWidth / 2;
+        if (scrollRef.current.scrollLeft >= maxScroll) {
+          scrollRef.current.scrollLeft -= maxScroll;
+        }
       }
       animationRef.current = requestAnimationFrame(animateScroll);
     };
@@ -73,8 +86,17 @@ export default function About({ onBack, counsellors }: AboutProps) {
     return () => { if (animationRef.current) cancelAnimationFrame(animationRef.current); };
   }, []);
 
-  const handleMouseEnter = () => { targetSpeedRef.current = 0; };
-  const handleMouseLeave = () => { targetSpeedRef.current = 1.5; };
+  const handleCardClick = () => { 
+    isInteractingRef.current = !isInteractingRef.current; 
+    targetSpeedRef.current = isInteractingRef.current ? 0 : 1.0; 
+  };
+  
+  const handleCardMouseLeave = () => { 
+    if (isInteractingRef.current) {
+      isInteractingRef.current = false; 
+      targetSpeedRef.current = 1.0; 
+    }
+  };
 
   return (
     <div className="min-h-screen bg-surface font-body text-on-surface overflow-x-hidden">
@@ -333,30 +355,37 @@ export default function About({ onBack, counsellors }: AboutProps) {
         </section>
 
         {/* Our Counsellors */}
-        <section className="mb-24 relative w-[100vw] max-w-[100vw] ml-[calc(50%-50vw)] px-4 md:px-12">
+        <section className="mb-24 relative w-screen -mx-[50vw] left-[50%] right-[50%] px-4 md:px-12">
           <h2 className="text-3xl font-extrabold font-headline mb-12 text-center">Our Counsellors</h2>
           
-          <div className="relative">
+          <div className="relative max-w-[100vw] mx-auto">
             {/* Left Fade Gradient */}
             <div className="absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r from-surface to-transparent z-10 pointer-events-none"></div>
             
             {/* Right Fade Gradient */}
             <div className="absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-surface to-transparent z-10 pointer-events-none"></div>
 
-            <div className="overflow-hidden" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-              <div ref={scrollRef} className="flex gap-4 sm:gap-6 md:gap-8" style={{ width: 'max-content' }}>
+            <div className="overflow-hidden w-full">
+              <div 
+                ref={scrollRef} 
+                className="flex gap-4 sm:gap-6 md:gap-8 overflow-x-auto hide-scrollbar px-4 md:px-12 pt-4 pb-8" 
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+              >
                 {[...Array(2)].map((_, setIndex) => (
                   <div key={setIndex} className="flex gap-4 sm:gap-6 md:gap-8 shrink-0">
                     {counsellors.map((counsellor, index) => (
                       <div 
                         key={index}
-                        className="w-[280px] sm:w-[340px] md:w-[380px] lg:w-[420px] bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100 hover:shadow-2xl hover:border-slate-300 transition-all duration-300 flex flex-col shrink-0 group"
+                        className="w-[85vw] max-w-[320px] sm:max-w-none sm:w-[340px] md:w-[380px] lg:w-[420px] bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100 hover:shadow-2xl hover:border-slate-300 transition-all duration-300 flex flex-col shrink-0 group cursor-pointer"
+                        onClick={handleCardClick}
+                        onMouseLeave={handleCardMouseLeave}
                       >
-                        <div className="relative h-72 overflow-hidden shrink-0">
+                        <div className="relative h-64 sm:h-72 overflow-hidden shrink-0 isolate transform-gpu text-left">
                           <img 
                             src={counsellor.image} 
                             alt={counsellor.name} 
                             className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 ${counsellor.name === 'Dr. Anjali Bhardwaj' ? 'object-[50%_25%]' : 'object-top'}`}
+                            loading="lazy"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-90 group-hover:opacity-100 transition-opacity"></div>
                           <div className="absolute bottom-4 left-6 right-6">
@@ -364,17 +393,17 @@ export default function About({ onBack, counsellors }: AboutProps) {
                             <p className={`text-sm font-semibold uppercase tracking-wider drop-shadow-md hover:text-white transition-colors cursor-default ${(counsellor.accent || '').split(' ')[1] || 'text-blue-300'}`}>{counsellor.title}</p>
                           </div>
                         </div>
-                        <div className="p-6 flex flex-col flex-grow bg-slate-50/50 backdrop-blur-sm">
+                        <div className="p-6 flex flex-col flex-grow bg-slate-50/50 backdrop-blur-sm text-left">
                           <p className={`text-slate-600 italic text-sm mb-5 leading-relaxed border-l-4 ${(counsellor.accent || '').split(' ')[0] || 'border-primary/30'} pl-4 relative group-hover:bg-slate-100/50 p-2 rounded-r-lg transition-colors`}>
                             {counsellor.quote}
                           </p>
-                          <ul className="space-y-2.5 text-sm">
+                          <ul className="space-y-3 text-sm">
                             {counsellor.bullets.map((bStr, bIdx) => {
                               const b = parseBullet(bStr, bIdx);
                               return (
-                                <li key={bIdx} className="flex items-start gap-2 hover:translate-x-1 transition-transform">
+                                <li key={bIdx} className="flex items-start gap-3 hover:translate-x-1 transition-transform">
                                   <span className={`w-1.5 h-1.5 rounded-full ${b.color} mt-1.5 shrink-0 shadow-sm`}></span>
-                                  <span className="text-slate-700"><strong className="text-slate-900 group-hover:text-primary transition-colors">{b.label}</strong> {b.value}</span>
+                                  <span className="text-slate-700 leading-relaxed"><strong className="text-slate-900 group-hover:text-primary transition-colors">{b.label}</strong> {b.value}</span>
                                 </li>
                               );
                             })}

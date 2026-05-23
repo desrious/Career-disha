@@ -26,29 +26,49 @@ export default function BrochurePage({ onBack, brochure }: BrochurePageProps) {
     setShowModal(true);
   };
 
-  const handleDownloadStart = () => {
-    if (brochure?.pdfUrl) {
+  const handleDownloadStart = async () => {
+    if (!brochure?.pdfUrl) return;
+
+    try {
       if (brochure.pdfUrl.startsWith('data:')) {
-        const newTab = window.open('about:blank', '_blank');
-        if (newTab) {
-          newTab.document.write('<div style="font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; color: #475569;">Opening brochure...</div>');
-          fetch(brochure.pdfUrl).then(res => res.blob()).then(blob => {
-            const blobUrl = URL.createObjectURL(blob);
-            newTab.location.replace(blobUrl);
-          }).catch(err => {
-            console.error('Failed to parse local brochure', err);
-            newTab.close();
-          });
-        }
-      } else {
+        // Direct download for base64 data URIs
         const link = document.createElement('a');
         link.href = brochure.pdfUrl;
-        link.download = 'career-disha-brochure.pdf';
-        link.target = '_blank';
+        link.download = 'Careerdisha Brochure.pdf';
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+        return;
       }
+
+      // Approach: Fetch as a Blob to enforce the download universally 
+      // without opening in a new tab or redirecting
+      const response = await fetch(brochure.pdfUrl);
+      if (!response.ok) throw new Error('Network response was not ok');
+      
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = 'Careerdisha Brochure.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      // Cleanup URL object
+      setTimeout(() => window.URL.revokeObjectURL(blobUrl), 150);
+      
+    } catch (err) {
+      console.error('Failed to download brochure via blob, using fallback', err);
+      // Fallback in case of CORS restrictions
+      const link = document.createElement('a');
+      link.href = brochure.pdfUrl;
+      link.download = 'Careerdisha Brochure.pdf';
+      link.target = '_blank';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
   };
 
@@ -162,12 +182,44 @@ export default function BrochurePage({ onBack, brochure }: BrochurePageProps) {
         )}
 
         {brochure.pdfUrl && (
-          <div className="w-full h-[75vh] md:h-[800px] border border-slate-200 rounded-xl overflow-hidden bg-slate-100/50">
-            <iframe 
-              src={`${brochure.pdfUrl}#toolbar=0&navpanes=0`} 
-              className="w-full h-full"
-              title="Brochure PDF Preview"
-            />
+          <div className="w-full h-auto min-h-[400px] md:h-[800px] border border-slate-200 rounded-xl overflow-hidden bg-slate-100/50 relative">
+            {/* Desktop View (object tags are reliable for desktop PDFs) */}
+            <object 
+              data={`${brochure.pdfUrl}#toolbar=0&navpanes=0`} 
+              type="application/pdf"
+              className="w-full h-full hidden md:block"
+            >
+              <div className="flex flex-col items-center justify-center p-8 text-center bg-white h-[400px]">
+                <BookOpen size={48} className="mb-4 text-slate-300" />
+                <h3 className="text-xl font-semibold text-slate-800 mb-2">Preview Unavailable</h3>
+                <p className="text-slate-600 mb-6 max-w-sm">
+                  Your browser requires a PDF plugin to view this inline.
+                </p>
+                <button 
+                  onClick={handleDownloadClick}
+                  className="flex items-center gap-2 px-6 py-3 bg-primary text-white font-medium rounded-full hover:bg-primary/90 transition-all shadow-md active:scale-95"
+                >
+                  <Download size={20} />
+                  Download Brochure
+                </button>
+              </div>
+            </object>
+
+            {/* Mobile View (Bypasses iframe limitations completely) */}
+            <div className="w-full h-auto flex flex-col items-center justify-center py-16 px-6 text-center md:hidden bg-white">
+                <BookOpen size={56} className="mb-5 text-slate-300" />
+                <h3 className="text-2xl font-semibold text-slate-800 mb-3">Brochure Ready</h3>
+                <p className="text-slate-600 mb-8 max-w-sm text-base leading-relaxed">
+                  Mobile browsers do not support high-quality PDF previews inline. Download the brochure directly to your device for the best reading experience.
+                </p>
+                <button 
+                  onClick={handleDownloadClick}
+                  className="flex items-center justify-center gap-2 w-full max-w-[280px] px-8 py-4 bg-primary text-white font-medium rounded-full hover:bg-primary/90 transition-all shadow-md active:scale-95 text-lg"
+                >
+                  <Download size={20} />
+                  Download PDF Now
+                </button>
+            </div>
           </div>
         )}
         
