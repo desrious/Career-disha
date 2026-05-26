@@ -161,6 +161,9 @@ export type ExpertAdviceInquiry = {
   name: string;
   email: string;
   mobile: string;
+  countryCode?: string;
+  dialCode?: string;
+  countryName?: string;
   service: string;
   message?: string;
   created_at?: string;
@@ -171,6 +174,9 @@ export type PartnerInquiry = {
   name: string;
   email: string;
   phone: string;
+  countryCode?: string;
+  dialCode?: string;
+  countryName?: string;
   interested_in: string;
   created_at?: string;
 };
@@ -180,6 +186,9 @@ export type BrochureInquiry = {
   name: string;
   email: string;
   mobile: string;
+  countryCode?: string;
+  dialCode?: string;
+  countryName?: string;
   query?: string;
   created_at?: string;
 };

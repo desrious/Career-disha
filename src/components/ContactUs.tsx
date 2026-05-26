@@ -1,9 +1,59 @@
 import { motion } from 'motion/react';
 import { Mail, Phone, MapPin, Send, MessageSquare, Facebook, Instagram, Linkedin, Youtube, MessageCircle } from 'lucide-react';
-import { CmsContact, defaultCmsData } from '../data/cms';
+import { CmsContact, defaultCmsData, saveExpertAdviceInquiry } from '../data/cms';
+import { useState } from 'react';
+import PhoneInput from './shared/PhoneInput';
+import { getPhoneDetails } from '../utils/phoneUtils';
 
 export default function ContactUs({ onBack, contact = defaultCmsData.contact }: { onBack: () => void; contact?: CmsContact }) {
   const mapSrc = "https://maps.google.com/maps?q=ZeOpto+IT+Services,+Sector+2,+Noida&t=&z=17&ie=UTF8&iwloc=&output=embed";
+  
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    message: ''
+  });
+  const [isPhoneValid, setIsPhoneValid] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
+      alert("Please fill all fields.");
+      return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      alert("Invalid email format.");
+      return;
+    }
+    const { isValid, countryCode, dialCode, countryName } = getPhoneDetails(formData.phone);
+    if (!isValid) {
+      alert("Please enter a valid phone number.");
+      return;
+    }
+    setIsSubmitting(true);
+    try {
+      await saveExpertAdviceInquiry({
+        name: formData.name,
+        email: formData.email,
+        mobile: formData.phone,
+        countryCode,
+        dialCode,
+        countryName,
+        service: 'Contact Us Page',
+        message: formData.message,
+      });
+      alert("Thank you for reaching out! We'll get back to you soon.");
+      setFormData({ name: '', email: '', phone: '', message: '' });
+    } catch (error) {
+      console.error(error);
+      alert("Failed to send message. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <section 
@@ -167,13 +217,16 @@ export default function ContactUs({ onBack, contact = defaultCmsData.contact }: 
               <h2 className="text-2xl font-bold text-slate-800">Send Us a Message</h2>
             </div>
             
-            <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
+            <form className="space-y-5" onSubmit={handleSubmit}>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">Full Name</label>
                 <input 
                   type="text" 
+                  value={formData.name}
+                  onChange={(e) => setFormData({...formData, name: e.target.value})}
                   placeholder="John Doe"
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-slate-50 focus:bg-white"
+                  required
                 />
               </div>
               
@@ -181,17 +234,21 @@ export default function ContactUs({ onBack, contact = defaultCmsData.contact }: 
                 <label className="block text-sm font-medium text-slate-700 mb-2">Email Address</label>
                 <input 
                   type="email" 
+                  value={formData.email}
+                  onChange={(e) => setFormData({...formData, email: e.target.value})}
                   placeholder="john@example.com"
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-slate-50 focus:bg-white"
+                  required
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">Phone Number</label>
-                <input 
-                  type="tel" 
-                  placeholder="+91 98765 43210"
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-slate-50 focus:bg-white"
+                <PhoneInput 
+                  value={formData.phone}
+                  onChange={(val) => setFormData({...formData, phone: val || ''})}
+                  onValidationChange={setIsPhoneValid}
+                  required
                 />
               </div>
               
@@ -199,17 +256,21 @@ export default function ContactUs({ onBack, contact = defaultCmsData.contact }: 
                 <label className="block text-sm font-medium text-slate-700 mb-2">Your Message</label>
                 <textarea 
                   rows={4}
+                  value={formData.message}
+                  onChange={(e) => setFormData({...formData, message: e.target.value})}
                   placeholder="How can we help you today?"
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-slate-50 focus:bg-white resize-none"
+                  required
                 ></textarea>
               </div>
               
               <button 
                 type="submit"
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-lg shadow-blue-500/30 mt-4"
+                disabled={isSubmitting || !isPhoneValid}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-lg shadow-blue-500/30 mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Send className="w-5 h-5" />
-                Send Message
+                {isSubmitting ? 'Sending...' : 'Send Message'}
               </button>
             </form>
           </motion.div>

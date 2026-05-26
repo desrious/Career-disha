@@ -11,6 +11,9 @@ create table if not exists public.expert_advice_inquiries (
   name text not null,
   email text not null,
   mobile text not null,
+  "countryCode" text,
+  "dialCode" text,
+  "countryName" text,
   service text not null,
   message text,
   created_at timestamptz not null default now()
@@ -273,6 +276,9 @@ create table if not exists public.partner_inquiries (
   name text not null,
   email text not null,
   phone text not null,
+  "countryCode" text,
+  "dialCode" text,
+  "countryName" text,
   interested_in text not null,
   created_at timestamptz not null default now()
 );
@@ -378,8 +384,9 @@ create table if not exists public.brochure_inquiries (
   id uuid primary key default extensions.gen_random_uuid(),
   name text not null,
   mobile text not null,
-  email text not null,
-  query text,
+  email text not null,  "countryCode" text,
+  "dialCode" text,
+  "countryName" text,  query text,
   created_at timestamptz not null default now()
 );
 
@@ -454,3 +461,16 @@ grant insert on public.brochure_inquiries to anon;
 grant execute on function public.list_brochure_inquiries(uuid) to anon;
 grant execute on function public.delete_brochure_inquiry(uuid, uuid) to anon;
 grant execute on function public.delete_all_brochure_inquiries(uuid) to anon;
+
+-- Adding phone number context columns for inquiries safely
+ALTER TABLE public.expert_advice_inquiries ADD COLUMN IF NOT EXISTS countryCode text;
+ALTER TABLE public.expert_advice_inquiries ADD COLUMN IF NOT EXISTS dialCode text;
+ALTER TABLE public.expert_advice_inquiries ADD COLUMN IF NOT EXISTS countryName text;
+
+ALTER TABLE public.partner_inquiries ADD COLUMN IF NOT EXISTS countryCode text;
+ALTER TABLE public.partner_inquiries ADD COLUMN IF NOT EXISTS dialCode text;
+ALTER TABLE public.partner_inquiries ADD COLUMN IF NOT EXISTS countryName text;
+
+ALTER TABLE public.brochure_inquiries ADD COLUMN IF NOT EXISTS countryCode text;
+ALTER TABLE public.brochure_inquiries ADD COLUMN IF NOT EXISTS dialCode text;
+ALTER TABLE public.brochure_inquiries ADD COLUMN IF NOT EXISTS countryName text;

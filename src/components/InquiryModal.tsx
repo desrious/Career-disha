@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Mail, MessageSquare, Phone, Send, Settings, User, X } from 'lucide-react';
 import { saveExpertAdviceInquiry } from '../data/cms';
+import PhoneInput from './shared/PhoneInput';
+import { getPhoneDetails } from '../utils/phoneUtils';
 
 interface InquiryModalProps {
   onClose: () => void;
@@ -16,6 +18,7 @@ const InquiryModal: React.FC<InquiryModalProps> = ({
   successMessage = 'An expert will get in contact with you shortly.',
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isPhoneValid, setIsPhoneValid] = useState(true);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -31,24 +34,34 @@ const InquiryModal: React.FC<InquiryModalProps> = ({
     });
   };
 
+  const handlePhoneChange = (value: string | undefined) => {
+    setFormData({ ...formData, mobile: value || '' });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const mobileRegex = /^\+?[0-9]{7,15}$/;
-
     if (!emailRegex.test(formData.email)) {
       alert('Invalid email');
       return;
     }
-    if (!mobileRegex.test(formData.mobile)) {
-      alert('Invalid mobile');
+
+    const { isValid, countryCode, dialCode, countryName } = getPhoneDetails(formData.mobile);
+    
+    if (!isValid) {
+      alert('Invalid mobile number according to country code');
       return;
     }
 
     setIsSubmitting(true);
     try {
-      await saveExpertAdviceInquiry(formData);
+      await saveExpertAdviceInquiry({
+        ...formData,
+        countryCode: countryCode,
+        dialCode: dialCode,
+        countryName: countryName,
+      });
       alert(successMessage);
       onClose();
     } catch {
@@ -113,20 +126,12 @@ const InquiryModal: React.FC<InquiryModalProps> = ({
               />
             </div>
 
-            <div className="flex bg-slate-50 border border-slate-200 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-primary focus-within:border-primary">
-              <div className="px-4 py-3 bg-white border-r border-slate-200 flex items-center justify-center text-slate-400">
-                <Phone className="w-5 h-5" />
-              </div>
-              <input
-                type="number"
-                name="mobile"
-                value={formData.mobile}
-                onChange={handleChange}
-                className="w-full px-4 py-3 bg-transparent outline-none"
-                placeholder="Mobile Number*"
-                required
-              />
-            </div>
+            <PhoneInput 
+              value={formData.mobile} 
+              onChange={handlePhoneChange} 
+              onValidationChange={setIsPhoneValid}
+              required 
+            />
 
             <div className="flex bg-slate-50 border border-slate-200 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-primary focus-within:border-primary">
               <div className="px-4 py-3 bg-white border-r border-slate-200 flex items-center justify-center text-slate-400">
@@ -163,8 +168,8 @@ const InquiryModal: React.FC<InquiryModalProps> = ({
             <div className="pt-4">
               <button
                 type="submit"
-                disabled={isSubmitting}
-                className="w-full text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all hover:opacity-90 hover:shadow-lg"
+                disabled={isSubmitting || !isPhoneValid}
+                className="w-full text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all hover:opacity-90 hover:shadow-lg disabled:opacity-50"
                 style={{ backgroundColor: '#fba70c' }}
               >
                 <Send className="w-5 h-5" />

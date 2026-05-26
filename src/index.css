@@ -99,3 +99,20 @@
 }
 
 
+
+/* Custom Phone Input Styles */
+.PhoneInputWrapper .PhoneInput {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.PhoneInputWrapper .PhoneInputCountry {
+  padding-left: 1rem;
+  margin-right: 0.5rem;
+}
+
+.PhoneInputWrapper .PhoneInputInput {
+  flex: 1;
+  min-width: 0;
+}

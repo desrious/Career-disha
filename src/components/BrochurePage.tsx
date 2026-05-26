@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { ArrowLeft, BookOpen, Clock, Download, X } from 'lucide-react';
 import { CmsBrochure, saveBrochureInquiry } from '../data/cms';
 import { LOGO_URL } from '../data/constants';
+import PhoneInput from './shared/PhoneInput';
+import { getPhoneDetails } from '../utils/phoneUtils';
 
 interface BrochurePageProps {
   onBack: () => void;
@@ -14,6 +16,7 @@ export default function BrochurePage({ onBack, brochure }: BrochurePageProps) {
   }, []);
 
   const [showModal, setShowModal] = useState(false);
+  const [isPhoneValid, setIsPhoneValid] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     mobile: '',
@@ -74,12 +77,21 @@ export default function BrochurePage({ onBack, brochure }: BrochurePageProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isPhoneValid) {
+      alert("Please enter a valid mobile number.");
+      return;
+    }
+    const { countryCode, dialCode, countryName } = getPhoneDetails(formData.mobile);
+    
     setIsSubmitting(true);
     try {
       await saveBrochureInquiry({
         name: formData.name,
         email: formData.email,
         mobile: formData.mobile,
+        countryCode,
+        dialCode,
+        countryName,
         query: formData.query
       });
       setShowModal(false);
@@ -264,13 +276,11 @@ export default function BrochurePage({ onBack, brochure }: BrochurePageProps) {
               
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">Mobile Number *</label>
-                <input 
-                  type="tel" 
-                  required
+                <PhoneInput 
                   value={formData.mobile}
-                  onChange={(e) => setFormData({...formData, mobile: e.target.value})}
-                  className="w-full px-4 py-2 rounded-xl border border-slate-200 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
-                  placeholder="Your contact number"
+                  onChange={(val) => setFormData({...formData, mobile: val || ''})}
+                  onValidationChange={setIsPhoneValid}
+                  required
                 />
               </div>
               
@@ -298,8 +308,8 @@ export default function BrochurePage({ onBack, brochure }: BrochurePageProps) {
               
               <button 
                 type="submit" 
-                disabled={isSubmitting}
-                className="w-full py-3 bg-primary text-white font-bold rounded-xl hover:bg-primary/90 transition-all shadow shadow-primary/20 disabled:opacity-70 flex items-center justify-center gap-2 mt-4"
+                disabled={isSubmitting || !isPhoneValid}
+                className="w-full py-3 bg-primary text-white font-bold rounded-xl hover:bg-primary/90 transition-all shadow shadow-primary/20 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-4"
               >
                 {isSubmitting ? (
                   <>

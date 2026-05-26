@@ -22,6 +22,9 @@ import {
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import ElectricBorder from './ElectricBorder';
+import PhoneInput from './shared/PhoneInput';
+import { getPhoneDetails } from '../utils/phoneUtils';
+import { saveExpertAdviceInquiry } from '../data/cms';
 
 import { CmsCounsellor } from '../data/cms';
 
@@ -31,7 +34,44 @@ interface AboutProps {
 }
 
 export default function About({ onBack, counsellors }: AboutProps) {
-  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+  const [selectedFounder, setSelectedFounder] = useState<{name: string, email: string} | null>(null);
+  const [formData, setFormData] = useState({ name: '', phone: '', message: '' });
+  const [isPhoneValid, setIsPhoneValid] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmitFounder = async () => {
+    if (!selectedFounder) return;
+    if (!formData.name.trim() || !formData.message.trim()) {
+      alert("Please fill all required fields.");
+      return;
+    }
+    const { isValid, countryCode, dialCode, countryName } = getPhoneDetails(formData.phone);
+    if (!isValid) return alert("Invalid phone number.");
+
+    setIsSubmitting(true);
+    try {
+      await saveExpertAdviceInquiry({
+        name: formData.name,
+        email: selectedFounder.email,
+        mobile: formData.phone,
+        countryCode,
+        dialCode,
+        countryName,
+        service: `Contact Founder: ${selectedFounder.name}`,
+        message: formData.message,
+      });
+
+      console.log(`[EMAIL ROUTING] To: ${selectedFounder.email}, From: ${formData.name}`);
+      alert(`Your message has been sent to ${selectedFounder.name}.`);
+      setSelectedFounder(null);
+      setFormData({ name: '', phone: '', message: '' });
+    } catch {
+      alert("Failed to send message. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const logoUrl = "/CareerDishaLogo.png";
 
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -309,7 +349,7 @@ export default function About({ onBack, counsellors }: AboutProps) {
                 </ul>
               </div>
               <div className="flex gap-3 mt-8 pt-6 border-t border-outline-variant/10">
-                <button onClick={() => setIsContactModalOpen(true)} className="px-6 py-2 bg-primary text-white rounded-full font-bold hover:bg-opacity-90 transition-colors">Contact</button>
+                <button onClick={() => setSelectedFounder({name: 'Mr. Gunjan Tewari', email: 'gunjan@careerdisha.com'})} className="px-6 py-2 bg-primary text-white rounded-full font-bold hover:bg-opacity-90 transition-colors">Contact</button>
                 <a href="https://in.linkedin.com/in/gunjantewari" target="_blank" rel="noopener noreferrer" className="px-6 py-2 border-2 border-primary text-primary rounded-full font-bold hover:bg-primary/5 transition-colors">LinkedIn</a>
               </div>
             </div>
@@ -347,7 +387,7 @@ export default function About({ onBack, counsellors }: AboutProps) {
                 </ul>
               </div>
               <div className="flex gap-3 mt-8 pt-6 border-t border-outline-variant/10">
-                <button onClick={() => setIsContactModalOpen(true)} className="px-6 py-2 bg-yellow-500 text-white rounded-full font-bold hover:bg-opacity-90 transition-colors">Contact</button>
+                <button onClick={() => setSelectedFounder({name: 'Mr. Abhijit Vyas', email: 'abhijit@careerdisha.com'})} className="px-6 py-2 bg-yellow-500 text-white rounded-full font-bold hover:bg-opacity-90 transition-colors">Contact</button>
                 <a href="https://www.linkedin.com/in/abhijit-v-696640216?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app" target="_blank" rel="noopener noreferrer" className="px-6 py-2 border-2 border-yellow-500 text-yellow-600 rounded-full font-bold hover:bg-yellow-500/10 transition-colors">LinkedIn</a>
               </div>
             </div>
@@ -455,7 +495,7 @@ export default function About({ onBack, counsellors }: AboutProps) {
       </footer>
 
       {/* Contact Form Modal */}
-      {isContactModalOpen && (
+      {selectedFounder && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm shadow-2xl">
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
@@ -464,9 +504,9 @@ export default function About({ onBack, counsellors }: AboutProps) {
             className="bg-white rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl pb-6"
           >
             <div className="flex justify-between items-center p-6 border-b border-outline-variant/20">
-              <h3 className="text-2xl font-headline font-bold text-on-surface">Contact Form</h3>
+              <h3 className="text-2xl font-headline font-bold text-on-surface">Contact {selectedFounder.name}</h3>
               <button 
-                onClick={() => setIsContactModalOpen(false)}
+                onClick={() => setSelectedFounder(null)}
                 className="text-on-surface-variant hover:text-on-surface p-2 rounded-full hover:bg-surface transition-colors"
                 aria-label="Close modal"
               >
@@ -480,38 +520,41 @@ export default function About({ onBack, counsellors }: AboutProps) {
                 </div>
                 <input
                   type="text"
-                  placeholder="Enter your name"
+                  value={formData.name}
+                  onChange={(e) => setFormData({...formData, name: e.target.value})}
+                  placeholder="Enter your name *"
                   className="w-full pl-16 pr-4 py-4 bg-transparent border border-outline-variant/30 rounded-xl focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
                 />
               </div>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none border-r border-outline-variant/20 pr-4 py-2 my-1">
-                  <Phone className="h-5 w-5 text-on-surface-variant" />
-                </div>
-                <input
-                  type="tel"
-                  placeholder="Enter your contact number"
-                  className="w-full pl-16 pr-4 py-4 bg-transparent border border-outline-variant/30 rounded-xl focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
-                />
-              </div>
+              
+              <PhoneInput 
+                value={formData.phone}
+                onChange={(val) => setFormData({...formData, phone: val || ''})}
+                onValidationChange={setIsPhoneValid}
+                required
+              />
+              
               <div className="relative">
                 <div className="absolute top-4 left-0 pl-4 flex items-start pointer-events-none border-r border-outline-variant/20 pr-4 bottom-4">
                   <MessageSquare className="h-5 w-5 text-on-surface-variant" />
                 </div>
                 <textarea
-                  placeholder="Enter your message"
+                  placeholder="Enter your message *"
                   rows={4}
+                  value={formData.message}
+                  onChange={(e) => setFormData({...formData, message: e.target.value})}
                   className="w-full pl-16 pr-4 py-4 bg-transparent border border-outline-variant/30 rounded-xl focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
                 ></textarea>
               </div>
             </div>
-            <div className="px-6">
+            <div className="px-6 mt-4">
               <button 
-                className="w-full py-4 bg-[#1e8e52] hover:bg-[#167843] text-white rounded-xl font-bold transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-2 group"
-                onClick={() => setIsContactModalOpen(false)}
+                className="w-full py-4 bg-[#1e8e52] hover:bg-[#167843] text-white rounded-xl font-bold transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={handleSubmitFounder}
+                disabled={isSubmitting || !isPhoneValid || !formData.name || !formData.message}
               >
                 <Send className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                Submit
+                {isSubmitting ? 'Sending...' : 'Submit'}
               </button>
             </div>
           </motion.div>

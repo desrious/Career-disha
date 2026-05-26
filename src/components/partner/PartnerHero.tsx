@@ -8,6 +8,8 @@ import { motion } from 'motion/react';
 import { ArrowRight, Sparkles, Users, Globe, Target, ChevronDown, CheckCircle2, Loader2 } from 'lucide-react';
 import type { CmsPartnerHero } from '../../data/cms';
 import { savePartnerInquiry } from '../../data/cms';
+import PhoneInput from '../shared/PhoneInput';
+import { getPhoneDetails } from '../../utils/phoneUtils';
 
 interface PartnerHeroProps {
   data: CmsPartnerHero;
@@ -27,6 +29,7 @@ export default function PartnerHero({ data, onCTAClick }: PartnerHeroProps) {
     email: '',
     phone: '',
   });
+  const [isPhoneValid, setIsPhoneValid] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -34,8 +37,13 @@ export default function PartnerHero({ data, onCTAClick }: PartnerHeroProps) {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!formData.interestedIn || !formData.name || !formData.email || !formData.phone) return;
+    if (!isPhoneValid) {
+      alert("Please enter a valid phone number.");
+      return;
+    }
 
     setSubmitting(true);
+    const { countryCode, dialCode, countryName } = getPhoneDetails(formData.phone);
 
     // Save to Supabase
     try {
@@ -43,6 +51,9 @@ export default function PartnerHero({ data, onCTAClick }: PartnerHeroProps) {
         name: formData.name,
         email: formData.email,
         phone: formData.phone,
+        countryCode,
+        dialCode,
+        countryName,
         interested_in: formData.interestedIn,
       });
     } catch (error) {
@@ -50,7 +61,7 @@ export default function PartnerHero({ data, onCTAClick }: PartnerHeroProps) {
     }
 
     // Build WhatsApp message
-    const message = `Hi, I'm interested in the *${formData.interestedIn}* partner program.\n\nName: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone}`;
+    const message = `Hi, I'm interested in the *${formData.interestedIn}* partner program.\n\nName: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone} (${countryName})`;
     const waUrl = `https://wa.me/919289191164?text=${encodeURIComponent(message)}`;
 
     setSubmitting(false);
@@ -212,15 +223,20 @@ export default function PartnerHero({ data, onCTAClick }: PartnerHeroProps) {
                     </div>
 
                     <div>
-                      <input type="tel" placeholder="Phone Number" value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl font-medium text-sm text-slate-900 placeholder-slate-400 bg-slate-50/50 hover:border-blue-300 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all duration-200" required />
+                      <PhoneInput 
+                        value={formData.phone}
+                        onChange={(val) => setFormData({...formData, phone: val || ''})}
+                        onValidationChange={setIsPhoneValid}
+                        required
+                      />
                     </div>
 
                     <motion.button
                       type="submit"
-                      disabled={submitting}
+                      disabled={submitting || !isPhoneValid}
                       whileHover={{ scale: 1.02, y: -1 }}
                       whileTap={{ scale: 0.98 }}
-                      className="w-full flex items-center justify-center gap-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-extrabold text-base py-4 rounded-xl shadow-lg shadow-blue-600/25 transition-all duration-300 mt-2"
+                      className="w-full flex items-center justify-center gap-3 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-extrabold text-base py-4 rounded-xl shadow-lg shadow-blue-600/25 transition-all duration-300 mt-2"
                     >
                       {submitting ? (<><Loader2 className="w-5 h-5 animate-spin" />Submitting...</>) : (<>Get Started Now<ArrowRight className="w-5 h-5" /></>)}
                     </motion.button>

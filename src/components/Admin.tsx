@@ -641,8 +641,7 @@ export default function Admin({ data, onDataChange }: AdminProps) {
                           <tr>
                             <th className="px-4 py-3 font-bold">Date</th>
                             <th className="px-4 py-3 font-bold">Name</th>
-                            <th className="px-4 py-3 font-bold">Email</th>
-                            <th className="px-4 py-3 font-bold">Mobile</th>
+                            <th className="px-4 py-3 font-bold">Contact</th>
                             <th className="px-4 py-3 font-bold">Query</th>
                             <th className="px-4 py-3 text-right font-bold">Actions</th>
                           </tr>
@@ -652,8 +651,11 @@ export default function Admin({ data, onDataChange }: AdminProps) {
                             <tr key={inq.id ?? `${inq.email}-${inq.mobile}`}>
                               <td className="px-4 py-3 text-slate-500">{inq.created_at ? new Date(inq.created_at).toLocaleString() : '-'}</td>
                               <td className="px-4 py-3 font-bold">{inq.name}</td>
-                              <td className="px-4 py-3 text-slate-600">{inq.email}</td>
-                              <td className="px-4 py-3 text-slate-600">{inq.mobile}</td>
+                              <td className="px-4 py-3">
+                                <div>{inq.email}</div>
+                                <div className="text-slate-500">{inq.mobile}</div>
+                                {inq.countryName && <div className="text-xs text-slate-400">{inq.countryName} ({inq.countryCode})</div>}
+                              </td>
                               <td className="px-4 py-3 text-slate-600 whitespace-normal min-w-[200px]">{inq.query || '-'}</td>
                               <td className="px-4 py-3 text-right">
                                 <button
@@ -779,6 +781,7 @@ export default function Admin({ data, onDataChange }: AdminProps) {
                             <td className="px-4 py-3">
                               <div>{inquiry.email}</div>
                               <div className="text-slate-500">{inquiry.mobile}</div>
+                              {inquiry.countryName && <div className="text-xs text-slate-400">{inquiry.countryName} ({inquiry.countryCode})</div>}
                             </td>
                             <td className="px-4 py-3">{inquiry.service}</td>
                             <td className="px-4 py-3 text-slate-600">{inquiry.message || '-'}</td>
@@ -1110,7 +1113,10 @@ export default function Admin({ data, onDataChange }: AdminProps) {
                             <td className="px-4 py-3 text-slate-500">{inq.created_at ? new Date(inq.created_at).toLocaleString() : '-'}</td>
                             <td className="px-4 py-3 font-bold">{inq.name}</td>
                             <td className="px-4 py-3">{inq.email}</td>
-                            <td className="px-4 py-3">{inq.phone}</td>
+                            <td className="px-4 py-3">
+                              {inq.phone}
+                              {inq.countryName && <div className="text-xs text-slate-400 mt-1">{inq.countryName} ({inq.countryCode})</div>}
+                            </td>
                             <td className="px-4 py-3">
                               <span className="inline-flex rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-bold text-blue-700">{inq.interested_in}</span>
                             </td>
