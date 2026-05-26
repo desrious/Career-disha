@@ -474,3 +474,146 @@ ALTER TABLE public.partner_inquiries ADD COLUMN IF NOT EXISTS countryName text;
 ALTER TABLE public.brochure_inquiries ADD COLUMN IF NOT EXISTS countryCode text;
 ALTER TABLE public.brochure_inquiries ADD COLUMN IF NOT EXISTS dialCode text;
 ALTER TABLE public.brochure_inquiries ADD COLUMN IF NOT EXISTS countryName text;
+
+-- Sample Reports CMS metadata. PDF files are static uploads in Supabase Storage.
+create table if not exists public.sample_reports (
+  id uuid primary key default extensions.gen_random_uuid(),
+  slug text not null unique,
+  title text not null,
+  subtitle text not null,
+  page_count text not null,
+  pdf_path text not null default '',
+  is_active boolean not null default true,
+  updated_at timestamptz not null default now(),
+  constraint sample_reports_slug_check check (
+    slug in ('career-snapshot', 'career-insight', 'career-master-blueprint')
+  )
+);
+
+alter table public.sample_reports enable row level security;
+
+drop policy if exists "Public can read sample reports" on public.sample_reports;
+create policy "Public can read sample reports"
+on public.sample_reports
+for select
+to anon
+using (true);
+
+insert into public.sample_reports (slug, title, subtitle, page_count, pdf_path, is_active)
+values
+  ('career-snapshot', 'Career Snapshot', 'Know Your Strengths & Best Career Direction', '10 Pages', '', true),
+  ('career-insight', 'Career Insight Report', 'Personalized Guidance for Better Career Decisions', '22 Pages', '', true),
+  ('career-master-blueprint', 'Career Master Blueprint', 'Complete Career Planning for Long-Term Success', '36 Pages', '', true)
+on conflict (slug) do nothing;
+
+create or replace function public.save_sample_report(
+  p_session_token uuid,
+  p_slug text,
+  p_title text,
+  p_subtitle text,
+  p_page_count text,
+  p_pdf_path text,
+  p_is_active boolean
+)
+returns setof public.sample_reports
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_admin_id uuid;
+begin
+  select public.admin_sessions.admin_user_id
+  into v_admin_id
+  from public.admin_sessions
+  join public.admin_users on public.admin_users.id = public.admin_sessions.admin_user_id
+  where public.admin_sessions.session_token = p_session_token
+    and public.admin_sessions.expires_at > now()
+    and public.admin_users.is_active = true
+  limit 1;
+
+  if v_admin_id is null then
+    raise exception 'Invalid admin session' using errcode = '28000';
+  end if;
+
+  if p_slug not in ('career-snapshot', 'career-insight', 'career-master-blueprint') then
+    raise exception 'Invalid sample report slug' using errcode = '22023';
+  end if;
+
+  insert into public.sample_reports (slug, title, subtitle, page_count, pdf_path, is_active, updated_at)
+  values (
+    p_slug,
+    nullif(trim(p_title), ''),
+    nullif(trim(p_subtitle), ''),
+    nullif(trim(p_page_count), ''),
+    coalesce(p_pdf_path, ''),
+    coalesce(p_is_active, true),
+    now()
+  )
+  on conflict (slug) do update
+    set title = excluded.title,
+        subtitle = excluded.subtitle,
+        page_count = excluded.page_count,
+        pdf_path = excluded.pdf_path,
+        is_active = excluded.is_active,
+        updated_at = excluded.updated_at;
+
+  return query
+  select *
+  from public.sample_reports
+  where public.sample_reports.slug = p_slug;
+end;
+$$;
+
+revoke all on public.sample_reports from anon;
+grant select on public.sample_reports to anon;
+grant execute on function public.save_sample_report(uuid, text, text, text, text, text, boolean) to anon;
+
+-- Supabase Storage bucket for manually uploaded static sample report PDFs.
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values ('sample-reports', 'sample-reports', false, 52428800, array['application/pdf'])
+on conflict (id) do update
+  set public = excluded.public,
+      file_size_limit = excluded.file_size_limit,
+      allowed_mime_types = excluded.allowed_mime_types;
+
+drop policy if exists "Public can read sample report PDFs" on storage.objects;
+create policy "Public can read sample report PDFs"
+on storage.objects
+for select
+to anon
+using (bucket_id = 'sample-reports');
+
+drop policy if exists "Anon can upload sample report PDFs" on storage.objects;
+create policy "Anon can upload sample report PDFs"
+on storage.objects
+for insert
+to anon
+with check (
+  bucket_id = 'sample-reports'
+  and name in ('career-snapshot.pdf', 'career-insight.pdf', 'career-master-blueprint.pdf')
+);
+
+drop policy if exists "Anon can replace sample report PDFs" on storage.objects;
+create policy "Anon can replace sample report PDFs"
+on storage.objects
+for update
+to anon
+using (
+  bucket_id = 'sample-reports'
+  and name in ('career-snapshot.pdf', 'career-insight.pdf', 'career-master-blueprint.pdf')
+)
+with check (
+  bucket_id = 'sample-reports'
+  and name in ('career-snapshot.pdf', 'career-insight.pdf', 'career-master-blueprint.pdf')
+);
+
+drop policy if exists "Anon can delete sample report PDFs" on storage.objects;
+create policy "Anon can delete sample report PDFs"
+on storage.objects
+for delete
+to anon
+using (
+  bucket_id = 'sample-reports'
+  and name in ('career-snapshot.pdf', 'career-insight.pdf', 'career-master-blueprint.pdf')
+);

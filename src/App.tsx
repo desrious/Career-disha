@@ -5,7 +5,7 @@
  * - `MainApp` manages view-based routing and composes the landing page from
  *   modular section components located in `components/landing/`.
  */
-import { useState, useEffect } from 'react';
+import { lazy, Suspense, useState, useEffect } from 'react';
 import About from './components/About';
 import Admin from './components/Admin';
 import Insights from './components/Insights';
@@ -36,21 +36,47 @@ import Visionaries from './components/landing/Visionaries';
 import Counsellors from './components/landing/Counsellors';
 import LandingFooter from './components/landing/LandingFooter';
 import WhatsAppFAB from './components/shared/WhatsAppFAB';
+import SampleReportsFAB from './components/shared/SampleReportsFAB';
 
-import { CMS_STORAGE_KEY, CMS_UPDATED_EVENT, CmsData, loadCmsData, loadCmsDataSync } from './data/cms';
+import {
+  CMS_STORAGE_KEY,
+  CMS_UPDATED_EVENT,
+  CmsData,
+  SAMPLE_REPORTS_STORAGE_KEY,
+  SAMPLE_REPORTS_UPDATED_EVENT,
+  SampleReport,
+  loadCmsData,
+  loadCmsDataSync,
+  loadSampleReports,
+  loadSampleReportsSync,
+} from './data/cms';
 import { highSchoolData, plusTwoData, graduatesData, workingProfessionalData } from './data/servicePageData';
 
-type ViewType = 'landing' | 'about' | 'insights' | 'contact-us' | 'partner' | 'brochure' | 'high-school' | 'plus-two' | 'graduates' | 'working-professional' | 'terms' | 'privacy' | 'refund';
+const SampleReportPage = lazy(() => import('./components/SampleReportPage'));
 
-function MainApp({ cmsData }: { cmsData: CmsData }) {
-  const [view, setViewLocal] = useState<ViewType>(() => {
-    const path = window.location.pathname.replace(/^\/+/, '').replace(/\/+$/, '');
-    const validViews: ViewType[] = ['landing', 'about', 'insights', 'contact-us', 'partner', 'brochure', 'high-school', 'plus-two', 'graduates', 'working-professional', 'terms', 'privacy', 'refund'];
-    return validViews.includes(path as ViewType) ? (path as ViewType) : 'landing';
-  });
+type ViewType = 'landing' | 'about' | 'insights' | 'contact-us' | 'partner' | 'brochure' | 'high-school' | 'plus-two' | 'graduates' | 'working-professional' | 'terms' | 'privacy' | 'refund' | 'sample-report';
+
+const validViews: ViewType[] = ['landing', 'about', 'insights', 'contact-us', 'partner', 'brochure', 'high-school', 'plus-two', 'graduates', 'working-professional', 'terms', 'privacy', 'refund', 'sample-report'];
+
+function readRoute(): { view: ViewType; sampleReportSlug?: string } {
+  const normalizedPath = window.location.pathname.replace(/^\/+/, '').replace(/\/+$/, '');
+  const [firstSegment, secondSegment] = normalizedPath.split('/');
+
+  if (firstSegment === 'sample-report' && secondSegment) {
+    return { view: 'sample-report', sampleReportSlug: secondSegment };
+  }
+
+  return {
+    view: validViews.includes(normalizedPath as ViewType) ? (normalizedPath as ViewType) : 'landing',
+  };
+}
+
+function MainApp({ cmsData, sampleReports }: { cmsData: CmsData; sampleReports: SampleReport[] }) {
+  const [route, setRoute] = useState(() => readRoute());
+  const view = route.view;
 
   const setView = (newView: ViewType) => {
-    setViewLocal(newView);
+    if (newView === 'sample-report') return;
     const newPath = newView === 'landing' ? '/' : `/${newView}`;
     window.history.pushState({}, '', newPath);
     window.dispatchEvent(new PopStateEvent('popstate'));
@@ -58,9 +84,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
 
   useEffect(() => {
     const handlePopState = () => {
-      const path = window.location.pathname.replace(/^\/+/, '').replace(/\/+$/, '');
-      const validViews: ViewType[] = ['landing', 'about', 'insights', 'contact-us', 'partner', 'brochure', 'high-school', 'plus-two', 'graduates', 'working-professional', 'terms', 'privacy', 'refund'];
-      setViewLocal(validViews.includes(path as ViewType) ? (path as ViewType) : 'landing');
+      setRoute(readRoute());
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
@@ -88,6 +112,14 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
   if (view === 'terms') return <TermsPage onBack={() => setView('landing')} />;
   if (view === 'privacy') return <PrivacyPage onBack={() => setView('landing')} />;
   if (view === 'refund') return <RefundPage onBack={() => setView('landing')} />;
+  if (view === 'sample-report') {
+    const report = sampleReports.find((item) => item.slug === route.sampleReportSlug);
+    return (
+      <Suspense fallback={<div className="min-h-screen bg-slate-50" />}>
+        <SampleReportPage report={report} onBack={() => setView('landing')} />
+      </Suspense>
+    );
+  }
 
   // ─── Landing page ─────────────────────────────────────────
   return (
@@ -118,6 +150,7 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
       </main>
 
       <LandingFooter setView={setView} contact={cmsData.contact} />
+      <SampleReportsFAB reports={sampleReports} />
       <WhatsAppFAB />
 
       {showInquiryModal && (
@@ -134,11 +167,13 @@ function MainApp({ cmsData }: { cmsData: CmsData }) {
 
 export default function App() {
   const [cmsData, setCmsData] = useState<CmsData>(() => loadCmsDataSync());
+  const [sampleReports, setSampleReports] = useState<SampleReport[]>(() => loadSampleReportsSync());
   const [pathname, setPathname] = useState(() => window.location.pathname);
   const [showSplash, setShowSplash] = useState(() => localStorage.getItem('seenSplash') !== 'true');
 
   useEffect(() => {
     loadCmsData().then(setCmsData);
+    loadSampleReports().then(setSampleReports);
   }, []);
 
   useEffect(() => {
@@ -161,6 +196,25 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    const syncSampleReportsFromStorage = () => {
+      setSampleReports(loadSampleReportsSync());
+    };
+
+    const onStorage = (event: StorageEvent) => {
+      if (event.key === SAMPLE_REPORTS_STORAGE_KEY) {
+        syncSampleReportsFromStorage();
+      }
+    };
+
+    window.addEventListener(SAMPLE_REPORTS_UPDATED_EVENT, syncSampleReportsFromStorage);
+    window.addEventListener('storage', onStorage);
+    return () => {
+      window.removeEventListener(SAMPLE_REPORTS_UPDATED_EVENT, syncSampleReportsFromStorage);
+      window.removeEventListener('storage', onStorage);
+    };
+  }, []);
+
+  useEffect(() => {
     const onRouteChange = () => {
       setPathname(window.location.pathname);
     };
@@ -172,10 +226,10 @@ export default function App() {
   const isAdminRoute = pathname === '/admin' || pathname === '/admin/';
 
   if (isAdminRoute) {
-    return <Admin data={cmsData} onDataChange={setCmsData} />;
+    return <Admin data={cmsData} onDataChange={setCmsData} sampleReports={sampleReports} onSampleReportsChange={setSampleReports} />;
   }
 
-  if (!showSplash) return <MainApp cmsData={cmsData} />;
+  if (!showSplash) return <MainApp cmsData={cmsData} sampleReports={sampleReports} />;
 
   return (
     <>
@@ -183,7 +237,7 @@ export default function App() {
         localStorage.setItem('seenSplash', 'true');
         setShowSplash(false);
       }} />
-      <MainApp cmsData={cmsData} />
+      <MainApp cmsData={cmsData} sampleReports={sampleReports} />
     </>
   );
 }

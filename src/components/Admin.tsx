@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { LogOut, Plus, Save, Trash2, Upload } from 'lucide-react';
+import { FileText, LogOut, Plus, Save, Trash2, Upload, X } from 'lucide-react';
 import {
   ADMIN_SESSION_STORAGE_KEY,
   CmsCounsellor,
@@ -10,6 +10,7 @@ import {
   ExpertAdviceInquiry,
   PartnerInquiry,
   BrochureInquiry,
+  SampleReport,
   SupabaseCmsError,
   SupabaseConnectionStatus,
   checkSupabaseConnection,
@@ -21,23 +22,30 @@ import {
   deleteAllBrochureInquiries,
   deleteBrochureInquiry,
   loadBrochureInquiries,
+  loadSampleReports,
   loginAdmin,
   loadExpertAdviceInquiries,
   loadPartnerInquiries,
   logoutAdmin,
+  removeSampleReportPdf,
   saveCmsData,
+  saveSampleReport,
+  uploadSampleReportPdf,
   verifyAdminSession,
 } from '../data/cms';
 
 type AdminProps = {
   data: CmsData;
   onDataChange: (data: CmsData) => void;
+  sampleReports: SampleReport[];
+  onSampleReportsChange: (reports: SampleReport[]) => void;
 };
 
-type SectionKey = 'brochure' | 'offer' | 'expert' | 'insights' | 'testimonials' | 'counsellors' | 'contact' | 'partner';
+type SectionKey = 'brochure' | 'sampleReports' | 'offer' | 'expert' | 'insights' | 'testimonials' | 'counsellors' | 'contact' | 'partner';
 
 const sections: { key: SectionKey; label: string }[] = [
   { key: 'brochure', label: 'Brochure' },
+  { key: 'sampleReports', label: 'Sample Reports' },
   { key: 'offer', label: 'Offer' },
   { key: 'expert', label: 'Expert advice inquiry' },
   { key: 'insights', label: 'Insights' },
@@ -297,12 +305,13 @@ function ConnectionStatus({ status }: { status: SupabaseConnectionStatus }) {
   );
 }
 
-export default function Admin({ data, onDataChange }: AdminProps) {
+export default function Admin({ data, onDataChange, sampleReports, onSampleReportsChange }: AdminProps) {
   const [loggedIn, setLoggedIn] = useState(false);
   const [authChecked, setAuthChecked] = useState(false);
   const [credentials, setCredentials] = useState({ username: '', password: '' });
   const [active, setActive] = useState<SectionKey>('offer');
   const [draft, setDraft] = useState<CmsData>(data);
+  const [sampleReportDrafts, setSampleReportDrafts] = useState<SampleReport[]>(sampleReports);
   const latestDraftRef = useRef<CmsData>(data);
   const [inquiries, setInquiries] = useState<ExpertAdviceInquiry[]>([]);
   const [partnerInquiries, setPartnerInquiries] = useState<PartnerInquiry[]>([]);
@@ -319,6 +328,10 @@ export default function Admin({ data, onDataChange }: AdminProps) {
   const [deletingBrochureInquiryId, setDeletingBrochureInquiryId] = useState<string | null>(null);
   const [isDirty, setIsDirty] = useState(false);
   const [message, setMessage] = useState('');
+  const [savingReportSlug, setSavingReportSlug] = useState<string | null>(null);
+  const [uploadingReportSlug, setUploadingReportSlug] = useState<string | null>(null);
+  const [uploadProgressBySlug, setUploadProgressBySlug] = useState<Record<string, number>>({});
+  const [removingReportSlug, setRemovingReportSlug] = useState<string | null>(null);
   const [connection, setConnection] = useState<SupabaseConnectionStatus>({
     frontend: false,
     backend: false,
@@ -357,6 +370,10 @@ export default function Admin({ data, onDataChange }: AdminProps) {
   }, [data, isDirty]);
 
   useEffect(() => {
+    setSampleReportDrafts(sampleReports);
+  }, [sampleReports]);
+
+  useEffect(() => {
     if (!loggedIn) return;
     let active = true;
 
@@ -375,6 +392,12 @@ export default function Admin({ data, onDataChange }: AdminProps) {
       });
       loadBrochureInquiries().then((nextBrochureInquiries) => {
         if (active) setBrochureInquiries(nextBrochureInquiries);
+      });
+      loadSampleReports().then((nextReports) => {
+        if (active) {
+          setSampleReportDrafts(nextReports);
+          onSampleReportsChange(nextReports);
+        }
       });
     };
 
@@ -400,6 +423,75 @@ export default function Admin({ data, onDataChange }: AdminProps) {
     setDraft(next);
     setIsDirty(true);
     setMessage('');
+  };
+
+  const updateSampleReportDraft = (slug: string, patch: Partial<SampleReport>) => {
+    setSampleReportDrafts((current) =>
+      current.map((report) => (report.slug === slug ? { ...report, ...patch } : report)),
+    );
+    setMessage('');
+  };
+
+  const publishSampleReports = (reports: SampleReport[]) => {
+    setSampleReportDrafts(reports);
+    onSampleReportsChange(reports);
+  };
+
+  const saveReport = async (report: SampleReport) => {
+    setSavingReportSlug(report.slug);
+    try {
+      const saved = await saveSampleReport(report);
+      const nextReports = sampleReportDrafts.map((item) => (item.slug === saved.slug ? saved : item));
+      publishSampleReports(nextReports);
+      setMessage(`${saved.title} updated.`);
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Unable to save sample report.');
+    } finally {
+      setSavingReportSlug(null);
+    }
+  };
+
+  const uploadReportPdf = async (report: SampleReport, file: File) => {
+    if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+      setMessage('Only PDF files can be uploaded for sample reports.');
+      return;
+    }
+
+    setUploadingReportSlug(report.slug);
+    setUploadProgressBySlug((current) => ({ ...current, [report.slug]: 0 }));
+    try {
+      const pdfPath = await uploadSampleReportPdf(report.slug, file, (progress) => {
+        setUploadProgressBySlug((current) => ({ ...current, [report.slug]: progress }));
+      });
+      const saved = await saveSampleReport({ ...report, pdf_path: pdfPath });
+      const nextReports = sampleReportDrafts.map((item) => (item.slug === saved.slug ? saved : item));
+      publishSampleReports(nextReports);
+      setMessage(`${saved.title} PDF uploaded.`);
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Unable to upload sample report PDF.');
+    } finally {
+      setUploadingReportSlug(null);
+    }
+  };
+
+  const removeReportPdf = async (report: SampleReport) => {
+    if (!report.pdf_path) return;
+
+    const confirmed = window.confirm(`Remove the PDF for ${report.title}?`);
+    if (!confirmed) return;
+
+    setRemovingReportSlug(report.slug);
+    try {
+      await removeSampleReportPdf(report.pdf_path);
+      const saved = await saveSampleReport({ ...report, pdf_path: '' });
+      const nextReports = sampleReportDrafts.map((item) => (item.slug === saved.slug ? saved : item));
+      publishSampleReports(nextReports);
+      setMessage(`${saved.title} PDF removed.`);
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Unable to remove sample report PDF.');
+    } finally {
+      setRemovingReportSlug(null);
+    }
   };
 
   const refreshInquiries = async () => {
@@ -695,6 +787,131 @@ export default function Admin({ data, onDataChange }: AdminProps) {
                   )}
                 </div>
                         </div>
+            )}
+
+            {active === 'sampleReports' && (
+              <div className="space-y-6">
+                <div>
+                  <h2 className="text-xl font-extrabold">Sample Reports</h2>
+                  <p className="text-sm font-medium text-slate-500">Manage the three landing page report previews.</p>
+                </div>
+
+                <div className="grid gap-5 lg:grid-cols-3">
+                  {sampleReportDrafts.map((report) => {
+                    const uploadId = `sample-report-${report.slug}`;
+                    const isUploading = uploadingReportSlug === report.slug;
+                    const isSavingReport = savingReportSlug === report.slug;
+                    const isRemoving = removingReportSlug === report.slug;
+                    const progress = uploadProgressBySlug[report.slug] ?? 0;
+
+                    return (
+                      <div key={report.slug} className="flex flex-col rounded-xl border border-slate-200 bg-slate-50 p-4 shadow-sm">
+                        <div className="mb-4 flex items-start justify-between gap-3">
+                          <div className="flex items-center gap-3">
+                            <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                              <FileText className="h-5 w-5" />
+                            </span>
+                            <div>
+                              <h3 className="font-extrabold text-slate-950">{report.title}</h3>
+                              <p className="text-xs font-bold text-slate-500">{report.page_count}</p>
+                            </div>
+                          </div>
+                          <label className="flex items-center gap-2 text-xs font-bold text-slate-600">
+                            <input
+                              type="checkbox"
+                              checked={report.is_active}
+                              onChange={(event) => updateSampleReportDraft(report.slug, { is_active: event.target.checked })}
+                            />
+                            Active
+                          </label>
+                        </div>
+
+                        <div className="space-y-3">
+                          <Field
+                            label="Title"
+                            value={report.title}
+                            onChange={(title) => updateSampleReportDraft(report.slug, { title })}
+                          />
+                          <Field
+                            label="Page Count Text"
+                            value={report.page_count}
+                            onChange={(page_count) => updateSampleReportDraft(report.slug, { page_count })}
+                          />
+                          <TextArea
+                            label="Subtitle"
+                            value={report.subtitle}
+                            rows={3}
+                            onChange={(subtitle) => updateSampleReportDraft(report.slug, { subtitle })}
+                          />
+                        </div>
+
+                        <div className="mt-4 rounded-lg border border-slate-200 bg-white p-3">
+                          <div className="flex items-center justify-between gap-3">
+                            <div className="min-w-0">
+                              <p className="text-xs font-extrabold uppercase tracking-wider text-slate-500">PDF File</p>
+                              <p className="mt-1 truncate text-xs font-semibold text-slate-600">
+                                {report.pdf_path || 'No PDF uploaded'}
+                              </p>
+                            </div>
+                            {report.pdf_path && (
+                              <button
+                                onClick={() => removeReportPdf(report)}
+                                disabled={isRemoving}
+                                className="shrink-0 rounded-lg border border-red-200 p-2 text-red-600 transition hover:bg-red-50 disabled:opacity-50"
+                                title="Remove PDF"
+                              >
+                                <X className="h-4 w-4" />
+                              </button>
+                            )}
+                          </div>
+
+                          {isUploading && (
+                            <div className="mt-3">
+                              <div className="h-2 overflow-hidden rounded-full bg-slate-100">
+                                <div
+                                  className="h-full rounded-full bg-primary transition-all"
+                                  style={{ width: `${Math.max(progress, 8)}%` }}
+                                />
+                              </div>
+                              <p className="mt-1 text-xs font-bold text-slate-500">Uploading {progress}%</p>
+                            </div>
+                          )}
+
+                          <div className="mt-3 flex flex-wrap gap-2">
+                            <label
+                              htmlFor={uploadId}
+                              className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 shadow-sm hover:bg-slate-50"
+                            >
+                              <Upload className="h-4 w-4" />
+                              {report.pdf_path ? 'Replace PDF' : 'Upload PDF'}
+                            </label>
+                            <input
+                              id={uploadId}
+                              type="file"
+                              accept="application/pdf"
+                              className="hidden"
+                              onChange={(event) => {
+                                const file = event.target.files?.[0];
+                                event.target.value = '';
+                                if (file) uploadReportPdf(report, file);
+                              }}
+                            />
+                          </div>
+                        </div>
+
+                        <button
+                          onClick={() => saveReport(report)}
+                          disabled={isSavingReport || isUploading}
+                          className="mt-4 inline-flex items-center justify-center gap-2 rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-slate-800 disabled:opacity-60"
+                        >
+                          <Save className="h-4 w-4" />
+                          {isSavingReport ? 'Saving...' : 'Save Report'}
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
             )}
 
             {active === 'offer' && (
@@ -1408,5 +1625,3 @@ function CollectionEditor<T extends { id: string; name: string }>({
     </div>
   );
 }
-
-

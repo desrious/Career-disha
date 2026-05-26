@@ -144,6 +144,19 @@ export type CmsBrochure = {
   pdfUrl: string;
 };
 
+export type SampleReportSlug = 'career-snapshot' | 'career-insight' | 'career-master-blueprint';
+
+export type SampleReport = {
+  id?: string;
+  slug: SampleReportSlug;
+  title: string;
+  subtitle: string;
+  page_count: string;
+  pdf_path: string;
+  is_active: boolean;
+  updated_at?: string;
+};
+
 export type CmsData = {
   offer: CmsOffer;
   testimonials: CmsTestimonial[];
@@ -197,7 +210,43 @@ export const CMS_STORAGE_KEY = 'careerDishaCmsData_v2';
 export const CMS_UPDATED_EVENT = 'careerDishaCmsUpdated';
 export const CMS_UPDATED_AT_KEY = 'careerDishaCmsUpdatedAt';
 export const ADMIN_SESSION_STORAGE_KEY = 'careerDishaAdminSessionToken';
+export const SAMPLE_REPORTS_STORAGE_KEY = 'careerDishaSampleReports_v1';
+export const SAMPLE_REPORTS_UPDATED_EVENT = 'careerDishaSampleReportsUpdated';
+export const SAMPLE_REPORT_BUCKET = 'sample-reports';
 const CMS_ROW_ID = 'site';
+
+export const SAMPLE_REPORT_ORDER: SampleReportSlug[] = [
+  'career-snapshot',
+  'career-insight',
+  'career-master-blueprint',
+];
+
+export const defaultSampleReports: SampleReport[] = [
+  {
+    slug: 'career-snapshot',
+    title: 'Career Snapshot',
+    page_count: '10 Pages',
+    subtitle: 'Know Your Strengths & Best Career Direction',
+    pdf_path: '',
+    is_active: true,
+  },
+  {
+    slug: 'career-insight',
+    title: 'Career Insight Report',
+    page_count: '22 Pages',
+    subtitle: 'Personalized Guidance for Better Career Decisions',
+    pdf_path: '',
+    is_active: true,
+  },
+  {
+    slug: 'career-master-blueprint',
+    title: 'Career Master Blueprint',
+    page_count: '36 Pages',
+    subtitle: 'Complete Career Planning for Long-Term Success',
+    pdf_path: '',
+    is_active: true,
+  },
+];
 
 export const defaultCmsData: CmsData = {
   brochure: {
@@ -499,6 +548,195 @@ async function supabaseRpc<T>(fn: string, body: Record<string, unknown>) {
     method: 'POST',
     body: JSON.stringify(body),
   });
+}
+
+async function supabaseStorageRequest<T>(path: string, init: RequestInit = {}): Promise<T> {
+  if (!hasSupabaseConfig()) {
+    throw new Error('Supabase URL or publishable key is missing.');
+  }
+
+  const response = await fetch(`${SUPABASE_URL}/storage/v1/${path}`, {
+    ...init,
+    cache: 'no-store',
+    headers: {
+      apikey: SUPABASE_KEY,
+      Authorization: `Bearer ${SUPABASE_KEY}`,
+      ...(init.headers ?? {}),
+    },
+  });
+
+  if (!response.ok) {
+    const detail = await response.text();
+    throw new SupabaseCmsError(detail || `Supabase storage request failed with ${response.status}`, response.status);
+  }
+
+  if (response.status === 204) return undefined as T;
+
+  const contentType = response.headers.get('content-type') ?? '';
+  if (contentType.includes('application/json')) {
+    return (await response.json()) as T;
+  }
+
+  return (await response.arrayBuffer()) as T;
+}
+
+function normalizeSampleReports(rows: Partial<SampleReport>[] = []) {
+  const rowMap = new Map(rows.map((row) => [row.slug, row]));
+
+  return defaultSampleReports.map((fallback) => {
+    const row = rowMap.get(fallback.slug);
+    return {
+      ...fallback,
+      ...row,
+      slug: fallback.slug,
+      title: row?.title || fallback.title,
+      subtitle: row?.subtitle || fallback.subtitle,
+      page_count: row?.page_count || fallback.page_count,
+      pdf_path: row?.pdf_path || '',
+      is_active: row?.is_active ?? fallback.is_active,
+    };
+  });
+}
+
+export function loadSampleReportsSync(): SampleReport[] {
+  if (typeof window === 'undefined') return defaultSampleReports;
+
+  try {
+    const stored = window.localStorage.getItem(SAMPLE_REPORTS_STORAGE_KEY);
+    if (!stored) return defaultSampleReports;
+    return normalizeSampleReports(JSON.parse(stored) as Partial<SampleReport>[]);
+  } catch {
+    return defaultSampleReports;
+  }
+}
+
+export async function loadSampleReports(): Promise<SampleReport[]> {
+  const fallback = loadSampleReportsSync();
+
+  try {
+    const rows = await supabaseRequest<SampleReport[]>(
+      'sample_reports?select=id,slug,title,subtitle,page_count,pdf_path,is_active,updated_at',
+    );
+    const reports = normalizeSampleReports(rows);
+    window.localStorage.setItem(SAMPLE_REPORTS_STORAGE_KEY, JSON.stringify(reports));
+    return reports;
+  } catch (error) {
+    console.warn('Using local sample reports because Supabase load failed.', error);
+    return fallback;
+  }
+}
+
+export async function saveSampleReport(report: SampleReport) {
+  const sessionToken = window.sessionStorage.getItem(ADMIN_SESSION_STORAGE_KEY);
+  if (!sessionToken) {
+    throw new SupabaseCmsError('Admin session missing', 401);
+  }
+
+  const savedRows = await supabaseRpc<SampleReport[]>('save_sample_report', {
+    p_session_token: sessionToken,
+    p_slug: report.slug,
+    p_title: report.title,
+    p_subtitle: report.subtitle,
+    p_page_count: report.page_count,
+    p_pdf_path: report.pdf_path,
+    p_is_active: report.is_active,
+  });
+
+  const saved = savedRows[0] ?? report;
+  const nextReports = normalizeSampleReports(
+    loadSampleReportsSync().map((item) => (item.slug === saved.slug ? saved : item)),
+  );
+  window.localStorage.setItem(SAMPLE_REPORTS_STORAGE_KEY, JSON.stringify(nextReports));
+  window.dispatchEvent(new CustomEvent(SAMPLE_REPORTS_UPDATED_EVENT, { detail: nextReports }));
+
+  return saved;
+}
+
+function objectPathFromPdfPath(pdfPath: string) {
+  return pdfPath.replace(/^sample-reports\//, '').replace(/^\/+/, '');
+}
+
+export function buildSampleReportPdfPath(slug: SampleReportSlug) {
+  return `${SAMPLE_REPORT_BUCKET}/${slug}.pdf`;
+}
+
+export async function uploadSampleReportPdf(
+  slug: SampleReportSlug,
+  file: File,
+  onProgress?: (progress: number) => void,
+) {
+  if (!hasSupabaseConfig()) {
+    throw new Error('Supabase URL or publishable key is missing.');
+  }
+
+  if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+    throw new Error('Only PDF files can be uploaded.');
+  }
+
+  const objectPath = `${slug}.pdf`;
+
+  await new Promise<void>((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', `${SUPABASE_URL}/storage/v1/object/${SAMPLE_REPORT_BUCKET}/${objectPath}`);
+    xhr.setRequestHeader('apikey', SUPABASE_KEY);
+    xhr.setRequestHeader('Authorization', `Bearer ${SUPABASE_KEY}`);
+    xhr.setRequestHeader('Content-Type', 'application/pdf');
+    xhr.setRequestHeader('x-upsert', 'true');
+
+    xhr.upload.onprogress = (event) => {
+      if (event.lengthComputable && onProgress) {
+        onProgress(Math.round((event.loaded / event.total) * 100));
+      }
+    };
+
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        onProgress?.(100);
+        resolve();
+        return;
+      }
+      reject(new SupabaseCmsError(xhr.responseText || `Upload failed with ${xhr.status}`, xhr.status));
+    };
+
+    xhr.onerror = () => reject(new Error('Unable to upload PDF to Supabase Storage.'));
+    xhr.send(file);
+  });
+
+  return buildSampleReportPdfPath(slug);
+}
+
+export async function removeSampleReportPdf(pdfPath: string) {
+  const objectPath = objectPathFromPdfPath(pdfPath);
+  if (!objectPath) return;
+
+  await supabaseStorageRequest(`object/${SAMPLE_REPORT_BUCKET}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ prefixes: [objectPath] }),
+  });
+}
+
+export async function fetchSampleReportPdfBytes(report: SampleReport) {
+  if (!report.pdf_path) {
+    throw new Error('No PDF has been uploaded for this sample report.');
+  }
+
+  if (report.pdf_path.startsWith('data:application/pdf')) {
+    const response = await fetch(report.pdf_path);
+    return new Uint8Array(await response.arrayBuffer());
+  }
+
+  if (/^https?:\/\//i.test(report.pdf_path)) {
+    const response = await fetch(report.pdf_path, { cache: 'no-store' });
+    if (!response.ok) throw new Error('Unable to load sample report PDF.');
+    return new Uint8Array(await response.arrayBuffer());
+  }
+
+  const objectPath = objectPathFromPdfPath(report.pdf_path);
+  const buffer = await supabaseStorageRequest<ArrayBuffer>(`object/${SAMPLE_REPORT_BUCKET}/${objectPath}`);
+  return new Uint8Array(buffer);
 }
 
 function mergeCmsData(parsed: Partial<CmsData>): CmsData {
