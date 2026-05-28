@@ -62,23 +62,45 @@ export type CmsFooter = {
 
 export type CmsInsightBlog = {
   id: string;
+  slug?: string;
   title: string;
   excerpt: string;
+  content?: string;
   date: string;
   category: string;
   image: string;
   link: string;
+  seoTitle?: string;
+  seoDescription?: string;
+  isPublished?: boolean;
+  publishedAt?: string;
 };
 
 export type CmsInsightVideo = {
   id: string;
+  slug?: string;
   youtubeId: string;
   title: string;
+  description?: string;
+  thumbnail?: string;
+  seoTitle?: string;
+  seoDescription?: string;
+  isPublished?: boolean;
+  publishedAt?: string;
 };
 
 export type CmsInsights = {
+  id?: string;
+  slug?: string;
   heroTitle: string;
   heroDescription: string;
+  content?: string;
+  image?: string;
+  thumbnail?: string;
+  seoTitle?: string;
+  seoDescription?: string;
+  isPublished?: boolean;
+  publishedAt?: string;
   blogs: CmsInsightBlog[];
   videos: CmsInsightVideo[];
 };
@@ -213,7 +235,9 @@ export const ADMIN_SESSION_STORAGE_KEY = 'careerDishaAdminSessionToken';
 export const SAMPLE_REPORTS_STORAGE_KEY = 'careerDishaSampleReports_v1';
 export const SAMPLE_REPORTS_UPDATED_EVENT = 'careerDishaSampleReportsUpdated';
 export const SAMPLE_REPORT_BUCKET = 'sample-reports';
+export const INSIGHTS_MEDIA_BUCKET = 'insights-media';
 const CMS_ROW_ID = 'site';
+const INSIGHTS_PAGE_SLUG = 'insights-page';
 
 export const SAMPLE_REPORT_ORDER: SampleReportSlug[] = [
   'career-snapshot',
@@ -503,6 +527,71 @@ function hasSupabaseConfig() {
   return Boolean(SUPABASE_URL && SUPABASE_KEY);
 }
 
+function redactSessionToken(token: string | null | undefined) {
+  if (!token) return 'missing';
+  if (token.length <= 12) return 'redacted';
+  return `${token.slice(0, 8)}...${token.slice(-4)}`;
+}
+
+function cmsLog(event: string, details?: unknown) {
+  console.info(`[Career Disha CMS] ${event}`, details ?? '');
+}
+
+function cmsWarn(event: string, details?: unknown) {
+  console.warn(`[Career Disha CMS] ${event}`, details ?? '');
+}
+
+function cmsError(event: string, details?: unknown) {
+  console.error(`[Career Disha CMS] ${event}`, details ?? '');
+}
+
+function getAdminSessionToken() {
+  const sessionToken = window.sessionStorage.getItem(ADMIN_SESSION_STORAGE_KEY);
+  cmsLog('admin session token read', { token: redactSessionToken(sessionToken) });
+  if (!sessionToken) {
+    throw new SupabaseCmsError('Admin session missing', 401);
+  }
+  return sessionToken;
+}
+
+function persistCmsData(data: CmsData) {
+  window.localStorage.setItem(CMS_STORAGE_KEY, JSON.stringify(data));
+  window.localStorage.setItem(CMS_UPDATED_AT_KEY, String(Date.now()));
+  window.dispatchEvent(new CustomEvent(CMS_UPDATED_EVENT, { detail: data }));
+}
+
+function slugify(value: string, fallback: string) {
+  const slug = value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .replace(/-{2,}/g, '-');
+
+  return slug || fallback;
+}
+
+function isUuid(value: string | undefined) {
+  return Boolean(value && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value));
+}
+
+function safePublishedAt(value: string | undefined) {
+  if (!value) return null;
+  const time = new Date(value).getTime();
+  return Number.isFinite(time) ? new Date(time).toISOString() : null;
+}
+
+function formatPublishedDate(value: string | null | undefined) {
+  if (!value) return new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+  return date.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function publicStorageUrl(bucket: string, objectPath: string) {
+  return `${SUPABASE_URL}/storage/v1/object/public/${bucket}/${objectPath}`;
+}
+
 export type SupabaseConnectionStatus = {
   frontend: boolean;
   backend: boolean;
@@ -515,10 +604,77 @@ export type AdminSession = {
   username: string;
 };
 
+type InsightRow = {
+  id: string;
+  slug: string;
+  title: string;
+  description: string;
+  content: string;
+  image_url: string;
+  thumbnail_url: string;
+  is_published: boolean;
+  published_at: string | null;
+  seo_title: string;
+  seo_description: string;
+  sort_order: number;
+  created_at?: string;
+  updated_at?: string;
+};
+
+type BlogPostRow = {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  category: string;
+  display_date: string;
+  read_more_url: string;
+  image_url: string;
+  thumbnail_url: string;
+  is_published: boolean;
+  published_at: string | null;
+  seo_title: string;
+  seo_description: string;
+  sort_order: number;
+  created_at?: string;
+  updated_at?: string;
+};
+
+type YoutubeVideoRow = {
+  id: string;
+  slug: string;
+  youtube_id: string;
+  title: string;
+  description: string;
+  thumbnail_url: string;
+  is_published: boolean;
+  published_at: string | null;
+  seo_title: string;
+  seo_description: string;
+  sort_order: number;
+  created_at?: string;
+  updated_at?: string;
+};
+
+type InsightsCmsRpcResponse = {
+  insight: InsightRow | null;
+  blogs: BlogPostRow[];
+  videos: YoutubeVideoRow[];
+};
+
+type InsightsCmsPayload = {
+  insight: Record<string, unknown>;
+  blogs: Record<string, unknown>[];
+  videos: Record<string, unknown>[];
+};
+
 async function supabaseRequest<T>(path: string, init: RequestInit = {}): Promise<T> {
   if (!hasSupabaseConfig()) {
     throw new Error('Supabase URL or publishable key is missing.');
   }
+
+  cmsLog('REST request', { path, method: init.method ?? 'GET' });
 
   const response = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
     ...init,
@@ -533,6 +689,7 @@ async function supabaseRequest<T>(path: string, init: RequestInit = {}): Promise
 
   if (!response.ok) {
     const detail = await response.text();
+    cmsError('REST request failed', { path, status: response.status, detail });
     throw new SupabaseCmsError(detail || `Supabase request failed with ${response.status}`, response.status);
   }
 
@@ -540,20 +697,33 @@ async function supabaseRequest<T>(path: string, init: RequestInit = {}): Promise
 
   const text = await response.text();
   if (!text) return undefined as T;
-  return JSON.parse(text) as T;
+  const parsed = JSON.parse(text) as T;
+  cmsLog('REST response', { path, status: response.status, result: parsed });
+  return parsed;
 }
 
 async function supabaseRpc<T>(fn: string, body: Record<string, unknown>) {
-  return supabaseRequest<T>(`rpc/${fn}`, {
+  const safeBody = {
+    ...body,
+    p_session_token: typeof body.p_session_token === 'string' ? redactSessionToken(body.p_session_token) : body.p_session_token,
+  };
+  cmsLog('RPC request', { fn, payload: safeBody });
+
+  const result = await supabaseRequest<T>(`rpc/${fn}`, {
     method: 'POST',
     body: JSON.stringify(body),
   });
+
+  cmsLog('RPC response', { fn, result });
+  return result;
 }
 
 async function supabaseStorageRequest<T>(path: string, init: RequestInit = {}): Promise<T> {
   if (!hasSupabaseConfig()) {
     throw new Error('Supabase URL or publishable key is missing.');
   }
+
+  cmsLog('Storage request', { path, method: init.method ?? 'GET' });
 
   const response = await fetch(`${SUPABASE_URL}/storage/v1/${path}`, {
     ...init,
@@ -567,6 +737,7 @@ async function supabaseStorageRequest<T>(path: string, init: RequestInit = {}): 
 
   if (!response.ok) {
     const detail = await response.text();
+    cmsError('Storage request failed', { path, status: response.status, detail });
     throw new SupabaseCmsError(detail || `Supabase storage request failed with ${response.status}`, response.status);
   }
 
@@ -621,16 +792,13 @@ export async function loadSampleReports(): Promise<SampleReport[]> {
     window.localStorage.setItem(SAMPLE_REPORTS_STORAGE_KEY, JSON.stringify(reports));
     return reports;
   } catch (error) {
-    console.warn('Using local sample reports because Supabase load failed.', error);
+    cmsWarn('Using local sample reports because Supabase load failed.', error);
     return fallback;
   }
 }
 
 export async function saveSampleReport(report: SampleReport) {
-  const sessionToken = window.sessionStorage.getItem(ADMIN_SESSION_STORAGE_KEY);
-  if (!sessionToken) {
-    throw new SupabaseCmsError('Admin session missing', 401);
-  }
+  const sessionToken = getAdminSessionToken();
 
   const savedRows = await supabaseRpc<SampleReport[]>('save_sample_report', {
     p_session_token: sessionToken,
@@ -673,13 +841,21 @@ export async function uploadSampleReportPdf(
     throw new Error('Only PDF files can be uploaded.');
   }
 
+  const sessionToken = getAdminSessionToken();
   const objectPath = `${slug}.pdf`;
+  cmsLog('Sample report PDF upload starting', {
+    bucket: SAMPLE_REPORT_BUCKET,
+    objectPath,
+    size: file.size,
+    sessionToken: redactSessionToken(sessionToken),
+  });
 
   await new Promise<void>((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', `${SUPABASE_URL}/storage/v1/object/${SAMPLE_REPORT_BUCKET}/${objectPath}`);
     xhr.setRequestHeader('apikey', SUPABASE_KEY);
     xhr.setRequestHeader('Authorization', `Bearer ${SUPABASE_KEY}`);
+    xhr.setRequestHeader('x-admin-session-token', sessionToken);
     xhr.setRequestHeader('Content-Type', 'application/pdf');
     xhr.setRequestHeader('x-upsert', 'true');
 
@@ -691,28 +867,129 @@ export async function uploadSampleReportPdf(
 
     xhr.onload = () => {
       if (xhr.status >= 200 && xhr.status < 300) {
+        cmsLog('Sample report PDF upload complete', { bucket: SAMPLE_REPORT_BUCKET, objectPath });
         onProgress?.(100);
         resolve();
         return;
       }
+      cmsError('Sample report PDF upload rejected', { status: xhr.status, response: xhr.responseText });
       reject(new SupabaseCmsError(xhr.responseText || `Upload failed with ${xhr.status}`, xhr.status));
     };
 
-    xhr.onerror = () => reject(new Error('Unable to upload PDF to Supabase Storage.'));
+    xhr.onerror = () => {
+      cmsError('Sample report PDF upload network failure', { bucket: SAMPLE_REPORT_BUCKET, objectPath });
+      reject(new Error('Unable to upload PDF to Supabase Storage.'));
+    };
     xhr.send(file);
   });
 
   return buildSampleReportPdfPath(slug);
 }
 
+function fileExtension(file: File) {
+  const nameExtension = file.name.split('.').pop()?.toLowerCase();
+  if (nameExtension) return nameExtension === 'jpg' ? 'jpeg' : nameExtension;
+  if (file.type === 'image/jpeg') return 'jpeg';
+  if (file.type === 'image/png') return 'png';
+  if (file.type === 'image/webp') return 'webp';
+  if (file.type === 'image/gif') return 'gif';
+  return '';
+}
+
+function validateInsightImage(file: File) {
+  const extension = fileExtension(file);
+  const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+  const allowedExtensions = ['jpeg', 'jpg', 'png', 'webp', 'gif'];
+
+  if (file.size > 5 * 1024 * 1024) {
+    throw new Error('Image is too large. Maximum upload size is 5MB.');
+  }
+
+  if (file.type && !allowedTypes.includes(file.type)) {
+    throw new Error('Only JPG, PNG, WebP, or GIF images can be uploaded.');
+  }
+
+  if (!allowedExtensions.includes(extension)) {
+    throw new Error('Only JPG, PNG, WebP, or GIF images can be uploaded.');
+  }
+
+  return extension === 'jpeg' ? 'jpg' : extension;
+}
+
+export async function uploadInsightMediaFile(file: File, folder = 'blogs', onProgress?: (progress: number) => void) {
+  if (!hasSupabaseConfig()) {
+    throw new Error('Supabase URL or publishable key is missing.');
+  }
+
+  const sessionToken = getAdminSessionToken();
+  const extension = validateInsightImage(file);
+  const safeName = slugify(file.name.replace(/\.[^.]+$/, ''), 'image');
+  const objectPath = `${slugify(folder, 'uploads')}/${Date.now()}-${crypto.randomUUID()}-${safeName}.${extension}`;
+  const contentType = file.type || (extension === 'jpg' ? 'image/jpeg' : `image/${extension}`);
+
+  cmsLog('Storage upload starting', {
+    bucket: INSIGHTS_MEDIA_BUCKET,
+    objectPath,
+    contentType,
+    size: file.size,
+    sessionToken: redactSessionToken(sessionToken),
+  });
+
+  await new Promise<void>((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', `${SUPABASE_URL}/storage/v1/object/${INSIGHTS_MEDIA_BUCKET}/${objectPath}`);
+    xhr.setRequestHeader('apikey', SUPABASE_KEY);
+    xhr.setRequestHeader('Authorization', `Bearer ${SUPABASE_KEY}`);
+    xhr.setRequestHeader('x-admin-session-token', sessionToken);
+    xhr.setRequestHeader('Content-Type', contentType);
+    xhr.setRequestHeader('x-upsert', 'true');
+
+    xhr.upload.onprogress = (event) => {
+      if (event.lengthComputable && onProgress) {
+        onProgress(Math.round((event.loaded / event.total) * 100));
+      }
+    };
+
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        cmsLog('Storage upload complete', { bucket: INSIGHTS_MEDIA_BUCKET, objectPath, response: xhr.responseText });
+        onProgress?.(100);
+        resolve();
+        return;
+      }
+
+      cmsError('Storage upload rejected', {
+        bucket: INSIGHTS_MEDIA_BUCKET,
+        objectPath,
+        status: xhr.status,
+        response: xhr.responseText,
+      });
+      reject(new SupabaseCmsError(xhr.responseText || `Upload failed with ${xhr.status}`, xhr.status));
+    };
+
+    xhr.onerror = () => {
+      cmsError('Storage upload network failure', { bucket: INSIGHTS_MEDIA_BUCKET, objectPath });
+      reject(new Error('Unable to upload image to Supabase Storage.'));
+    };
+
+    xhr.send(file);
+  });
+
+  const url = publicStorageUrl(INSIGHTS_MEDIA_BUCKET, objectPath);
+  cmsLog('Storage public URL generated', { url });
+  return url;
+}
+
 export async function removeSampleReportPdf(pdfPath: string) {
   const objectPath = objectPathFromPdfPath(pdfPath);
   if (!objectPath) return;
+  const sessionToken = getAdminSessionToken();
 
   await supabaseStorageRequest(`object/${SAMPLE_REPORT_BUCKET}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
+      'x-admin-session-token': sessionToken,
     },
     body: JSON.stringify({ prefixes: [objectPath] }),
   });
@@ -737,6 +1014,165 @@ export async function fetchSampleReportPdfBytes(report: SampleReport) {
   const objectPath = objectPathFromPdfPath(report.pdf_path);
   const buffer = await supabaseStorageRequest<ArrayBuffer>(`object/${SAMPLE_REPORT_BUCKET}/${objectPath}`);
   return new Uint8Array(buffer);
+}
+
+function insightRowToCms(row: InsightRow | null | undefined, fallback: CmsInsights): CmsInsights {
+  if (!row) return fallback;
+
+  return {
+    ...fallback,
+    id: row.id,
+    slug: row.slug,
+    heroTitle: row.title || fallback.heroTitle,
+    heroDescription: row.description || fallback.heroDescription,
+    content: row.content,
+    image: row.image_url,
+    thumbnail: row.thumbnail_url,
+    seoTitle: row.seo_title,
+    seoDescription: row.seo_description,
+    isPublished: row.is_published,
+    publishedAt: row.published_at ?? undefined,
+  };
+}
+
+function blogRowToCms(row: BlogPostRow): CmsInsightBlog {
+  return {
+    id: row.slug || row.id,
+    slug: row.slug,
+    title: row.title,
+    excerpt: row.excerpt,
+    content: row.content,
+    date: row.display_date || formatPublishedDate(row.published_at),
+    category: row.category,
+    image: row.image_url || row.thumbnail_url || '/CareerDishaLogo.png',
+    link: row.read_more_url,
+    seoTitle: row.seo_title,
+    seoDescription: row.seo_description,
+    isPublished: row.is_published,
+    publishedAt: row.published_at ?? undefined,
+  };
+}
+
+function videoRowToCms(row: YoutubeVideoRow): CmsInsightVideo {
+  return {
+    id: row.slug || row.id,
+    slug: row.slug,
+    youtubeId: row.youtube_id,
+    title: row.title,
+    description: row.description,
+    thumbnail: row.thumbnail_url,
+    seoTitle: row.seo_title,
+    seoDescription: row.seo_description,
+    isPublished: row.is_published,
+    publishedAt: row.published_at ?? undefined,
+  };
+}
+
+function insightsRpcResponseToCms(response: InsightsCmsRpcResponse | null | undefined, fallback: CmsInsights) {
+  if (!response) return fallback;
+  const page = insightRowToCms(response.insight, fallback);
+
+  return {
+    ...page,
+    blogs: Array.isArray(response.blogs) ? response.blogs.map(blogRowToCms) : fallback.blogs,
+    videos: Array.isArray(response.videos) ? response.videos.map(videoRowToCms) : fallback.videos,
+  };
+}
+
+function buildInsightsPayload(insights: CmsInsights): InsightsCmsPayload {
+  return {
+    insight: {
+      id: isUuid(insights.id) ? insights.id : null,
+      slug: insights.slug || INSIGHTS_PAGE_SLUG,
+      title: insights.heroTitle,
+      description: insights.heroDescription,
+      content: insights.content || '',
+      image_url: insights.image || '',
+      thumbnail_url: insights.thumbnail || '',
+      is_published: insights.isPublished ?? true,
+      published_at: safePublishedAt(insights.publishedAt),
+      seo_title: insights.seoTitle || '',
+      seo_description: insights.seoDescription || '',
+      sort_order: 0,
+    },
+    blogs: insights.blogs.map((blog, index) => {
+      const slug = slugify(blog.slug || blog.id || blog.title, `blog-${index + 1}`);
+      return {
+        id: isUuid(blog.id) ? blog.id : null,
+        slug,
+        title: blog.title,
+        excerpt: blog.excerpt,
+        content: blog.content || '',
+        category: blog.category,
+        display_date: blog.date,
+        read_more_url: blog.link,
+        image_url: blog.image,
+        thumbnail_url: blog.image,
+        is_published: blog.isPublished ?? true,
+        published_at: safePublishedAt(blog.publishedAt),
+        seo_title: blog.seoTitle || '',
+        seo_description: blog.seoDescription || '',
+        sort_order: index,
+      };
+    }),
+    videos: insights.videos.map((video, index) => {
+      const slug = slugify(video.slug || video.id || video.title || video.youtubeId, `video-${index + 1}`);
+      return {
+        id: isUuid(video.id) ? video.id : null,
+        slug,
+        youtube_id: video.youtubeId.trim(),
+        title: video.title,
+        description: video.description || '',
+        thumbnail_url: video.thumbnail || '',
+        is_published: video.isPublished ?? true,
+        published_at: safePublishedAt(video.publishedAt),
+        seo_title: video.seoTitle || '',
+        seo_description: video.seoDescription || '',
+        sort_order: index,
+      };
+    }),
+  };
+}
+
+async function loadPublishedInsightsFromSupabase(fallback: CmsInsights) {
+  const [insightRows, blogRows, videoRows] = await Promise.all([
+    supabaseRequest<InsightRow[]>(
+      `insights?slug=eq.${INSIGHTS_PAGE_SLUG}&is_published=eq.true&select=id,slug,title,description,content,image_url,thumbnail_url,is_published,published_at,seo_title,seo_description,sort_order,updated_at&limit=1`,
+    ),
+    supabaseRequest<BlogPostRow[]>(
+      'blog_posts?is_published=eq.true&select=id,slug,title,excerpt,content,category,display_date,read_more_url,image_url,thumbnail_url,is_published,published_at,seo_title,seo_description,sort_order,updated_at&order=sort_order.asc',
+    ),
+    supabaseRequest<YoutubeVideoRow[]>(
+      'youtube_videos?is_published=eq.true&select=id,slug,youtube_id,title,description,thumbnail_url,is_published,published_at,seo_title,seo_description,sort_order,updated_at&order=sort_order.asc',
+    ),
+  ]);
+
+  if (!insightRows[0] && blogRows.length === 0 && videoRows.length === 0) {
+    return fallback;
+  }
+
+  return insightsRpcResponseToCms(
+    {
+      insight: insightRows[0] ?? null,
+      blogs: blogRows,
+      videos: videoRows,
+    },
+    fallback,
+  );
+}
+
+async function saveInsightsCms(insights: CmsInsights, sessionToken: string) {
+  const payload = buildInsightsPayload(insights);
+  cmsLog('saving insights payload', { payload, sessionToken: redactSessionToken(sessionToken) });
+
+  const rows = await supabaseRpc<{ data: InsightsCmsRpcResponse }[]>('save_insights_cms', {
+    p_session_token: sessionToken,
+    p_payload: payload,
+  });
+
+  const saved = insightsRpcResponseToCms(rows[0]?.data, insights);
+  cmsLog('saved insights content', saved);
+  return saved;
 }
 
 function mergeCmsData(parsed: Partial<CmsData>): CmsData {
@@ -801,34 +1237,40 @@ export async function loadCmsData(): Promise<CmsData> {
       `cms_settings?id=eq.${CMS_ROW_ID}&select=data&limit=1`,
     );
     const remoteData = rows[0]?.data;
-    if (!remoteData) return fallback;
+    const cmsBase = remoteData ? mergeCmsData(remoteData) : fallback;
+    const publishedInsights = await loadPublishedInsightsFromSupabase(cmsBase.insights).catch((error) => {
+      cmsWarn('Using CMS JSON insights because dedicated Insights tables could not be loaded.', error);
+      return cmsBase.insights;
+    });
 
-    const merged = mergeCmsData(remoteData);
-    window.localStorage.setItem(CMS_STORAGE_KEY, JSON.stringify(merged));
+    const merged = mergeCmsData({ ...cmsBase, insights: publishedInsights });
+    persistCmsData(merged);
     return merged;
   } catch (error) {
-    console.warn('Using local CMS data because Supabase CMS load failed.', error);
+    cmsWarn('Using local CMS data because Supabase CMS load failed.', error);
     return fallback;
   }
 }
 
 export async function saveCmsData(data: CmsData) {
-  const sessionToken = window.sessionStorage.getItem(ADMIN_SESSION_STORAGE_KEY);
-  if (!sessionToken) {
-    throw new SupabaseCmsError('Admin session missing', 401);
-  }
-
-  window.localStorage.setItem(CMS_STORAGE_KEY, JSON.stringify(data));
+  const sessionToken = getAdminSessionToken();
 
   try {
+    const savedInsights = await saveInsightsCms(data.insights, sessionToken);
+    const dataToPersist = mergeCmsData({ ...data, insights: savedInsights });
+
     await supabaseRpc('save_cms_settings', {
       p_session_token: sessionToken,
-      p_data: data,
+      p_data: dataToPersist,
     });
-    window.localStorage.setItem(CMS_UPDATED_AT_KEY, String(Date.now()));
-    window.dispatchEvent(new CustomEvent(CMS_UPDATED_EVENT, { detail: data }));
+
+    persistCmsData(dataToPersist);
+    return dataToPersist;
   } catch (error) {
-    console.warn('Saved CMS locally, but Supabase CMS save failed.', error);
+    cmsError('Supabase CMS save failed. Local cache was not updated.', {
+      error,
+      sessionToken: redactSessionToken(sessionToken),
+    });
     throw error;
   }
 }
@@ -852,16 +1294,13 @@ export async function loadExpertAdviceInquiries() {
       p_session_token: sessionToken,
     });
   } catch (error) {
-    console.warn('Supabase inquiry load failed.', error);
+    cmsWarn('Supabase inquiry load failed.', error);
     return [];
   }
 }
 
 export async function deleteExpertAdviceInquiry(inquiryId: string) {
-  const sessionToken = window.sessionStorage.getItem(ADMIN_SESSION_STORAGE_KEY);
-  if (!sessionToken) {
-    throw new SupabaseCmsError('Admin session missing', 401);
-  }
+  const sessionToken = getAdminSessionToken();
 
   await supabaseRpc('delete_expert_advice_inquiry', {
     p_session_token: sessionToken,
@@ -870,10 +1309,7 @@ export async function deleteExpertAdviceInquiry(inquiryId: string) {
 }
 
 export async function deleteAllExpertAdviceInquiries() {
-  const sessionToken = window.sessionStorage.getItem(ADMIN_SESSION_STORAGE_KEY);
-  if (!sessionToken) {
-    throw new SupabaseCmsError('Admin session missing', 401);
-  }
+  const sessionToken = getAdminSessionToken();
 
   await supabaseRpc('delete_all_expert_advice_inquiries', {
     p_session_token: sessionToken,
@@ -901,16 +1337,13 @@ export async function loadPartnerInquiries() {
       p_session_token: sessionToken,
     });
   } catch (error) {
-    console.warn('Supabase partner inquiry load failed.', error);
+    cmsWarn('Supabase partner inquiry load failed.', error);
     return [];
   }
 }
 
 export async function deletePartnerInquiry(inquiryId: string) {
-  const sessionToken = window.sessionStorage.getItem(ADMIN_SESSION_STORAGE_KEY);
-  if (!sessionToken) {
-    throw new SupabaseCmsError('Admin session missing', 401);
-  }
+  const sessionToken = getAdminSessionToken();
 
   await supabaseRpc('delete_partner_inquiry', {
     p_session_token: sessionToken,
@@ -919,10 +1352,7 @@ export async function deletePartnerInquiry(inquiryId: string) {
 }
 
 export async function deleteAllPartnerInquiries() {
-  const sessionToken = window.sessionStorage.getItem(ADMIN_SESSION_STORAGE_KEY);
-  if (!sessionToken) {
-    throw new SupabaseCmsError('Admin session missing', 401);
-  }
+  const sessionToken = getAdminSessionToken();
 
   await supabaseRpc('delete_all_partner_inquiries', {
     p_session_token: sessionToken,
@@ -965,6 +1395,9 @@ export async function checkSupabaseConnection(): Promise<SupabaseConnectionStatu
   try {
     await Promise.all([
       supabaseRequest('cms_settings?select=id&limit=1'),
+      supabaseRequest('insights?select=id&limit=1'),
+      supabaseRequest('blog_posts?select=id&limit=1'),
+      supabaseRequest('youtube_videos?select=id&limit=1'),
       supabaseRpc('verify_admin_login', {
         p_username: '__health_check__',
         p_password: '__health_check__',
@@ -1020,16 +1453,13 @@ export async function loadBrochureInquiries() {
       p_session_token: sessionToken,
     });
   } catch (error) {
-    console.warn('Supabase brochure inquiry load failed.', error);
+    cmsWarn('Supabase brochure inquiry load failed.', error);
     return [];
   }
 }
 
 export async function deleteBrochureInquiry(inquiryId: string) {
-  const sessionToken = window.sessionStorage.getItem(ADMIN_SESSION_STORAGE_KEY);
-  if (!sessionToken) {
-    throw new SupabaseCmsError('Admin session missing', 401);
-  }
+  const sessionToken = getAdminSessionToken();
 
   await supabaseRpc('delete_brochure_inquiry', {
     p_session_token: sessionToken,
@@ -1038,10 +1468,7 @@ export async function deleteBrochureInquiry(inquiryId: string) {
 }
 
 export async function deleteAllBrochureInquiries() {
-  const sessionToken = window.sessionStorage.getItem(ADMIN_SESSION_STORAGE_KEY);
-  if (!sessionToken) {
-    throw new SupabaseCmsError('Admin session missing', 401);
-  }
+  const sessionToken = getAdminSessionToken();
 
   await supabaseRpc('delete_all_brochure_inquiries', {
     p_session_token: sessionToken,

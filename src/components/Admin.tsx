@@ -30,6 +30,7 @@ import {
   removeSampleReportPdf,
   saveCmsData,
   saveSampleReport,
+  uploadInsightMediaFile,
   uploadSampleReportPdf,
   verifyAdminSession,
 } from '../data/cms';
@@ -255,32 +256,64 @@ function PdfInput({ value, onChange }: { value: string; onChange: (value: string
   );
 }
 
-function ImageInput({ value, onChange }: { value: string; onChange: (value: string) => void }) {
+function ImageInput({
+  value,
+  onChange,
+  onUpload,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  onUpload?: (file: File, onProgress: (progress: number) => void) => Promise<string>;
+}) {
   const uploadId = useMemo(() => crypto.randomUUID(), []);
+  const [isUploading, setIsUploading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [error, setError] = useState('');
 
   return (
     <div className="space-y-2">
       <Field label="Image URL" value={value} onChange={onChange} />
       <label
         htmlFor={uploadId}
-        className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+        className={`inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 ${isUploading ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}`}
       >
         <Upload className="h-4 w-4" />
-        Upload Image
+        {isUploading ? `Uploading ${progress}%` : 'Upload Image'}
       </label>
       <input
         id={uploadId}
         type="file"
         accept="image/*"
         className="hidden"
-        onChange={(event) => {
+        disabled={isUploading}
+        onChange={async (event) => {
           const file = event.target.files?.[0];
+          event.target.value = '';
           if (!file) return;
-          const reader = new FileReader();
-          reader.onload = () => onChange(String(reader.result));
-          reader.readAsDataURL(file);
+
+          setError('');
+          setProgress(0);
+          setIsUploading(true);
+
+          try {
+            if (onUpload) {
+              const uploadedUrl = await onUpload(file, setProgress);
+              onChange(uploadedUrl);
+              return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = () => onChange(String(reader.result));
+            reader.onerror = () => setError('Unable to read the selected image.');
+            reader.readAsDataURL(file);
+          } catch (uploadError) {
+            setError(uploadError instanceof Error ? uploadError.message : 'Unable to upload image.');
+          } finally {
+            setIsUploading(false);
+          }
         }}
       />
+      {error && <p className="text-xs font-bold text-red-600">{error}</p>}
     </div>
   );
 }
@@ -531,6 +564,8 @@ export default function Admin({ data, onDataChange, sampleReports, onSampleRepor
   };
 
   const save = async () => {
+    if (isSaving) return;
+
     const latestDraft = latestDraftRef.current;
 
     // Validate countdown configuration before saving
@@ -554,18 +589,21 @@ export default function Admin({ data, onDataChange, sampleReports, onSampleRepor
 
     setIsSaving(true);
     try {
-      await saveCmsData(latestDraft);
-      onDataChange(latestDraft);
+      const savedData = await saveCmsData(latestDraft);
+      latestDraftRef.current = savedData;
+      setDraft(savedData);
+      onDataChange(savedData);
       setIsDirty(false);
       setConnection({ frontend: true, backend: true, message: 'Supabase connected' });
       setMessage('Changes saved to Supabase and published.');
     } catch (error) {
       if (error instanceof SupabaseCmsError && error.status === 404) {
         setConnection({ frontend: true, backend: false, message: 'Tables missing' });
-        setMessage('Saved locally, but Supabase tables are missing. Run the SQL setup in Supabase, then save again.');
+        setMessage('Nothing was published. Supabase tables or RPC functions are missing. Run the Insights CMS migration, then save again.');
       } else {
         setConnection({ frontend: true, backend: false, message: 'Backend unavailable' });
-        setMessage('Saved locally, but Supabase rejected the update. Check table setup and RLS policies.');
+        const detail = error instanceof Error ? error.message : 'Unknown Supabase error.';
+        setMessage(`Nothing was published. Supabase rejected the update: ${detail}`);
       }
     } finally {
       setIsSaving(false);
@@ -1100,7 +1138,11 @@ export default function Admin({ data, onDataChange, sampleReports, onSampleRepor
                       <Field label="Category" value={blog.category} onChange={(category) => updateDraft({ ...draft, insights: { ...draft.insights, blogs: draft.insights.blogs.map((item) => item.id === blog.id ? { ...item, category } : item) } })} />
                       <Field label="Date" value={blog.date} onChange={(date) => updateDraft({ ...draft, insights: { ...draft.insights, blogs: draft.insights.blogs.map((item) => item.id === blog.id ? { ...item, date } : item) } })} />
                       <Field label="Read More Link" value={blog.link} onChange={(link) => updateDraft({ ...draft, insights: { ...draft.insights, blogs: draft.insights.blogs.map((item) => item.id === blog.id ? { ...item, link } : item) } })} />
-                      <ImageInput value={blog.image} onChange={(image) => updateDraft({ ...draft, insights: { ...draft.insights, blogs: draft.insights.blogs.map((item) => item.id === blog.id ? { ...item, image } : item) } })} />
+                      <ImageInput
+                        value={blog.image}
+                        onUpload={(file, onProgress) => uploadInsightMediaFile(file, 'blogs', onProgress)}
+                        onChange={(image) => updateDraft({ ...draft, insights: { ...draft.insights, blogs: draft.insights.blogs.map((item) => item.id === blog.id ? { ...item, image } : item) } })}
+                      />
                       <div className="md:col-span-2">
                         <TextArea label="Excerpt" value={blog.excerpt} onChange={(excerpt) => updateDraft({ ...draft, insights: { ...draft.insights, blogs: draft.insights.blogs.map((item) => item.id === blog.id ? { ...item, excerpt } : item) } })} />
                       </div>
