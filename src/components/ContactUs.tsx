@@ -16,21 +16,25 @@ export default function ContactUs({ onBack, contact = defaultCmsData.contact }: 
   });
   const [isPhoneValid, setIsPhoneValid] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formError, setFormError] = useState('');
+  const [formSuccess, setFormSuccess] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
-      alert("Please fill all fields.");
+    setFormError('');
+    setFormSuccess('');
+    if (!formData.name.trim() || !formData.email.trim() || !formData.phone.trim() || !formData.message.trim()) {
+      setFormError('Please fill all required fields.');
       return;
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
-      alert("Invalid email format.");
+      setFormError('Please enter a valid email address.');
       return;
     }
     const { isValid, countryCode, dialCode, countryName } = getPhoneDetails(formData.phone);
     if (!isValid) {
-      alert("Please enter a valid phone number.");
+      setFormError('Please enter a valid phone number for the selected country.');
       return;
     }
     setIsSubmitting(true);
@@ -39,17 +43,17 @@ export default function ContactUs({ onBack, contact = defaultCmsData.contact }: 
         name: formData.name,
         email: formData.email,
         mobile: formData.phone,
-        countryCode,
-        dialCode,
-        countryName,
+        countrycode: countryCode,
+        dialcode: dialCode,
+        countryname: countryName,
         service: 'Contact Us Page',
         message: formData.message,
       });
-      alert("Thank you for reaching out! We'll get back to you soon.");
+      setFormSuccess("Thank you for reaching out. We'll get back to you soon.");
       setFormData({ name: '', email: '', phone: '', message: '' });
     } catch (error) {
-      console.error(error);
-      alert("Failed to send message. Please try again.");
+      console.error('Contact enquiry submission failed.', error);
+      setFormError('Unable to send your enquiry right now. Please try again shortly.');
     } finally {
       setIsSubmitting(false);
     }
@@ -272,6 +276,8 @@ export default function ContactUs({ onBack, contact = defaultCmsData.contact }: 
                 <Send className="w-5 h-5" />
                 {isSubmitting ? 'Sending...' : 'Send Message'}
               </button>
+              {formError && <p className="text-sm font-semibold text-red-600" role="alert">{formError}</p>}
+              {formSuccess && <p className="text-sm font-semibold text-emerald-700" role="status">{formSuccess}</p>}
             </form>
           </motion.div>
         </div>

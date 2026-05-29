@@ -54,16 +54,20 @@ import { highSchoolData, plusTwoData, graduatesData, workingProfessionalData } f
 
 const SampleReportPage = lazy(() => import('./components/SampleReportPage'));
 
-type ViewType = 'landing' | 'about' | 'insights' | 'contact-us' | 'partner' | 'brochure' | 'high-school' | 'plus-two' | 'graduates' | 'working-professional' | 'terms' | 'privacy' | 'refund' | 'sample-report';
+type ViewType = 'landing' | 'about' | 'insights' | 'blog' | 'contact-us' | 'partner' | 'brochure' | 'high-school' | 'plus-two' | 'graduates' | 'working-professional' | 'terms' | 'privacy' | 'refund' | 'sample-report';
 
-const validViews: ViewType[] = ['landing', 'about', 'insights', 'contact-us', 'partner', 'brochure', 'high-school', 'plus-two', 'graduates', 'working-professional', 'terms', 'privacy', 'refund', 'sample-report'];
+const validViews: ViewType[] = ['landing', 'about', 'insights', 'blog', 'contact-us', 'partner', 'brochure', 'high-school', 'plus-two', 'graduates', 'working-professional', 'terms', 'privacy', 'refund', 'sample-report'];
 
-function readRoute(): { view: ViewType; sampleReportSlug?: string } {
+function readRoute(): { view: ViewType; sampleReportSlug?: string; blogSlug?: string } {
   const normalizedPath = window.location.pathname.replace(/^\/+/, '').replace(/\/+$/, '');
   const [firstSegment, secondSegment] = normalizedPath.split('/');
 
   if (firstSegment === 'sample-report' && secondSegment) {
     return { view: 'sample-report', sampleReportSlug: secondSegment };
+  }
+
+  if (firstSegment === 'insights' && secondSegment) {
+    return { view: 'blog', blogSlug: secondSegment };
   }
 
   return {
@@ -76,8 +80,14 @@ function MainApp({ cmsData, sampleReports }: { cmsData: CmsData; sampleReports: 
   const view = route.view;
 
   const setView = (newView: ViewType) => {
-    if (newView === 'sample-report') return;
+    if (newView === 'sample-report' || newView === 'blog') return;
     const newPath = newView === 'landing' ? '/' : `/${newView}`;
+    window.history.pushState({}, '', newPath);
+    window.dispatchEvent(new PopStateEvent('popstate'));
+  };
+
+  const setBlogView = (slug?: string) => {
+    const newPath = slug ? `/insights/${slug}` : '/insights';
     window.history.pushState({}, '', newPath);
     window.dispatchEvent(new PopStateEvent('popstate'));
   };
@@ -101,7 +111,8 @@ function MainApp({ cmsData, sampleReports }: { cmsData: CmsData; sampleReports: 
 
   // ─── Non-landing views ────────────────────────────────────
   if (view === 'about') return <About onBack={() => setView('landing')} counsellors={cmsData.counsellors || []} />;
-  if (view === 'insights') return <Insights onBack={() => setView('landing')} insights={cmsData.insights} />;
+  if (view === 'insights') return <Insights onBack={() => setView('landing')} insights={cmsData.insights} onBlogSelect={setBlogView} />;
+  if (view === 'blog') return <Insights onBack={() => setView('landing')} insights={cmsData.insights} blogSlug={route.blogSlug} onBlogSelect={setBlogView} />;
   if (view === 'contact-us') return <ContactUs onBack={() => setView('landing')} contact={cmsData.contact} />;
   if (view === 'partner') return <PartnerPage onBack={() => setView('landing')} data={cmsData.partner} />;
     if (view === 'brochure') return <BrochurePage onBack={() => setView('landing')} brochure={cmsData.brochure} />;

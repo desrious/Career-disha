@@ -1,14 +1,117 @@
-import { ArrowLeft, Youtube, BookOpen, ExternalLink, Phone, Mail, Globe } from 'lucide-react';
+import { ArrowLeft, Youtube, BookOpen, CalendarDays, Phone, Mail, Globe } from 'lucide-react';
 import { motion } from 'motion/react';
+import type { ReactNode } from 'react';
 import { LOGO_URL, COPYRIGHT_TEXT } from '../data/constants';
 import { CmsInsights, defaultCmsData } from '../data/cms';
 
 interface InsightsProps {
   onBack: () => void;
   insights?: CmsInsights;
+  blogSlug?: string;
+  onBlogSelect?: (slug: string) => void;
 }
 
-export default function Insights({ onBack, insights = defaultCmsData.insights }: InsightsProps) {
+function renderBlogContent(content: string) {
+  const lines = content.split(/\r?\n/);
+  const blocks: ReactNode[] = [];
+  let listItems: string[] = [];
+
+  const flushList = () => {
+    if (listItems.length === 0) return;
+    blocks.push(
+      <ul key={`list-${blocks.length}`} className="my-6 list-disc space-y-2 pl-6 text-slate-700">
+        {listItems.map((item, index) => (
+          <li key={index}>{item}</li>
+        ))}
+      </ul>,
+    );
+    listItems = [];
+  };
+
+  lines.forEach((line, index) => {
+    const trimmed = line.trim();
+    if (!trimmed) {
+      flushList();
+      return;
+    }
+    if (/^[-*]\s+/.test(trimmed)) {
+      listItems.push(trimmed.replace(/^[-*]\s+/, ''));
+      return;
+    }
+    flushList();
+    if (trimmed.startsWith('### ')) {
+      blocks.push(<h3 key={index} className="mt-8 text-2xl font-extrabold text-slate-950">{trimmed.slice(4)}</h3>);
+    } else if (trimmed.startsWith('## ')) {
+      blocks.push(<h2 key={index} className="mt-10 text-3xl font-extrabold text-slate-950">{trimmed.slice(3)}</h2>);
+    } else if (trimmed.startsWith('# ')) {
+      blocks.push(<h2 key={index} className="mt-10 text-3xl font-extrabold text-slate-950">{trimmed.slice(2)}</h2>);
+    } else {
+      blocks.push(<p key={index} className="my-5 text-lg leading-8 text-slate-700">{trimmed}</p>);
+    }
+  });
+  flushList();
+
+  return blocks.length > 0 ? blocks : <p className="text-lg leading-8 text-slate-700">Blog content will be available soon.</p>;
+}
+
+export default function Insights({ onBack, insights = defaultCmsData.insights, blogSlug, onBlogSelect }: InsightsProps) {
+  const selectedBlog = blogSlug ? insights.blogs.find((blog) => (blog.slug || blog.id) === blogSlug) : null;
+
+  if (blogSlug) {
+    return (
+      <div className="min-h-screen bg-surface font-body text-on-surface flex flex-col">
+        <nav className="fixed top-0 w-full z-[45] bg-white/85 backdrop-blur-md border-b border-outline-variant/10">
+          <div className="flex justify-between items-center w-full px-4 py-3">
+            <button onClick={onBack} className="flex items-center gap-2 group">
+              <img alt="Career Disha Logo" className="h-10 w-auto object-contain" src={LOGO_URL} referrerPolicy="no-referrer" />
+              <span className="text-xl font-extrabold text-blue-700 tracking-tighter font-headline">Career Disha</span>
+            </button>
+            <button
+              onClick={() => onBlogSelect?.('')}
+              className="flex items-center gap-2 text-on-surface-variant font-bold hover:text-primary transition-colors group"
+            >
+              <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+              Back to Insights
+            </button>
+          </div>
+        </nav>
+
+        <main className="pt-24 sm:pt-32 pb-16 sm:pb-24 px-4 sm:px-6 w-full">
+          {selectedBlog ? (
+            <article className="mx-auto max-w-4xl">
+              <div className="mb-8 overflow-hidden rounded-[2rem] bg-slate-200 shadow-xl shadow-slate-900/10">
+                <img
+                  src={selectedBlog.image}
+                  alt={selectedBlog.title}
+                  className="aspect-[16/9] w-full object-cover"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+              <div className="mb-8 flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-primary">
+                <CalendarDays className="h-4 w-4" />
+                {selectedBlog.date}
+              </div>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold font-headline text-slate-950 tracking-tight leading-tight">
+                {selectedBlog.title}
+              </h1>
+              <div className="mt-8 border-t border-slate-300 pt-6">
+                {renderBlogContent(selectedBlog.content)}
+              </div>
+            </article>
+          ) : (
+            <div className="mx-auto max-w-2xl rounded-[2rem] border border-slate-200 bg-white p-10 text-center shadow-xl shadow-slate-900/10">
+              <BookOpen className="mx-auto mb-4 h-12 w-12 text-primary" />
+              <h1 className="text-3xl font-extrabold text-slate-950">Blog Not Found</h1>
+              <p className="mt-3 text-slate-600">This article is unavailable or has been unpublished.</p>
+              <button onClick={() => onBlogSelect?.('')} className="mt-8 rounded-full bg-primary px-6 py-3 font-bold text-white hover:bg-primary-container">
+                View All Insights
+              </button>
+            </div>
+          )}
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-surface font-body text-on-surface flex flex-col">
@@ -107,41 +210,38 @@ export default function Insights({ onBack, insights = defaultCmsData.insights }:
           {insights.blogs.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {insights.blogs.map((blog, index) => (
-                <motion.div
+                <motion.article
                   key={blog.id}
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
-                  className="bg-white rounded-[2.5rem] border border-outline-variant/10 flex flex-col overflow-hidden hover:shadow-xl transition-all group"
+                  className="bg-white rounded-[2rem] border border-outline-variant/10 flex flex-col overflow-hidden hover:shadow-xl transition-all group"
                 >
-                  <div className="aspect-[4/3] relative overflow-hidden">
-                    <img
-                      src={blog.image}
-                      alt={blog.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                      referrerPolicy="no-referrer"
-                    />
-                    <div className="absolute top-4 right-4 bg-primary/90 text-white px-3 py-1 rounded-full text-xs font-bold backdrop-blur-sm">
-                      {blog.date}
+                  <button
+                    type="button"
+                    onClick={() => onBlogSelect?.(blog.slug || blog.id)}
+                    className="flex h-full flex-col text-left focus:outline-none focus:ring-4 focus:ring-primary/25"
+                    aria-label={`Read blog: ${blog.title}`}
+                  >
+                    <div className="aspect-[16/10] relative overflow-hidden bg-slate-100">
+                      <img
+                        src={blog.image}
+                        alt={blog.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        referrerPolicy="no-referrer"
+                        loading="lazy"
+                      />
                     </div>
-                  </div>
-                  <div className="p-8 flex flex-col flex-1">
-                    <span className="text-xs font-bold text-primary uppercase tracking-widest mb-4 block">{blog.category}</span>
-                    <h3 className="text-xl font-bold mb-4 leading-tight group-hover:text-primary transition-colors">{blog.title}</h3>
-                    <p className="text-on-surface-variant text-sm leading-relaxed mb-6 line-clamp-3">{blog.excerpt}</p>
-                    <div className="mt-auto pt-6 border-t border-outline-variant/10 flex items-center justify-between">
-                      <a
-                        href={blog.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-primary font-bold text-sm flex items-center gap-1 hover:gap-2 transition-all"
-                      >
-                        Read More <ExternalLink className="w-4 h-4" />
-                      </a>
+                    <div className="p-6 flex flex-col flex-1">
+                      <span className="mb-4 inline-flex items-center gap-2 text-xs font-bold text-primary uppercase tracking-widest">
+                        <CalendarDays className="h-4 w-4" />
+                        {blog.date}
+                      </span>
+                      <h3 className="text-xl font-bold leading-tight text-slate-950 group-hover:text-primary transition-colors">{blog.title}</h3>
                     </div>
-                  </div>
-                </motion.div>
+                  </button>
+                </motion.article>
               ))}
             </div>
           ) : (

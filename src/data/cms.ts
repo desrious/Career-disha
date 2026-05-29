@@ -64,12 +64,12 @@ export type CmsInsightBlog = {
   id: string;
   slug?: string;
   title: string;
-  excerpt: string;
-  content?: string;
+  content: string;
   date: string;
-  category: string;
   image: string;
-  link: string;
+  excerpt?: string;
+  category?: string;
+  link?: string;
   seoTitle?: string;
   seoDescription?: string;
   isPublished?: boolean;
@@ -196,9 +196,9 @@ export type ExpertAdviceInquiry = {
   name: string;
   email: string;
   mobile: string;
-  countryCode?: string;
-  dialCode?: string;
-  countryName?: string;
+  countrycode?: string;
+  dialcode?: string;
+  countryname?: string;
   service: string;
   message?: string;
   created_at?: string;
@@ -209,9 +209,9 @@ export type PartnerInquiry = {
   name: string;
   email: string;
   phone: string;
-  countryCode?: string;
-  dialCode?: string;
-  countryName?: string;
+  countrycode?: string;
+  dialcode?: string;
+  countryname?: string;
   interested_in: string;
   created_at?: string;
 };
@@ -221,9 +221,9 @@ export type BrochureInquiry = {
   name: string;
   email: string;
   mobile: string;
-  countryCode?: string;
-  dialCode?: string;
-  countryName?: string;
+  countrycode?: string;
+  dialcode?: string;
+  countryname?: string;
   query?: string;
   created_at?: string;
 };
@@ -402,65 +402,51 @@ export const defaultCmsData: CmsData = {
       {
         id: 'sap-career-viable',
         title: 'Is adopting career in SAP is viable Opt...',
-        excerpt: 'Is Adopting a Career in SAP for Fresher Graduates a Viable Option? In toda...',
+        content: 'Use this space to publish the full article content from the admin panel. Add paragraphs, headings, and lists to create a readable internal blog page.',
         date: '7-Sep-2025',
-        category: 'Career Advice',
         image: 'https://www.zeopto.com/img/ChatGPT%20Image%20Sep%207,%202025,%2012_54_10%20PM.png',
-        link: 'https://ZeOpto.com/blog-details.php?slug=is-adopting-career-in-sap-is-viable-option-',
       },
       {
         id: 'amrapali-workshop',
         title: 'ZeOpto Workshop at Amrapali University -...',
-        excerpt: 'Learning is always special when it connects with real-world opportunities. Our recent SAP Worksho...',
+        content: 'Use this space to publish the full article content from the admin panel. Add workshop highlights, outcomes, and next steps for readers.',
         date: '30-Sep-2025',
-        category: 'Workshop',
         image: 'https://www.zeopto.com/img/Amrapali%20Workshop.png',
-        link: 'https://ZeOpto.com/blog-details.php?slug=ZeOpto-workshop-at-amrapali-university---a-journey-of-learning-growth',
       },
       {
         id: 'sap-fico-training',
         title: 'Best SAP FICO Training Institute | ZeOpt...',
-        excerpt: 'SAP FICO Training. Choosing the right SAP FICO training institute in Noida can shape your ca...',
+        content: 'Use this space to publish the full article content from the admin panel. Include practical guidance, headings, and bullet lists.',
         date: '6-Nov-2025',
-        category: 'Training',
         image: 'https://www.zeopto.com/img/SAP%20FICO%20Training%20(1).png',
-        link: 'https://ZeOpto.com/blog-details.php?slug=best-sap-fico-training-institute-ZeOpto',
       },
       {
         id: 'sap-mm-training',
         title: 'Best SAP MM Training Institute in Noida ...',
-        excerpt: 'SAP MM is one of the most important modules in the SAP system and is widely used in industries th...',
+        content: 'Use this space to publish the full article content from the admin panel. Explain the topic clearly with sections and examples.',
         date: '16-Nov-2025',
-        category: 'Training',
         image: 'https://www.zeopto.com/img/SAP%20MM%20Training%20ZeOpto.png',
-        link: 'https://ZeOpto.com/blog-details.php?slug=best-sap-mm-training-institute-in-noida-ZeOpto',
       },
       {
         id: 'sap-training-noida',
         title: 'Best SAP Training Institute in Noida | Z...',
-        excerpt: 'Best SAP Training Institute in Noida. SAP is one of the most widely used business software...',
+        content: 'Use this space to publish the full article content from the admin panel. Keep the post helpful, structured, and easy to scan.',
         date: '15-Dec-2025',
-        category: 'Education',
         image: 'https://www.zeopto.com/img/Thumbnail%20.png',
-        link: 'https://ZeOpto.com/blog-details.php?slug=best-sap-training-institute-in-noida-ZeOpto',
       },
       {
         id: 'graphic-era-workshop',
         title: 'ZeOpto Workshop at Graphic Era Universit...',
-        excerpt: 'ZeOpto Workshop at Graphic Era University - Industry-Focused Learning Experience...',
+        content: 'Use this space to publish the full article content from the admin panel. Add event details, learning outcomes, and student takeaways.',
         date: '5-Feb-2026',
-        category: 'Workshop',
         image: 'https://www.zeopto.com/img/Untitled%20design%20(59).png',
-        link: 'https://ZeOpto.com/blog-details.php?slug=ZeOpto-workshop-at-graphic-era-university-empowering-students-with-industry-ready-it-sap-skills',
       },
       {
         id: 'sap-classes-noida',
         title: 'SAP Classes in Noida...',
-        excerpt: 'SAP Classes in Noida: Learn SAP with Practical Training at ZeOpto. Today, com...',
+        content: 'Use this space to publish the full article content from the admin panel. Add complete information through the admin blog editor.',
         date: '5-Feb-2026',
-        category: 'Training',
         image: 'https://www.zeopto.com/img/Best%20SAP%20CLasses%20in%20Noida.png',
-        link: 'https://ZeOpto.com/blog-details.php?slug=sap-classes-in-noida',
       },
     ],
   },
@@ -625,19 +611,19 @@ type BlogPostRow = {
   id: string;
   slug: string;
   title: string;
-  excerpt: string;
   content: string;
-  category: string;
-  display_date: string;
-  read_more_url: string;
   image_url: string;
-  thumbnail_url: string;
-  is_published: boolean;
-  published_at: string | null;
-  seo_title: string;
-  seo_description: string;
-  sort_order: number;
-  created_at?: string;
+  created_at: string;
+  excerpt?: string;
+  category?: string;
+  display_date?: string;
+  read_more_url?: string;
+  thumbnail_url?: string;
+  is_published?: boolean;
+  published_at?: string | null;
+  seo_title?: string;
+  seo_description?: string;
+  sort_order?: number;
   updated_at?: string;
 };
 
@@ -1037,18 +1023,18 @@ function insightRowToCms(row: InsightRow | null | undefined, fallback: CmsInsigh
 
 function blogRowToCms(row: BlogPostRow): CmsInsightBlog {
   return {
-    id: row.slug || row.id,
+    id: row.id,
     slug: row.slug,
     title: row.title,
-    excerpt: row.excerpt,
-    content: row.content,
-    date: row.display_date || formatPublishedDate(row.published_at),
-    category: row.category,
+    excerpt: row.excerpt || '',
+    content: row.content || '',
+    date: row.display_date || formatPublishedDate(row.created_at || row.published_at),
+    category: row.category || '',
     image: row.image_url || row.thumbnail_url || '/CareerDishaLogo.png',
-    link: row.read_more_url,
-    seoTitle: row.seo_title,
-    seoDescription: row.seo_description,
-    isPublished: row.is_published,
+    link: '',
+    seoTitle: row.seo_title || '',
+    seoDescription: row.seo_description || '',
+    isPublished: row.is_published ?? true,
     publishedAt: row.published_at ?? undefined,
   };
 }
@@ -1080,6 +1066,8 @@ function insightsRpcResponseToCms(response: InsightsCmsRpcResponse | null | unde
 }
 
 function buildInsightsPayload(insights: CmsInsights): InsightsCmsPayload {
+  const blogSlugCounts = new Map<string, number>();
+
   return {
     insight: {
       id: isUuid(insights.id) ? insights.id : null,
@@ -1096,20 +1084,23 @@ function buildInsightsPayload(insights: CmsInsights): InsightsCmsPayload {
       sort_order: 0,
     },
     blogs: insights.blogs.map((blog, index) => {
-      const slug = slugify(blog.slug || blog.id || blog.title, `blog-${index + 1}`);
+      const baseSlug = slugify(blog.title, `blog-${index + 1}`);
+      const nextCount = (blogSlugCounts.get(baseSlug) ?? 0) + 1;
+      blogSlugCounts.set(baseSlug, nextCount);
+      const slug = nextCount === 1 ? baseSlug : `${baseSlug}-${nextCount}`;
       return {
         id: isUuid(blog.id) ? blog.id : null,
         slug,
         title: blog.title,
-        excerpt: blog.excerpt,
+        excerpt: '',
         content: blog.content || '',
-        category: blog.category,
-        display_date: blog.date,
-        read_more_url: blog.link,
+        category: '',
+        display_date: '',
+        read_more_url: '',
         image_url: blog.image,
         thumbnail_url: blog.image,
         is_published: blog.isPublished ?? true,
-        published_at: safePublishedAt(blog.publishedAt),
+        published_at: safePublishedAt(blog.publishedAt) || new Date().toISOString(),
         seo_title: blog.seoTitle || '',
         seo_description: blog.seoDescription || '',
         sort_order: index,
@@ -1140,7 +1131,7 @@ async function loadPublishedInsightsFromSupabase(fallback: CmsInsights) {
       `insights?slug=eq.${INSIGHTS_PAGE_SLUG}&is_published=eq.true&select=id,slug,title,description,content,image_url,thumbnail_url,is_published,published_at,seo_title,seo_description,sort_order,updated_at&limit=1`,
     ),
     supabaseRequest<BlogPostRow[]>(
-      'blog_posts?is_published=eq.true&select=id,slug,title,excerpt,content,category,display_date,read_more_url,image_url,thumbnail_url,is_published,published_at,seo_title,seo_description,sort_order,updated_at&order=sort_order.asc',
+      'blog_posts?select=id,slug,title,content,image_url,created_at&order=created_at.desc',
     ),
     supabaseRequest<YoutubeVideoRow[]>(
       'youtube_videos?is_published=eq.true&select=id,slug,youtube_id,title,description,thumbnail_url,is_published,published_at,seo_title,seo_description,sort_order,updated_at&order=sort_order.asc',

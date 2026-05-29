@@ -43,10 +43,10 @@ export default function SampleReportsFAB({ reports }: { reports: SampleReport[] 
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 12, scale: 0.96 }}
             transition={{ duration: 0.22, ease: 'easeOut' }}
-            className="absolute bottom-full left-0 mb-4 w-[min(88vw,360px)] overflow-hidden rounded-2xl border border-white/60 bg-white/95 p-3 shadow-2xl shadow-slate-900/20 backdrop-blur-xl"
+            className="absolute bottom-full left-0 mb-4 w-[min(88vw,360px)] overflow-hidden rounded-2xl border border-blue-300/60 bg-blue-700/95 p-3 shadow-2xl shadow-slate-900/20 backdrop-blur-xl"
           >
             <div className="mb-2 px-2">
-              <p className="text-xs font-extrabold uppercase tracking-widest text-primary">Sample Reports</p>
+              <p className="text-xs font-extrabold uppercase tracking-widest text-blue-50">Sample Reports</p>
             </div>
 
             <div className="space-y-2">

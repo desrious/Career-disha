@@ -33,34 +33,49 @@ export default function PartnerHero({ data, onCTAClick }: PartnerHeroProps) {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [formError, setFormError] = useState('');
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!formData.interestedIn || !formData.name || !formData.email || !formData.phone) return;
+    setFormError('');
+    if (!formData.interestedIn || !formData.name.trim() || !formData.email.trim() || !formData.phone.trim()) {
+      setFormError('Please fill all required fields.');
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      setFormError('Please enter a valid email address.');
+      return;
+    }
     if (!isPhoneValid) {
-      alert("Please enter a valid phone number.");
+      setFormError('Please enter a valid phone number for the selected country.');
       return;
     }
 
     setSubmitting(true);
-    const { countryCode, dialCode, countryName } = getPhoneDetails(formData.phone);
+    const { isValid, countryCode, dialCode, countryName } = getPhoneDetails(formData.phone);
+    if (!isValid) {
+      setFormError('Please enter a valid phone number for the selected country.');
+      setSubmitting(false);
+      return;
+    }
 
-    // Save to Supabase
     try {
       await savePartnerInquiry({
         name: formData.name,
         email: formData.email,
         phone: formData.phone,
-        countryCode,
-        dialCode,
-        countryName,
+        countrycode: countryCode,
+        dialcode: dialCode,
+        countryname: countryName,
         interested_in: formData.interestedIn,
       });
     } catch (error) {
-      console.warn('Partner inquiry save failed (Supabase may not be configured).', error);
+      console.error('Partner enquiry submission failed.', error);
+      setFormError('Unable to send your enquiry right now. Please try again shortly.');
+      setSubmitting(false);
+      return;
     }
 
-    // Build WhatsApp message
     const message = `Hi, I'm interested in the *${formData.interestedIn}* partner program.\n\nName: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone} (${countryName})`;
     const waUrl = `https://wa.me/919289191164?text=${encodeURIComponent(message)}`;
 
@@ -240,6 +255,7 @@ export default function PartnerHero({ data, onCTAClick }: PartnerHeroProps) {
                     >
                       {submitting ? (<><Loader2 className="w-5 h-5 animate-spin" />Submitting...</>) : (<>Get Started Now<ArrowRight className="w-5 h-5" /></>)}
                     </motion.button>
+                    {formError && <p className="text-sm font-semibold text-red-600" role="alert">{formError}</p>}
                   </form>
                 )}
               </div>

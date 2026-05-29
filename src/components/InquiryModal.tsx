@@ -26,6 +26,7 @@ const InquiryModal: React.FC<InquiryModalProps> = ({
     service: '',
     message: '',
   });
+  const [formError, setFormError] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -40,17 +41,23 @@ const InquiryModal: React.FC<InquiryModalProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setFormError('');
+
+    if (!formData.name.trim() || !formData.email.trim() || !formData.mobile.trim() || !formData.service.trim()) {
+      setFormError('Please fill all required fields.');
+      return;
+    }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
-      alert('Invalid email');
+      setFormError('Please enter a valid email address.');
       return;
     }
 
     const { isValid, countryCode, dialCode, countryName } = getPhoneDetails(formData.mobile);
     
     if (!isValid) {
-      alert('Invalid mobile number according to country code');
+      setFormError('Please enter a valid phone number for the selected country.');
       return;
     }
 
@@ -58,14 +65,15 @@ const InquiryModal: React.FC<InquiryModalProps> = ({
     try {
       await saveExpertAdviceInquiry({
         ...formData,
-        countryCode: countryCode,
-        dialCode: dialCode,
-        countryName: countryName,
+        countrycode: countryCode,
+        dialcode: dialCode,
+        countryname: countryName,
       });
       alert(successMessage);
       onClose();
-    } catch {
-      alert('Unable to submit your inquiry right now. Please try again shortly.');
+    } catch (error) {
+      console.error('Expert advice enquiry submission failed.', error);
+      setFormError('Unable to send your enquiry right now. Please try again shortly.');
     } finally {
       setIsSubmitting(false);
     }
@@ -176,6 +184,7 @@ const InquiryModal: React.FC<InquiryModalProps> = ({
                 {isSubmitting ? 'Submitting...' : 'Submit Inquiry'}
               </button>
             </div>
+            {formError && <p className="text-sm font-semibold text-red-600" role="alert">{formError}</p>}
           </form>
         </div>
       </div>

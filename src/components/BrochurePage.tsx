@@ -24,6 +24,7 @@ export default function BrochurePage({ onBack, brochure }: BrochurePageProps) {
     query: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formError, setFormError] = useState('');
 
   const handleDownloadClick = () => {
     setShowModal(true);
@@ -77,11 +78,20 @@ export default function BrochurePage({ onBack, brochure }: BrochurePageProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isPhoneValid) {
-      alert("Please enter a valid mobile number.");
+    setFormError('');
+    if (!formData.name.trim() || !formData.email.trim() || !formData.mobile.trim()) {
+      setFormError('Please fill all required fields.');
       return;
     }
-    const { countryCode, dialCode, countryName } = getPhoneDetails(formData.mobile);
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      setFormError('Please enter a valid email address.');
+      return;
+    }
+    const { isValid, countryCode, dialCode, countryName } = getPhoneDetails(formData.mobile);
+    if (!isPhoneValid || !isValid) {
+      setFormError('Please enter a valid mobile number for the selected country.');
+      return;
+    }
     
     setIsSubmitting(true);
     try {
@@ -89,16 +99,16 @@ export default function BrochurePage({ onBack, brochure }: BrochurePageProps) {
         name: formData.name,
         email: formData.email,
         mobile: formData.mobile,
-        countryCode,
-        dialCode,
-        countryName,
+        countrycode: countryCode,
+        dialcode: dialCode,
+        countryname: countryName,
         query: formData.query
       });
       setShowModal(false);
       handleDownloadStart();
     } catch (err) {
-      console.error(err);
-      alert('Unable to process your request right now. Please try again.');
+      console.error('Brochure enquiry submission failed.', err);
+      setFormError('Unable to process your request right now. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -323,6 +333,7 @@ export default function BrochurePage({ onBack, brochure }: BrochurePageProps) {
                   </>
                 )}
               </button>
+              {formError && <p className="text-sm font-semibold text-red-600" role="alert">{formError}</p>}
             </form>
           </div>
         </div>

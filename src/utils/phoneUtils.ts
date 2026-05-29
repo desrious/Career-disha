@@ -1,7 +1,9 @@
 import { parsePhoneNumber, isValidPhoneNumber } from 'libphonenumber-js';
 
-// Convert country code to a human-readable name using Intl.DisplayNames
-const regionNames = new Intl.DisplayNames(['en'], { type: 'region' });
+const regionNames =
+  typeof Intl !== 'undefined' && 'DisplayNames' in Intl
+    ? new Intl.DisplayNames(['en'], { type: 'region' })
+    : null;
 
 export const getPhoneDetails = (phoneNumber: string) => {
   if (!phoneNumber || !isValidPhoneNumber(phoneNumber)) {
@@ -12,7 +14,7 @@ export const getPhoneDetails = (phoneNumber: string) => {
     const parsed = parsePhoneNumber(phoneNumber);
     const countryCode = parsed.country; // e.g., 'IN', 'US'
     const dialCode = `+${parsed.countryCallingCode}`; // e.g., '+91', '+1'
-    const countryName = countryCode ? regionNames.of(countryCode) : '';
+    const countryName = countryCode ? regionNames?.of(countryCode) || countryCode : '';
 
     return {
       isValid: true,

@@ -78,11 +78,10 @@ const emptyCounsellor = (): CmsCounsellor => ({
 const emptyInsightBlog = (): CmsInsightBlog => ({
   id: crypto.randomUUID(),
   title: 'New Insight Article',
-  excerpt: 'Add a short summary for this insight.',
+  slug: '',
+  content: 'Write the full blog content here.\n\nUse headings, paragraphs, and bullet lists to make the article easy to read.',
   date: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
-  category: 'Career Advice',
   image: '/CareerDishaLogo.png',
-  link: 'https://ZeOpto.com/',
 });
 
 const emptyInsightVideo = (): CmsInsightVideo => ({
@@ -784,7 +783,7 @@ export default function Admin({ data, onDataChange, sampleReports, onSampleRepor
                               <td className="px-4 py-3">
                                 <div>{inq.email}</div>
                                 <div className="text-slate-500">{inq.mobile}</div>
-                                {inq.countryName && <div className="text-xs text-slate-400">{inq.countryName} ({inq.countryCode})</div>}
+                                {inq.countryname && <div className="text-xs text-slate-400">{inq.countryname} ({inq.countrycode})</div>}
                               </td>
                               <td className="px-4 py-3 text-slate-600 whitespace-normal min-w-[200px]">{inq.query || '-'}</td>
                               <td className="px-4 py-3 text-right">
@@ -1036,7 +1035,7 @@ export default function Admin({ data, onDataChange, sampleReports, onSampleRepor
                             <td className="px-4 py-3">
                               <div>{inquiry.email}</div>
                               <div className="text-slate-500">{inquiry.mobile}</div>
-                              {inquiry.countryName && <div className="text-xs text-slate-400">{inquiry.countryName} ({inquiry.countryCode})</div>}
+                              {inquiry.countryname && <div className="text-xs text-slate-400">{inquiry.countryname} ({inquiry.countrycode})</div>}
                             </td>
                             <td className="px-4 py-3">{inquiry.service}</td>
                             <td className="px-4 py-3 text-slate-600">{inquiry.message || '-'}</td>
@@ -1116,12 +1115,12 @@ export default function Admin({ data, onDataChange, sampleReports, onSampleRepor
               <div className="space-y-4">
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <h2 className="text-xl font-extrabold">Latest Blogs</h2>
-                    <p className="text-sm text-slate-500">Manage article cards, images, categories, dates, and read-more links.</p>
+                    <h2 className="text-xl font-extrabold">Blogs</h2>
+                    <p className="text-sm text-slate-500">Manage internal blog posts. Slugs and upload dates are generated automatically.</p>
                   </div>
                   <button onClick={() => updateDraft({ ...draft, insights: { ...draft.insights, blogs: [...draft.insights.blogs, emptyInsightBlog()] } })} className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white hover:bg-primary-container">
                     <Plus className="h-4 w-4" />
-                    Add Blog
+                    Add New Blog
                   </button>
                 </div>
                 {draft.insights.blogs.map((blog) => (
@@ -1135,16 +1134,13 @@ export default function Admin({ data, onDataChange, sampleReports, onSampleRepor
                     </div>
                     <div className="grid gap-4 md:grid-cols-2">
                       <Field label="Title" value={blog.title} onChange={(title) => updateDraft({ ...draft, insights: { ...draft.insights, blogs: draft.insights.blogs.map((item) => item.id === blog.id ? { ...item, title } : item) } })} />
-                      <Field label="Category" value={blog.category} onChange={(category) => updateDraft({ ...draft, insights: { ...draft.insights, blogs: draft.insights.blogs.map((item) => item.id === blog.id ? { ...item, category } : item) } })} />
-                      <Field label="Date" value={blog.date} onChange={(date) => updateDraft({ ...draft, insights: { ...draft.insights, blogs: draft.insights.blogs.map((item) => item.id === blog.id ? { ...item, date } : item) } })} />
-                      <Field label="Read More Link" value={blog.link} onChange={(link) => updateDraft({ ...draft, insights: { ...draft.insights, blogs: draft.insights.blogs.map((item) => item.id === blog.id ? { ...item, link } : item) } })} />
                       <ImageInput
                         value={blog.image}
                         onUpload={(file, onProgress) => uploadInsightMediaFile(file, 'blogs', onProgress)}
                         onChange={(image) => updateDraft({ ...draft, insights: { ...draft.insights, blogs: draft.insights.blogs.map((item) => item.id === blog.id ? { ...item, image } : item) } })}
                       />
                       <div className="md:col-span-2">
-                        <TextArea label="Excerpt" value={blog.excerpt} onChange={(excerpt) => updateDraft({ ...draft, insights: { ...draft.insights, blogs: draft.insights.blogs.map((item) => item.id === blog.id ? { ...item, excerpt } : item) } })} />
+                        <TextArea label="Blog Content" value={blog.content} onChange={(content) => updateDraft({ ...draft, insights: { ...draft.insights, blogs: draft.insights.blogs.map((item) => item.id === blog.id ? { ...item, content } : item) } })} />
                       </div>
                     </div>
                   </div>
@@ -1374,7 +1370,7 @@ export default function Admin({ data, onDataChange, sampleReports, onSampleRepor
                             <td className="px-4 py-3">{inq.email}</td>
                             <td className="px-4 py-3">
                               {inq.phone}
-                              {inq.countryName && <div className="text-xs text-slate-400 mt-1">{inq.countryName} ({inq.countryCode})</div>}
+                              {inq.countryname && <div className="text-xs text-slate-400 mt-1">{inq.countryname} ({inq.countrycode})</div>}
                             </td>
                             <td className="px-4 py-3">
                               <span className="inline-flex rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-bold text-blue-700">{inq.interested_in}</span>

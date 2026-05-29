@@ -10,7 +10,7 @@ interface ProfileCardProps {
   description: string;
   bullets: string[];
   linkedinUrl: string;
-  onContactClick: () => void;
+  emailAddress: string;
   innerGradient?: string;
   behindGlowColor?: string;
 }
@@ -23,7 +23,7 @@ const ProfileCard = ({
   description,
   bullets,
   linkedinUrl,
-  onContactClick,
+  emailAddress,
   innerGradient,
   behindGlowColor,
 }: ProfileCardProps) => {
@@ -100,12 +100,12 @@ const ProfileCard = ({
         </div>
         
         <div className="flex gap-4 mt-10 pt-6 border-t border-slate-200 relative z-10">
-          <button 
-            onClick={onContactClick} 
+          <a
+            href={`mailto:${emailAddress}`}
             className={`px-8 py-2.5 ${bgClass} text-white rounded-full font-bold ${hoverBgClass} shadow-md hover:shadow-xl transition-all active:scale-95`}
           >
-            Contact
-          </button>
+            Email Us
+          </a>
           <a 
             href={linkedinUrl} 
             target="_blank" 

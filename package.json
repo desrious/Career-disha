@@ -17,6 +17,7 @@
     "pdfjs-dist": "^5.7.284",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
+    "react-international-phone": "^4.8.0",
     "react-phone-number-input": "^3.4.16"
   },
   "devDependencies": {
