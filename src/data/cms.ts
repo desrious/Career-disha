@@ -1,4 +1,4 @@
-export type CmsOffer = {
+type CmsOffer = {
   badge: string;
   title: string;
   description: string;
@@ -30,7 +30,7 @@ export type CmsCounsellor = {
   accent: string;
 };
 
-export type CmsExpertAdvice = {
+type CmsExpertAdvice = {
   heading: string;
   services: string[];
   successMessage: string;
@@ -52,7 +52,7 @@ export type CmsContact = {
   };
 };
 
-export type CmsFooter = {
+type CmsFooter = {
   brand: string;
   description: string;
   copyright: string;
@@ -98,7 +98,7 @@ export type CmsInsights = {
   videos: CmsInsightVideo[];
 };
 
-export type CmsPartnerStat = {
+type CmsPartnerStat = {
   value: string;
   label: string;
 };
@@ -112,7 +112,7 @@ export type CmsPartnerHero = {
   programs: string[];
 };
 
-export type CmsPartnerService = {
+type CmsPartnerService = {
   id: string;
   title: string;
   description: string;
@@ -132,14 +132,14 @@ export type CmsPartnerPath = {
   color: string;
 };
 
-export type CmsPartnerCTA = {
+type CmsPartnerCTA = {
   heading: string;
   description: string;
   whatsappUrl: string;
   emailAddress: string;
 };
 
-export type CmsPartnerWhy = {
+type CmsPartnerWhy = {
   id: string;
   title: string;
   description: string;
@@ -223,22 +223,22 @@ export type BrochureInquiry = {
 
 export const CMS_STORAGE_KEY = 'careerDishaCmsData_v2';
 export const CMS_UPDATED_EVENT = 'careerDishaCmsUpdated';
-export const CMS_UPDATED_AT_KEY = 'careerDishaCmsUpdatedAt';
+const CMS_UPDATED_AT_KEY = 'careerDishaCmsUpdatedAt';
 export const ADMIN_SESSION_STORAGE_KEY = 'careerDishaAdminSessionToken';
 export const SAMPLE_REPORTS_STORAGE_KEY = 'careerDishaSampleReports_v1';
 export const SAMPLE_REPORTS_UPDATED_EVENT = 'careerDishaSampleReportsUpdated';
-export const SAMPLE_REPORT_BUCKET = 'sample-reports';
-export const INSIGHTS_MEDIA_BUCKET = 'insights-media';
+const SAMPLE_REPORT_BUCKET = 'sample-reports';
+const INSIGHTS_MEDIA_BUCKET = 'insights-media';
 const CMS_ROW_ID = 'site';
 const INSIGHTS_PAGE_SLUG = 'insights-page';
 
-export const SAMPLE_REPORT_ORDER: SampleReportSlug[] = [
+const SAMPLE_REPORT_ORDER: SampleReportSlug[] = [
   'career-snapshot',
   'career-insight',
   'career-master-blueprint',
 ];
 
-export const defaultSampleReports: SampleReport[] = [
+const defaultSampleReports: SampleReport[] = [
   {
     slug: 'career-snapshot',
     title: 'Career Snapshot',
@@ -386,62 +386,8 @@ export const defaultCmsData: CmsData = {
   insights: {
     heroTitle: 'Insights',
     heroDescription: 'Stay updated with the latest industry trends, expert mentorship sessions, and career guidance from the visionaries at Careerदिशा.',
-    videos: [
-      { id: 'career-guidance-session-1', youtubeId: '2RBDdsniaHw', title: 'Career Guidance Session 1' },
-      { id: 'sap-consulting-insights', youtubeId: 'U2QHNZmi-XY', title: 'SAP Consulting Insights' },
-      { id: 'future-of-work', youtubeId: 'zkBlpi7JYnw', title: 'Future of Work' },
-    ],
-    blogs: [
-      {
-        id: 'sap-career-viable',
-        title: 'Is adopting career in SAP is viable Opt...',
-        content: 'Use this space to publish the full article content from the admin panel. Add paragraphs, headings, and lists to create a readable internal blog page.',
-        date: '7-Sep-2025',
-        image: 'https://www.zeopto.com/img/ChatGPT%20Image%20Sep%207,%202025,%2012_54_10%20PM.png',
-      },
-      {
-        id: 'amrapali-workshop',
-        title: 'ZeOpto Workshop at Amrapali University -...',
-        content: 'Use this space to publish the full article content from the admin panel. Add workshop highlights, outcomes, and next steps for readers.',
-        date: '30-Sep-2025',
-        image: 'https://www.zeopto.com/img/Amrapali%20Workshop.png',
-      },
-      {
-        id: 'sap-fico-training',
-        title: 'Best SAP FICO Training Institute | ZeOpt...',
-        content: 'Use this space to publish the full article content from the admin panel. Include practical guidance, headings, and bullet lists.',
-        date: '6-Nov-2025',
-        image: 'https://www.zeopto.com/img/SAP%20FICO%20Training%20(1).png',
-      },
-      {
-        id: 'sap-mm-training',
-        title: 'Best SAP MM Training Institute in Noida ...',
-        content: 'Use this space to publish the full article content from the admin panel. Explain the topic clearly with sections and examples.',
-        date: '16-Nov-2025',
-        image: 'https://www.zeopto.com/img/SAP%20MM%20Training%20ZeOpto.png',
-      },
-      {
-        id: 'sap-training-noida',
-        title: 'Best SAP Training Institute in Noida | Z...',
-        content: 'Use this space to publish the full article content from the admin panel. Keep the post helpful, structured, and easy to scan.',
-        date: '15-Dec-2025',
-        image: 'https://www.zeopto.com/img/Thumbnail%20.png',
-      },
-      {
-        id: 'graphic-era-workshop',
-        title: 'ZeOpto Workshop at Graphic Era Universit...',
-        content: 'Use this space to publish the full article content from the admin panel. Add event details, learning outcomes, and student takeaways.',
-        date: '5-Feb-2026',
-        image: 'https://www.zeopto.com/img/Untitled%20design%20(59).png',
-      },
-      {
-        id: 'sap-classes-noida',
-        title: 'SAP Classes in Noida...',
-        content: 'Use this space to publish the full article content from the admin panel. Add complete information through the admin blog editor.',
-        date: '5-Feb-2026',
-        image: 'https://www.zeopto.com/img/Best%20SAP%20CLasses%20in%20Noida.png',
-      },
-    ],
+    videos: [],
+    blogs: [],
   },
   partner: {
     hero: {
@@ -796,7 +742,7 @@ function objectPathFromPdfPath(pdfPath: string) {
   return pdfPath.replace(/^sample-reports\//, '').replace(/^\/+/, '');
 }
 
-export function buildSampleReportPdfPath(slug: SampleReportSlug) {
+function buildSampleReportPdfPath(slug: SampleReportSlug) {
   return `${SAMPLE_REPORT_BUCKET}/${slug}.pdf`;
 }
 
@@ -1048,8 +994,8 @@ function buildInsightsPayload(insights: CmsInsights): InsightsCmsPayload {
   return {
     delete_missing_blogs: true,
     delete_missing_videos: true,
-    allow_empty_blog_delete: false,
-    allow_empty_video_delete: false,
+    allow_empty_blog_delete: true,
+    allow_empty_video_delete: true,
     insight: {
       id: isUuid(insights.id) ? insights.id : null,
       slug: insights.slug || INSIGHTS_PAGE_SLUG,
@@ -1421,3 +1367,6 @@ export async function deleteBrochureInquiry(inquiryId: string) {
     p_inquiry_id: inquiryId,
   });
 }
+
+
+

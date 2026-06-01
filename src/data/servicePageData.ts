@@ -5,7 +5,7 @@
 import { Target, Map, UserCheck } from 'lucide-react';
 import type { ComponentType } from 'react';
 
-export interface ProblemCard {
+interface ProblemCard {
   icon: ComponentType<{ className?: string }>;
   iconColor: string;
   bgColor: string;
@@ -13,7 +13,7 @@ export interface ProblemCard {
   desc: string;
 }
 
-export interface OfferItem {
+interface OfferItem {
   title: string;
   desc: string;
 }
@@ -205,3 +205,4 @@ export const workingProfessionalData: ServicePageData = {
   recommendValue: 'Senior Product Manager',
   benefitsHeading: 'Why Choose Careerदिशा?',
 };
+
