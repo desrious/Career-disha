@@ -1,5 +1,5 @@
 /** Counsellors — Scrolling counsellor gallery with smooth deceleration animation and touch support. */
-import { useRef, useEffect, useState, useCallback } from 'react';
+import { useRef, useEffect } from 'react';
 import { CmsCounsellor } from '../../data/cms';
 
 const COLORS = ['bg-primary', 'bg-secondary', 'bg-accent', 'bg-red-500', 'bg-orange-500', 'bg-purple-500'];
@@ -22,7 +22,6 @@ function parseBullet(bulletStr: string, index: number) {
 
 export default function Counsellors({ counsellors }: { counsellors: CmsCounsellor[] }) {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const scrollPosRef = useRef(0);
   const speedRef = useRef(1.0);
   const targetSpeedRef = useRef(1.0);
   const animationRef = useRef<number | null>(null);

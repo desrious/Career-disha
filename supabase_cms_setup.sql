@@ -1,3 +1,7 @@
+-- Legacy bootstrap helper only.
+-- Authoritative production schema is the ordered migration set in supabase/migrations.
+-- For current CMS architecture and drift notes, see docs/cms-architecture.md.
+
 create extension if not exists pgcrypto with schema extensions;
 
 create table if not exists public.cms_settings (
@@ -55,7 +59,12 @@ create policy "Public can create inquiries"
 on public.expert_advice_inquiries
 for insert
 to anon
-with check (true);
+with check (
+  length(trim(name)) > 0
+  and email ~* '^[^@\s]+@[^@\s]+\.[^@\s]+$'
+  and length(trim(mobile)) > 0
+  and length(trim(service)) > 0
+);
 
 drop policy if exists "Public can read inquiries" on public.expert_advice_inquiries;
 drop policy if exists "Public can upsert CMS settings" on public.cms_settings;
@@ -121,6 +130,22 @@ as $$
     and public.admin_sessions.expires_at > now()
     and public.admin_users.is_active = true
   limit 1;
+$$;
+
+create or replace function public.is_valid_admin_session(p_session_token uuid)
+returns boolean
+language sql
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1
+    from public.admin_sessions
+    join public.admin_users on public.admin_users.id = public.admin_sessions.admin_user_id
+    where public.admin_sessions.session_token = p_session_token
+      and public.admin_sessions.expires_at > now()
+      and public.admin_users.is_active = true
+  );
 $$;
 
 create or replace function public.revoke_admin_session(p_session_token uuid)
@@ -261,6 +286,7 @@ grant select on public.cms_settings to anon;
 grant insert on public.expert_advice_inquiries to anon;
 grant execute on function public.verify_admin_login(text, text) to anon;
 grant execute on function public.verify_admin_session(uuid) to anon;
+grant execute on function public.is_valid_admin_session(uuid) to anon;
 grant execute on function public.revoke_admin_session(uuid) to anon;
 grant execute on function public.save_cms_settings(uuid, jsonb) to anon;
 grant execute on function public.list_expert_advice_inquiries(uuid) to anon;
@@ -290,7 +316,12 @@ create policy "Public can create partner inquiries"
 on public.partner_inquiries
 for insert
 to anon
-with check (true);
+with check (
+  length(trim(name)) > 0
+  and email ~* '^[^@\s]+@[^@\s]+\.[^@\s]+$'
+  and length(trim(phone)) > 0
+  and length(trim(interested_in)) > 0
+);
 
 create or replace function public.list_partner_inquiries(p_session_token uuid)
 returns setof public.partner_inquiries
@@ -396,38 +427,33 @@ drop policy if exists "Public can create brochure inquiries" on public.brochure_
 create policy "Public can create brochure inquiries"
   on public.brochure_inquiries
   for insert
-  with check (true);
+  to anon
+  with check (
+    length(trim(name)) > 0
+    and email ~* '^[^@\s]+@[^@\s]+\.[^@\s]+$'
+    and length(trim(mobile)) > 0
+  );
 
 drop policy if exists "Public can read brochure inquiries" on public.brochure_inquiries;
-create policy "Public can read brochure inquiries"
-  on public.brochure_inquiries
-  for select
-  using (true);
 
 drop policy if exists "Public can delete brochure inquiries" on public.brochure_inquiries;
-create policy "Public can delete brochure inquiries"
-  on public.brochure_inquiries
-  for delete
-  using (true);
 
-create or replace function public.delete_all_brochure_inquiries()
-returns void
-language sql
-security definer
-as $body$
-  delete from public.brochure_inquiries;
-$body$;
+drop function if exists public.delete_all_brochure_inquiries();
 
 create or replace function public.list_brochure_inquiries(p_session_token uuid)
 returns setof public.brochure_inquiries
 language plpgsql
 security definer
+set search_path = public
 as $body$
 begin
-  if not public.verify_admin_session(p_session_token) then
-    raise exception 'Unauthorized';
+  if not public.is_valid_admin_session(p_session_token) then
+    raise exception 'Invalid admin session' using errcode = '28000';
   end if;
-  return query select * from public.brochure_inquiries order by created_at desc;
+  return query
+  select *
+  from public.brochure_inquiries
+  order by public.brochure_inquiries.created_at desc;
 end;
 $body$;
 
@@ -435,45 +461,34 @@ create or replace function public.delete_brochure_inquiry(p_session_token uuid, 
 returns void
 language plpgsql
 security definer
+set search_path = public
 as $body$
 begin
-  if not public.verify_admin_session(p_session_token) then
-    raise exception 'Unauthorized';
+  if not public.is_valid_admin_session(p_session_token) then
+    raise exception 'Invalid admin session' using errcode = '28000';
   end if;
-  delete from public.brochure_inquiries where id = p_inquiry_id;
-end;
-$body$;
-
-create or replace function public.delete_all_brochure_inquiries(p_session_token uuid)
-returns void
-language plpgsql
-security definer
-as $body$
-begin
-  if not public.verify_admin_session(p_session_token) then
-    raise exception 'Unauthorized';
-  end if;
-  delete from public.brochure_inquiries;
+  delete from public.brochure_inquiries
+  where public.brochure_inquiries.id = p_inquiry_id;
 end;
 $body$;
 
 grant insert on public.brochure_inquiries to anon;
 grant execute on function public.list_brochure_inquiries(uuid) to anon;
 grant execute on function public.delete_brochure_inquiry(uuid, uuid) to anon;
-grant execute on function public.delete_all_brochure_inquiries(uuid) to anon;
+drop function if exists public.delete_all_brochure_inquiries(uuid);
 
 -- Adding phone number context columns for inquiries safely
-ALTER TABLE public.expert_advice_inquiries ADD COLUMN IF NOT EXISTS countryCode text;
-ALTER TABLE public.expert_advice_inquiries ADD COLUMN IF NOT EXISTS dialCode text;
-ALTER TABLE public.expert_advice_inquiries ADD COLUMN IF NOT EXISTS countryName text;
+ALTER TABLE public.expert_advice_inquiries ADD COLUMN IF NOT EXISTS countrycode text;
+ALTER TABLE public.expert_advice_inquiries ADD COLUMN IF NOT EXISTS dialcode text;
+ALTER TABLE public.expert_advice_inquiries ADD COLUMN IF NOT EXISTS countryname text;
 
-ALTER TABLE public.partner_inquiries ADD COLUMN IF NOT EXISTS countryCode text;
-ALTER TABLE public.partner_inquiries ADD COLUMN IF NOT EXISTS dialCode text;
-ALTER TABLE public.partner_inquiries ADD COLUMN IF NOT EXISTS countryName text;
+ALTER TABLE public.partner_inquiries ADD COLUMN IF NOT EXISTS countrycode text;
+ALTER TABLE public.partner_inquiries ADD COLUMN IF NOT EXISTS dialcode text;
+ALTER TABLE public.partner_inquiries ADD COLUMN IF NOT EXISTS countryname text;
 
-ALTER TABLE public.brochure_inquiries ADD COLUMN IF NOT EXISTS countryCode text;
-ALTER TABLE public.brochure_inquiries ADD COLUMN IF NOT EXISTS dialCode text;
-ALTER TABLE public.brochure_inquiries ADD COLUMN IF NOT EXISTS countryName text;
+ALTER TABLE public.brochure_inquiries ADD COLUMN IF NOT EXISTS countrycode text;
+ALTER TABLE public.brochure_inquiries ADD COLUMN IF NOT EXISTS dialcode text;
+ALTER TABLE public.brochure_inquiries ADD COLUMN IF NOT EXISTS countryname text;
 
 -- Sample Reports CMS metadata. PDF files are static uploads in Supabase Storage.
 create table if not exists public.sample_reports (
@@ -585,35 +600,50 @@ to anon
 using (bucket_id = 'sample-reports');
 
 drop policy if exists "Anon can upload sample report PDFs" on storage.objects;
-create policy "Anon can upload sample report PDFs"
+drop policy if exists "Admin session can upload sample report PDFs" on storage.objects;
+create policy "Admin session can upload sample report PDFs"
 on storage.objects
 for insert
 to anon
 with check (
   bucket_id = 'sample-reports'
   and name in ('career-snapshot.pdf', 'career-insight.pdf', 'career-master-blueprint.pdf')
+  and public.is_valid_admin_session(
+    nullif((nullif(current_setting('request.headers', true), '')::json ->> 'x-admin-session-token'), '')::uuid
+  )
 );
 
 drop policy if exists "Anon can replace sample report PDFs" on storage.objects;
-create policy "Anon can replace sample report PDFs"
+drop policy if exists "Admin session can replace sample report PDFs" on storage.objects;
+create policy "Admin session can replace sample report PDFs"
 on storage.objects
 for update
 to anon
 using (
   bucket_id = 'sample-reports'
   and name in ('career-snapshot.pdf', 'career-insight.pdf', 'career-master-blueprint.pdf')
+  and public.is_valid_admin_session(
+    nullif((nullif(current_setting('request.headers', true), '')::json ->> 'x-admin-session-token'), '')::uuid
+  )
 )
 with check (
   bucket_id = 'sample-reports'
   and name in ('career-snapshot.pdf', 'career-insight.pdf', 'career-master-blueprint.pdf')
+  and public.is_valid_admin_session(
+    nullif((nullif(current_setting('request.headers', true), '')::json ->> 'x-admin-session-token'), '')::uuid
+  )
 );
 
 drop policy if exists "Anon can delete sample report PDFs" on storage.objects;
-create policy "Anon can delete sample report PDFs"
+drop policy if exists "Admin session can delete sample report PDFs" on storage.objects;
+create policy "Admin session can delete sample report PDFs"
 on storage.objects
 for delete
 to anon
 using (
   bucket_id = 'sample-reports'
   and name in ('career-snapshot.pdf', 'career-insight.pdf', 'career-master-blueprint.pdf')
+  and public.is_valid_admin_session(
+    nullif((nullif(current_setting('request.headers', true), '')::json ->> 'x-admin-session-token'), '')::uuid
+  )
 );

@@ -31,12 +31,6 @@ const whyIconMap: Record<string, React.ReactNode> = {
 };
 
 export default function PartnerPage({ onBack, data }: PartnerPageProps) {
-
-  const scrollToContact = () => {
-    const el = document.getElementById('partner-contact');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-  };
-
   return (
     <div className="min-h-screen bg-slate-50 font-body text-on-surface">
       {/* Top Navbar */}
@@ -53,7 +47,7 @@ export default function PartnerPage({ onBack, data }: PartnerPageProps) {
 
       <div className="pt-16">
         {/* Hero Section */}
-        <PartnerHero data={data.hero} onCTAClick={scrollToContact} />
+        <PartnerHero data={data.hero} />
 
         {/* Services Section */}
         <section className="py-20 sm:py-28 px-4 sm:px-6 md:px-8 relative overflow-hidden" id="services">

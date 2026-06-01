@@ -1,5 +1,5 @@
 import { Brain, ArrowRight, CheckCircle2, Map, BookOpen, UserCheck, Star, ArrowLeft, Target, Users } from 'lucide-react';
-import { LOGO_URL, COPYRIGHT_TEXT } from '../data/constants';
+import { LOGO_URL } from '../data/constants';
 import type { ServicePageData } from '../data/servicePageData';
 
 interface ServicePageProps {

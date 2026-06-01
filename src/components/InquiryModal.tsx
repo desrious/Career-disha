@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, MessageSquare, Phone, Send, Settings, User, X } from 'lucide-react';
+import { Mail, MessageSquare, Send, Settings, User, X } from 'lucide-react';
 import { saveExpertAdviceInquiry } from '../data/cms';
 import PhoneInput from './shared/PhoneInput';
 import { getPhoneDetails } from '../utils/phoneUtils';

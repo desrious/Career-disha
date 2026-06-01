@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from 'react';
+import { useState } from 'react';
 import { PhoneInput as ReactInternationalPhone } from 'react-international-phone';
 import 'react-international-phone/style.css';
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
@@ -13,8 +13,7 @@ interface PhoneInputProps {
   onCountryDataChange?: (data: { countryCode?: string; dialCode?: string; countryName?: string }) => void;
 }
 
-const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
-  ({ value, onChange, required = false, className = '', placeholder = 'Mobile Number*', onValidationChange, onCountryDataChange }, ref) => {
+const PhoneInput = ({ value, onChange, required = false, className = '', placeholder = 'Mobile Number*', onValidationChange, onCountryDataChange }: PhoneInputProps) => {
     const [touched, setTouched] = useState(false);
     
     const handleChange = (val: string, meta: any) => {
@@ -87,7 +86,6 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
                 onBlur: handleBlur,
                 required: required,
                 placeholder: placeholder,
-                ref: ref,
                 'aria-invalid': showError,
                 'aria-describedby': showError ? errorId : undefined,
               }}
@@ -101,8 +99,7 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
         )}
       </div>
     );
-  }
-);
+};
 
 PhoneInput.displayName = 'PhoneInput';
 

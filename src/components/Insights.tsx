@@ -1,7 +1,7 @@
 import { ArrowLeft, Youtube, BookOpen, CalendarDays, Phone, Mail, Globe } from 'lucide-react';
 import { motion } from 'motion/react';
 import type { ReactNode } from 'react';
-import { LOGO_URL, COPYRIGHT_TEXT } from '../data/constants';
+import { LOGO_URL } from '../data/constants';
 import { CmsInsights, defaultCmsData } from '../data/cms';
 
 interface InsightsProps {

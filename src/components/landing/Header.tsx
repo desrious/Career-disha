@@ -2,7 +2,7 @@
  * Header — Fixed top navigation bar with desktop nav links, Programs dropdown,
  * Expert Advice CTA, and animated mobile menu drawer.
  */
-import { Phone, Mail, Globe, Menu, X, ChevronDown, ArrowRight } from 'lucide-react';
+import { Phone, Mail, Globe, Menu, X, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { LOGO_URL } from '../../data/constants';
 

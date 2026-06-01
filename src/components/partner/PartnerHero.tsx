@@ -13,7 +13,6 @@ import { getPhoneDetails } from '../../utils/phoneUtils';
 
 interface PartnerHeroProps {
   data: CmsPartnerHero;
-  onCTAClick: () => void;
 }
 
 const statIcons = [
@@ -22,7 +21,7 @@ const statIcons = [
   <Target className="w-6 h-6 text-emerald-400" />,
 ];
 
-export default function PartnerHero({ data, onCTAClick }: PartnerHeroProps) {
+export default function PartnerHero({ data }: PartnerHeroProps) {
   const [formData, setFormData] = useState({
     interestedIn: '',
     name: '',

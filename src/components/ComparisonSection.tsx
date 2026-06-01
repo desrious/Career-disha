@@ -92,7 +92,7 @@ const ComparisonSection = () => {
         {/* Blocks */}
         <div className="space-y-8">
           <AnimatePresence>
-            {visibleData.map((item, idx) => (
+            {visibleData.map((item) => (
               <motion.div 
                 key={item.id}
                 initial={{ opacity: 0, y: 20, height: 0 }}

@@ -67,13 +67,6 @@ export type CmsInsightBlog = {
   content: string;
   date: string;
   image: string;
-  excerpt?: string;
-  category?: string;
-  link?: string;
-  seoTitle?: string;
-  seoDescription?: string;
-  isPublished?: boolean;
-  publishedAt?: string;
 };
 
 export type CmsInsightVideo = {
@@ -614,17 +607,6 @@ type BlogPostRow = {
   content: string;
   image_url: string;
   created_at: string;
-  excerpt?: string;
-  category?: string;
-  display_date?: string;
-  read_more_url?: string;
-  thumbnail_url?: string;
-  is_published?: boolean;
-  published_at?: string | null;
-  seo_title?: string;
-  seo_description?: string;
-  sort_order?: number;
-  updated_at?: string;
 };
 
 type YoutubeVideoRow = {
@@ -650,6 +632,10 @@ type InsightsCmsRpcResponse = {
 };
 
 type InsightsCmsPayload = {
+  delete_missing_blogs: boolean;
+  delete_missing_videos: boolean;
+  allow_empty_blog_delete: boolean;
+  allow_empty_video_delete: boolean;
   insight: Record<string, unknown>;
   blogs: Record<string, unknown>[];
   videos: Record<string, unknown>[];
@@ -1026,16 +1012,9 @@ function blogRowToCms(row: BlogPostRow): CmsInsightBlog {
     id: row.id,
     slug: row.slug,
     title: row.title,
-    excerpt: row.excerpt || '',
     content: row.content || '',
-    date: row.display_date || formatPublishedDate(row.created_at || row.published_at),
-    category: row.category || '',
-    image: row.image_url || row.thumbnail_url || '/CareerDishaLogo.png',
-    link: '',
-    seoTitle: row.seo_title || '',
-    seoDescription: row.seo_description || '',
-    isPublished: row.is_published ?? true,
-    publishedAt: row.published_at ?? undefined,
+    date: formatPublishedDate(row.created_at),
+    image: row.image_url || '/CareerDishaLogo.png',
   };
 }
 
@@ -1066,9 +1045,11 @@ function insightsRpcResponseToCms(response: InsightsCmsRpcResponse | null | unde
 }
 
 function buildInsightsPayload(insights: CmsInsights): InsightsCmsPayload {
-  const blogSlugCounts = new Map<string, number>();
-
   return {
+    delete_missing_blogs: true,
+    delete_missing_videos: true,
+    allow_empty_blog_delete: false,
+    allow_empty_video_delete: false,
     insight: {
       id: isUuid(insights.id) ? insights.id : null,
       slug: insights.slug || INSIGHTS_PAGE_SLUG,
@@ -1083,29 +1064,12 @@ function buildInsightsPayload(insights: CmsInsights): InsightsCmsPayload {
       seo_description: insights.seoDescription || '',
       sort_order: 0,
     },
-    blogs: insights.blogs.map((blog, index) => {
-      const baseSlug = slugify(blog.title, `blog-${index + 1}`);
-      const nextCount = (blogSlugCounts.get(baseSlug) ?? 0) + 1;
-      blogSlugCounts.set(baseSlug, nextCount);
-      const slug = nextCount === 1 ? baseSlug : `${baseSlug}-${nextCount}`;
-      return {
-        id: isUuid(blog.id) ? blog.id : null,
-        slug,
-        title: blog.title,
-        excerpt: '',
-        content: blog.content || '',
-        category: '',
-        display_date: '',
-        read_more_url: '',
-        image_url: blog.image,
-        thumbnail_url: blog.image,
-        is_published: blog.isPublished ?? true,
-        published_at: safePublishedAt(blog.publishedAt) || new Date().toISOString(),
-        seo_title: blog.seoTitle || '',
-        seo_description: blog.seoDescription || '',
-        sort_order: index,
-      };
-    }),
+    blogs: insights.blogs.map((blog) => ({
+      id: isUuid(blog.id) ? blog.id : null,
+      title: blog.title,
+      content: blog.content || '',
+      image_url: blog.image,
+    })),
     videos: insights.videos.map((video, index) => {
       const slug = slugify(video.slug || video.id || video.title || video.youtubeId, `video-${index + 1}`);
       return {
@@ -1455,13 +1419,5 @@ export async function deleteBrochureInquiry(inquiryId: string) {
   await supabaseRpc('delete_brochure_inquiry', {
     p_session_token: sessionToken,
     p_inquiry_id: inquiryId,
-  });
-}
-
-export async function deleteAllBrochureInquiries() {
-  const sessionToken = getAdminSessionToken();
-
-  await supabaseRpc('delete_all_brochure_inquiries', {
-    p_session_token: sessionToken,
   });
 }

@@ -12,9 +12,7 @@ import {
   CheckCircle2,
   Award,
   TrendingUp,
-  Globe,
-  ChevronLeft,
-  ChevronRight
+  Globe
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import ElectricBorder from './ElectricBorder';
@@ -30,7 +28,6 @@ export default function About({ onBack, counsellors }: AboutProps) {
   const logoUrl = "/CareerDishaLogo.png";
 
   const scrollRef = useRef<HTMLDivElement>(null);
-  const scrollPosRef = useRef(0);
   const speedRef = useRef(1.0);
   const targetSpeedRef = useRef(1.0);
   const animationRef = useRef<number | null>(null);

@@ -156,7 +156,7 @@ function MainApp({ cmsData, sampleReports }: { cmsData: CmsData; sampleReports: 
         <Testimonials testimonials={cmsData.testimonials} />
         <ComparisonSection />
         <FinalCTA />
-        <Visionaries setView={setView} />
+        <Visionaries />
         <Counsellors counsellors={cmsData.counsellors || []} />
       </main>
 

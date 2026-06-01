@@ -1,13 +1,7 @@
 /** Visionaries — Founder profiles section using ProfileCard. */
 import ProfileCard from '../ProfileCard';
 
-type ViewType = 'landing' | 'about' | 'insights' | 'contact-us' | 'high-school' | 'plus-two' | 'graduates' | 'working-professional';
-
-interface VisionariesProps {
-  setView: (view: ViewType) => void;
-}
-
-export default function Visionaries({ setView }: VisionariesProps) {
+export default function Visionaries() {
   const founders = [
     {
       name: "Mr. Gunjan Tewari",
