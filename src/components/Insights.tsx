@@ -79,11 +79,11 @@ export default function Insights({ onBack, insights = defaultCmsData.insights, b
         <main className="pt-24 sm:pt-32 pb-16 sm:pb-24 px-4 sm:px-6 w-full">
           {selectedBlog ? (
             <article className="mx-auto max-w-4xl">
-              <div className="mb-8 overflow-hidden rounded-[2rem] bg-slate-200 shadow-xl shadow-slate-900/10">
+              <div className="mb-8 rounded-[2rem] bg-slate-200 shadow-xl shadow-slate-900/10">
                 <img
                   src={selectedBlog.image}
                   alt={selectedBlog.title}
-                  className="aspect-[16/9] w-full object-cover"
+                  className="w-full h-auto object-contain"
                   referrerPolicy="no-referrer"
                 />
               </div>
@@ -224,11 +224,11 @@ export default function Insights({ onBack, insights = defaultCmsData.insights, b
                     className="flex h-full flex-col text-left focus:outline-none focus:ring-4 focus:ring-primary/25"
                     aria-label={`Read blog: ${blog.title}`}
                   >
-                    <div className="aspect-[16/10] relative overflow-hidden bg-slate-100">
+                    <div className="relative w-full bg-slate-100">
                       <img
                         src={blog.image}
                         alt={blog.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-500"
                         referrerPolicy="no-referrer"
                         loading="lazy"
                       />

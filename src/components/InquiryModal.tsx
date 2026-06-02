@@ -27,6 +27,7 @@ const InquiryModal: React.FC<InquiryModalProps> = ({
     message: '',
   });
   const [formError, setFormError] = useState('');
+  const [formResetKey, setFormResetKey] = useState(0);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -69,6 +70,10 @@ const InquiryModal: React.FC<InquiryModalProps> = ({
         dialcode: dialCode,
         countryname: countryName,
       });
+      setFormData({ name: '', email: '', mobile: '', service: '', message: '' });
+      setIsPhoneValid(false);
+      setFormError('');
+      setFormResetKey(prev => prev + 1);
       alert(successMessage);
       onClose();
     } catch (error) {
@@ -135,6 +140,7 @@ const InquiryModal: React.FC<InquiryModalProps> = ({
             </div>
 
             <PhoneInput 
+              key={formResetKey}
               value={formData.mobile} 
               onChange={handlePhoneChange} 
               onValidationChange={setIsPhoneValid}

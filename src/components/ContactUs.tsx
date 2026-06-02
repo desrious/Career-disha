@@ -18,6 +18,7 @@ export default function ContactUs({ onBack, contact = defaultCmsData.contact }: 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formError, setFormError] = useState('');
   const [formSuccess, setFormSuccess] = useState('');
+  const [formResetKey, setFormResetKey] = useState(0);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,6 +52,8 @@ export default function ContactUs({ onBack, contact = defaultCmsData.contact }: 
       });
       setFormSuccess("Thank you for reaching out. We'll get back to you soon.");
       setFormData({ name: '', email: '', phone: '', message: '' });
+      setIsPhoneValid(false);
+      setFormResetKey(prev => prev + 1);
     } catch (error) {
       console.error('Contact enquiry submission failed.', error);
       setFormError('Unable to send your enquiry right now. Please try again shortly.');
@@ -249,6 +252,7 @@ export default function ContactUs({ onBack, contact = defaultCmsData.contact }: 
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">Phone Number</label>
                 <PhoneInput 
+                  key={formResetKey}
                   value={formData.phone}
                   onChange={(val) => setFormData({...formData, phone: val || ''})}
                   onValidationChange={setIsPhoneValid}

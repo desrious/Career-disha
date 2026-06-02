@@ -25,6 +25,7 @@ export default function BrochurePage({ onBack, brochure }: BrochurePageProps) {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formError, setFormError] = useState('');
+  const [formResetKey, setFormResetKey] = useState(0);
 
   const handleDownloadClick = () => {
     setShowModal(true);
@@ -104,6 +105,10 @@ export default function BrochurePage({ onBack, brochure }: BrochurePageProps) {
         countryname: countryName,
         query: formData.query
       });
+      setFormData({ name: '', mobile: '', email: '', query: '' });
+      setIsPhoneValid(false);
+      setFormError('');
+      setFormResetKey(prev => prev + 1);
       setShowModal(false);
       handleDownloadStart();
     } catch (err) {
@@ -287,6 +292,7 @@ export default function BrochurePage({ onBack, brochure }: BrochurePageProps) {
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">Mobile Number *</label>
                 <PhoneInput 
+                  key={formResetKey}
                   value={formData.mobile}
                   onChange={(val) => setFormData({...formData, mobile: val || ''})}
                   onValidationChange={setIsPhoneValid}

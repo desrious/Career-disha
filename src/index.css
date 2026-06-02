@@ -101,3 +101,8 @@
 
 
 /* Custom Phone Input Styles (removed old react-phone-number-input styles) */
+
+/* Hide PhoneInput inline error messages - parent forms handle validation */
+.PhoneInputWrapper p {
+  display: none !important;
+}
