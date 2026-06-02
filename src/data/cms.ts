@@ -229,6 +229,7 @@ export const SAMPLE_REPORTS_STORAGE_KEY = 'careerDishaSampleReports_v1';
 export const SAMPLE_REPORTS_UPDATED_EVENT = 'careerDishaSampleReportsUpdated';
 const SAMPLE_REPORT_BUCKET = 'sample-reports';
 const INSIGHTS_MEDIA_BUCKET = 'insights-media';
+const CMS_MEDIA_BUCKET = 'cms-media';
 const CMS_ROW_ID = 'site';
 const INSIGHTS_PAGE_SLUG = 'insights-page';
 
@@ -483,6 +484,63 @@ function persistCmsData(data: CmsData) {
   window.localStorage.setItem(CMS_STORAGE_KEY, JSON.stringify(data));
   window.localStorage.setItem(CMS_UPDATED_AT_KEY, String(Date.now()));
   window.dispatchEvent(new CustomEvent(CMS_UPDATED_EVENT, { detail: data }));
+}
+
+function isBase64DataUri(value: string | undefined | null) {
+  if (!value) return false;
+  return /^data:(image\/[a-z0-9.+-]+|application\/pdf);base64,/i.test(value);
+}
+
+function detectDataUriType(value: string) {
+  const match = /^data:([^;]+);base64,/i.exec(value);
+  return match?.[1]?.toLowerCase() ?? '';
+}
+
+function sanitizeCmsMediaFields(data: CmsData) {
+  let changed = false;
+
+  const counsellors = data.counsellors.map((item) => {
+    if (!isBase64DataUri(item.image)) return item;
+    changed = true;
+    return { ...item, image: '' };
+  });
+
+  const testimonials = data.testimonials.map((item) => {
+    if (!isBase64DataUri(item.image)) return item;
+    changed = true;
+    return { ...item, image: '' };
+  });
+
+  const brochurePdf = isBase64DataUri(data.brochure.pdfUrl) ? '' : data.brochure.pdfUrl;
+  if (brochurePdf !== data.brochure.pdfUrl) changed = true;
+
+  const insightsImage = isBase64DataUri(data.insights.image) ? '' : (data.insights.image || '');
+  if (insightsImage !== (data.insights.image || '')) changed = true;
+
+  const insightsThumbnail = isBase64DataUri(data.insights.thumbnail) ? '' : (data.insights.thumbnail || '');
+  if (insightsThumbnail !== (data.insights.thumbnail || '')) changed = true;
+
+  const insightBlogs = data.insights.blogs.map((blog) => {
+    if (!isBase64DataUri(blog.image)) return blog;
+    changed = true;
+    return { ...blog, image: '/CareerDishaLogo.png' };
+  });
+
+  return {
+    changed,
+    data: {
+      ...data,
+      counsellors,
+      testimonials,
+      brochure: { ...data.brochure, pdfUrl: brochurePdf },
+      insights: {
+        ...data.insights,
+        image: insightsImage,
+        thumbnail: insightsThumbnail,
+        blogs: insightBlogs,
+      },
+    },
+  };
 }
 
 function slugify(value: string, fallback: string) {
@@ -898,6 +956,175 @@ export async function uploadInsightMediaFile(file: File, folder = 'blogs', onPro
   return url;
 }
 
+function validateCmsImage(file: File) {
+  const extension = fileExtension(file);
+  const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+  const allowedExtensions = ['jpeg', 'jpg', 'png', 'webp', 'gif'];
+
+  if (file.size > 5 * 1024 * 1024) {
+    throw new Error('Image is too large. Maximum upload size is 5MB.');
+  }
+  if (file.type && !allowedTypes.includes(file.type)) {
+    throw new Error('Only JPG, PNG, WebP, or GIF images can be uploaded.');
+  }
+  if (!allowedExtensions.includes(extension)) {
+    throw new Error('Only JPG, PNG, WebP, or GIF images can be uploaded.');
+  }
+}
+
+async function uploadCmsStorageObject(
+  file: File,
+  folder: string,
+  sessionToken: string,
+  onProgress?: (progress: number) => void,
+) {
+  const extension = fileExtension(file) || 'bin';
+  const safeName = slugify(file.name.replace(/\.[^.]+$/, ''), 'file');
+  const objectPath = `${slugify(folder, 'uploads')}/${Date.now()}-${crypto.randomUUID()}-${safeName}.${extension}`;
+
+  await new Promise<void>((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', `${SUPABASE_URL}/storage/v1/object/${CMS_MEDIA_BUCKET}/${objectPath}`);
+    xhr.setRequestHeader('apikey', SUPABASE_KEY);
+    xhr.setRequestHeader('Authorization', `Bearer ${SUPABASE_KEY}`);
+    xhr.setRequestHeader('x-admin-session-token', sessionToken);
+    xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream');
+    xhr.setRequestHeader('x-upsert', 'true');
+    xhr.upload.onprogress = (event) => {
+      if (event.lengthComputable && onProgress) onProgress(Math.round((event.loaded / event.total) * 100));
+    };
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        onProgress?.(100);
+        resolve();
+        return;
+      }
+      reject(new SupabaseCmsError(xhr.responseText || `Upload failed with ${xhr.status}`, xhr.status));
+    };
+    xhr.onerror = () => reject(new Error('Unable to upload file to Supabase Storage.'));
+    xhr.send(file);
+  });
+
+  return publicStorageUrl(CMS_MEDIA_BUCKET, objectPath);
+}
+
+export async function uploadCmsImageFile(file: File, folder = 'images', onProgress?: (progress: number) => void) {
+  if (!hasSupabaseConfig()) {
+    throw new Error('Supabase URL or publishable key is missing.');
+  }
+  validateCmsImage(file);
+  const sessionToken = getAdminSessionToken();
+  return uploadCmsStorageObject(file, folder, sessionToken, onProgress);
+}
+
+export async function uploadCmsBrochurePdf(file: File, onProgress?: (progress: number) => void) {
+  if (!hasSupabaseConfig()) {
+    throw new Error('Supabase URL or publishable key is missing.');
+  }
+  if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+    throw new Error('Only PDF files can be uploaded.');
+  }
+  if (file.size > 10 * 1024 * 1024) {
+    throw new Error('PDF is too large. Maximum upload size is 10MB.');
+  }
+  const sessionToken = getAdminSessionToken();
+  return uploadCmsStorageObject(file, 'brochures', sessionToken, onProgress);
+}
+
+async function uploadDataUriToCmsStorage(
+  dataUri: string,
+  folder: string,
+  filenamePrefix: string,
+  sessionToken: string,
+) {
+  const mimeType = detectDataUriType(dataUri);
+  if (!mimeType) return '';
+  const response = await fetch(dataUri);
+  const blob = await response.blob();
+  const extension =
+    mimeType === 'application/pdf'
+      ? 'pdf'
+      : mimeType === 'image/jpeg'
+        ? 'jpg'
+        : mimeType.startsWith('image/')
+          ? mimeType.slice('image/'.length)
+          : 'bin';
+  const file = new File([blob], `${filenamePrefix}.${extension}`, { type: mimeType });
+  return uploadCmsStorageObject(file, folder, sessionToken);
+}
+
+async function migrateEmbeddedCmsMedia(data: CmsData, sessionToken: string): Promise<CmsData> {
+  const next: CmsData = {
+    ...data,
+    counsellors: [...data.counsellors],
+    testimonials: [...data.testimonials],
+    brochure: { ...data.brochure },
+    insights: { ...data.insights, blogs: [...data.insights.blogs] },
+  };
+
+  await Promise.all(
+    next.counsellors.map(async (item, idx) => {
+      if (!isBase64DataUri(item.image) || !detectDataUriType(item.image).startsWith('image/')) return;
+      try {
+        const url = await uploadDataUriToCmsStorage(item.image, 'counsellors', `counsellor-${idx + 1}`, sessionToken);
+        next.counsellors[idx] = { ...item, image: url || '' };
+      } catch {
+        next.counsellors[idx] = { ...item, image: '' };
+      }
+    }),
+  );
+
+  await Promise.all(
+    next.testimonials.map(async (item, idx) => {
+      if (!isBase64DataUri(item.image) || !detectDataUriType(item.image).startsWith('image/')) return;
+      try {
+        const url = await uploadDataUriToCmsStorage(item.image, 'testimonials', `testimonial-${idx + 1}`, sessionToken);
+        next.testimonials[idx] = { ...item, image: url || '' };
+      } catch {
+        next.testimonials[idx] = { ...item, image: '' };
+      }
+    }),
+  );
+
+  if (isBase64DataUri(next.brochure.pdfUrl) && detectDataUriType(next.brochure.pdfUrl) === 'application/pdf') {
+    try {
+      const url = await uploadDataUriToCmsStorage(next.brochure.pdfUrl, 'brochures', 'brochure', sessionToken);
+      next.brochure.pdfUrl = url || '';
+    } catch {
+      next.brochure.pdfUrl = '';
+    }
+  }
+
+  await Promise.all(
+    next.insights.blogs.map(async (blog, idx) => {
+      if (!isBase64DataUri(blog.image) || !detectDataUriType(blog.image).startsWith('image/')) return;
+      try {
+        const url = await uploadDataUriToCmsStorage(blog.image, 'insights/blogs', `blog-${idx + 1}`, sessionToken);
+        next.insights.blogs[idx] = { ...blog, image: url || '/CareerDishaLogo.png' };
+      } catch {
+        next.insights.blogs[idx] = { ...blog, image: '/CareerDishaLogo.png' };
+      }
+    }),
+  );
+
+  if (isBase64DataUri(next.insights.image) && detectDataUriType(next.insights.image).startsWith('image/')) {
+    try {
+      next.insights.image = await uploadDataUriToCmsStorage(next.insights.image, 'insights', 'page-image', sessionToken);
+    } catch {
+      next.insights.image = '';
+    }
+  }
+  if (isBase64DataUri(next.insights.thumbnail) && detectDataUriType(next.insights.thumbnail).startsWith('image/')) {
+    try {
+      next.insights.thumbnail = await uploadDataUriToCmsStorage(next.insights.thumbnail, 'insights', 'page-thumbnail', sessionToken);
+    } catch {
+      next.insights.thumbnail = '';
+    }
+  }
+
+  return next;
+}
+
 export async function removeSampleReportPdf(pdfPath: string) {
   const objectPath = objectPathFromPdfPath(pdfPath);
   if (!objectPath) return;
@@ -1124,7 +1351,10 @@ export function loadCmsDataSync(): CmsData {
     const stored = window.localStorage.getItem(CMS_STORAGE_KEY);
     if (!stored) return defaultCmsData;
     const parsed = JSON.parse(stored) as Partial<CmsData>;
-    return mergeCmsData(parsed);
+    const merged = mergeCmsData(parsed);
+    const sanitized = sanitizeCmsMediaFields(merged);
+    if (sanitized.changed) persistCmsData(sanitized.data);
+    return sanitized.data;
   } catch {
     return defaultCmsData;
   }
@@ -1145,8 +1375,9 @@ export async function loadCmsData(): Promise<CmsData> {
     });
 
     const merged = mergeCmsData({ ...cmsBase, insights: publishedInsights });
-    persistCmsData(merged);
-    return merged;
+    const sanitized = sanitizeCmsMediaFields(merged);
+    persistCmsData(sanitized.data);
+    return sanitized.data;
   } catch (error) {
     cmsWarn('Using local CMS data because Supabase CMS load failed.', error);
     return fallback;
@@ -1157,8 +1388,9 @@ export async function saveCmsData(data: CmsData) {
   const sessionToken = getAdminSessionToken();
 
   try {
-    const savedInsights = await saveInsightsCms(data.insights, sessionToken);
-    const dataToPersist = mergeCmsData({ ...data, insights: savedInsights });
+    const migratedData = await migrateEmbeddedCmsMedia(data, sessionToken);
+    const savedInsights = await saveInsightsCms(migratedData.insights, sessionToken);
+    const dataToPersist = sanitizeCmsMediaFields(mergeCmsData({ ...migratedData, insights: savedInsights })).data;
 
     await supabaseRpc('save_cms_settings', {
       p_session_token: sessionToken,

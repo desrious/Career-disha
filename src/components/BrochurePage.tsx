@@ -35,17 +35,6 @@ export default function BrochurePage({ onBack, brochure }: BrochurePageProps) {
     if (!brochure?.pdfUrl) return;
 
     try {
-      if (brochure.pdfUrl.startsWith('data:')) {
-        // Direct download for base64 data URIs
-        const link = document.createElement('a');
-        link.href = brochure.pdfUrl;
-        link.download = 'Careerdisha Brochure.pdf';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        return;
-      }
-
       // Approach: Fetch as a Blob to enforce the download universally 
       // without opening in a new tab or redirecting
       const response = await fetch(brochure.pdfUrl);

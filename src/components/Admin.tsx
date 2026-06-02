@@ -28,6 +28,8 @@ import {
   removeSampleReportPdf,
   saveCmsData,
   saveSampleReport,
+  uploadCmsBrochurePdf,
+  uploadCmsImageFile,
   uploadInsightMediaFile,
   uploadSampleReportPdf,
   verifyAdminSession,
@@ -208,8 +210,19 @@ function SelectField({
   );
 }
 
-function PdfInput({ value, onChange }: { value: string; onChange: (value: string) => void }) {
+function PdfInput({
+  value,
+  onChange,
+  onUpload,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  onUpload?: (file: File, onProgress: (progress: number) => void) => Promise<string>;
+}) {
   const uploadId = useMemo(() => crypto.randomUUID(), []);
+  const [isUploading, setIsUploading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [error, setError] = useState('');
 
   return (
     <div className="space-y-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
@@ -229,26 +242,33 @@ function PdfInput({ value, onChange }: { value: string; onChange: (value: string
           type="file"
           accept="application/pdf"
           className="hidden"
-          onChange={(event) => {
+          disabled={isUploading}
+          onChange={async (event) => {
             const file = event.target.files?.[0];
+            event.target.value = '';
             if (!file) return;
-            
-            if (file.size > 10 * 1024 * 1024) {
-              alert('PDF is too large. Max size is 10MB to ensure smooth database saving.');
-              return;
-            }
 
-            const reader = new FileReader();
-            reader.onload = () => onChange(String(reader.result));
-            reader.readAsDataURL(file);
+            setError('');
+            setProgress(0);
+            setIsUploading(true);
+
+            try {
+              if (onUpload) {
+                const uploadedUrl = await onUpload(file, setProgress);
+                onChange(uploadedUrl);
+              } else {
+                setError('Upload is not configured. Paste a public PDF URL manually.');
+              }
+            } catch (uploadError) {
+              setError(uploadError instanceof Error ? uploadError.message : 'Unable to upload PDF.');
+            } finally {
+              setIsUploading(false);
+            }
           }}
         />
       </div>
-      {value && value.startsWith('data:application/pdf') && (
-        <span className="block text-xs font-bold text-green-700 bg-green-50 px-3 py-2 rounded-lg inline-block">
-          ✓ Local PDF file loaded. Click Save to publish.
-        </span>
-      )}
+      {isUploading && <p className="text-xs font-bold text-slate-500">Uploading PDF {progress}%</p>}
+      {error && <p className="text-xs font-bold text-red-600">{error}</p>}
     </div>
   );
 }
@@ -298,11 +318,7 @@ function ImageInput({
               onChange(uploadedUrl);
               return;
             }
-
-            const reader = new FileReader();
-            reader.onload = () => onChange(String(reader.result));
-            reader.onerror = () => setError('Unable to read the selected image.');
-            reader.readAsDataURL(file);
+            setError('Upload is not configured. Paste a public image URL manually.');
           } catch (uploadError) {
             setError(uploadError instanceof Error ? uploadError.message : 'Unable to upload image.');
           } finally {
@@ -719,6 +735,7 @@ export default function Admin({ data, onDataChange, sampleReports, onSampleRepor
                 
                 <PdfInput 
                   value={draft.brochure?.pdfUrl || ''} 
+                  onUpload={(file, onProgress) => uploadCmsBrochurePdf(file, onProgress)}
                   onChange={(pdfUrl) => updateDraft({ ...draft, brochure: { ...draft.brochure, pdfUrl } })} 
                 />
 
@@ -1157,7 +1174,12 @@ export default function Admin({ data, onDataChange, sampleReports, onSampleRepor
                   <Field label="Name" value={item.name} onChange={(name) => updateDraft({ ...draft, testimonials: draft.testimonials.map((t) => t.id === item.id ? { ...t, name } : t) })} />
                   <Field label="Role" value={item.role} onChange={(role) => updateDraft({ ...draft, testimonials: draft.testimonials.map((t) => t.id === item.id ? { ...t, role } : t) })} />
                   <Field label="Rating" type="number" value={String(item.rating)} onChange={(rating) => updateDraft({ ...draft, testimonials: draft.testimonials.map((t) => t.id === item.id ? { ...t, rating: Number(rating) || 5 } : t) })} />
-                  <ImageInput value={item.image} onChange={(image) => updateDraft({ ...draft, testimonials: draft.testimonials.map((t) => t.id === item.id ? { ...t, image } : t) })} />
+                  <ImageInput
+                    value={item.image}
+                    onUpload={(file, onProgress) => uploadCmsImageFile(file, 'testimonials', onProgress)}
+                    onChange={(image) => updateDraft({ ...draft, testimonials: draft.testimonials.map((t) => t.id === item.id ? { ...t, image } : t) })}
+                  />
+                  
                   <div className="md:col-span-2">
                     <TextArea label="Quote" value={item.quote} onChange={(quote) => updateDraft({ ...draft, testimonials: draft.testimonials.map((t) => t.id === item.id ? { ...t, quote } : t) })} />
                   </div>
@@ -1182,7 +1204,11 @@ export default function Admin({ data, onDataChange, sampleReports, onSampleRepor
                     options={counsellorAccentOptions}
                     onChange={(accent) => updateDraft({ ...draft, counsellors: draft.counsellors.map((c) => c.id === item.id ? { ...c, accent } : c) })}
                   />
-                  <ImageInput value={item.image} onChange={(image) => updateDraft({ ...draft, counsellors: draft.counsellors.map((c) => c.id === item.id ? { ...c, image } : c) })} />
+                  <ImageInput
+                    value={item.image}
+                    onUpload={(file, onProgress) => uploadCmsImageFile(file, 'counsellors', onProgress)}
+                    onChange={(image) => updateDraft({ ...draft, counsellors: draft.counsellors.map((c) => c.id === item.id ? { ...c, image } : c) })}
+                  />
                   <div className="md:col-span-2">
                     <TextArea label="Quote" value={item.quote} onChange={(quote) => updateDraft({ ...draft, counsellors: draft.counsellors.map((c) => c.id === item.id ? { ...c, quote } : c) })} />
                     <TextArea label="Bullets (one per line)" rows={5} value={item.bullets.join('\n')} onChange={(value) => updateDraft({ ...draft, counsellors: draft.counsellors.map((c) => c.id === item.id ? { ...c, bullets: value.split('\n').filter(Boolean) } : c) })} />
