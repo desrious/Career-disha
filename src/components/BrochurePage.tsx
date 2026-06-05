@@ -129,7 +129,7 @@ export default function BrochurePage({ onBack, brochure }: BrochurePageProps) {
             className="flex items-center gap-2 text-slate-700 hover:text-primary font-semibold transition-colors cursor-pointer"
           >
             <ArrowLeft className="w-5 h-5" />
-            <span className="hidden sm:inline">Back to Home</span>
+            <span className="text-sm sm:text-base">Back to Home</span>
           </button>
         </div>
 
@@ -184,7 +184,7 @@ export default function BrochurePage({ onBack, brochure }: BrochurePageProps) {
           className="flex items-center gap-2 text-slate-700 hover:text-primary font-semibold transition-colors cursor-pointer"
         >
           <ArrowLeft className="w-5 h-5" />
-          <span className="hidden sm:inline">Back to Home</span>
+          <span className="text-sm sm:text-base">Back to Home</span>
         </button>
       </div>
 
@@ -198,20 +198,19 @@ export default function BrochurePage({ onBack, brochure }: BrochurePageProps) {
         )}
 
         {brochure.pdfUrl && (
-          <div className="w-full h-auto min-h-[400px] md:h-[800px] border border-slate-200 rounded-xl overflow-hidden bg-slate-100/50 relative">
-            {/* Desktop View (object tags are reliable for desktop PDFs) */}
-            <object 
-              data={`${brochure.pdfUrl}#toolbar=0&navpanes=0`} 
+          <div className="w-full min-h-[400px] h-[70vh] md:h-[800px] border border-slate-200 rounded-xl overflow-hidden bg-slate-100/50">
+            <object
+              data={`${brochure.pdfUrl}#toolbar=0&navpanes=0`}
               type="application/pdf"
-              className="w-full h-full hidden md:block"
+              className="block h-full w-full"
             >
-              <div className="flex flex-col items-center justify-center p-8 text-center bg-white h-[400px]">
+              <div className="flex h-[400px] flex-col items-center justify-center bg-white p-8 text-center">
                 <BookOpen size={48} className="mb-4 text-slate-300" />
                 <h3 className="text-xl font-semibold text-slate-800 mb-2">Preview Unavailable</h3>
                 <p className="text-slate-600 mb-6 max-w-sm">
                   Your browser requires a PDF plugin to view this inline.
                 </p>
-                <button 
+                <button
                   onClick={handleDownloadClick}
                   className="flex items-center gap-2 px-6 py-3 bg-primary text-white font-medium rounded-full hover:bg-primary/90 transition-all shadow-md active:scale-95"
                 >
@@ -220,22 +219,6 @@ export default function BrochurePage({ onBack, brochure }: BrochurePageProps) {
                 </button>
               </div>
             </object>
-
-            {/* Mobile View (Bypasses iframe limitations completely) */}
-            <div className="w-full h-auto flex flex-col items-center justify-center py-16 px-6 text-center md:hidden bg-white">
-                <BookOpen size={56} className="mb-5 text-slate-300" />
-                <h3 className="text-2xl font-semibold text-slate-800 mb-3">Brochure Ready</h3>
-                <p className="text-slate-600 mb-8 max-w-sm text-base leading-relaxed">
-                  Mobile browsers do not support high-quality PDF previews inline. Download the brochure directly to your device for the best reading experience.
-                </p>
-                <button 
-                  onClick={handleDownloadClick}
-                  className="flex items-center justify-center gap-2 w-full max-w-[280px] px-8 py-4 bg-primary text-white font-medium rounded-full hover:bg-primary/90 transition-all shadow-md active:scale-95 text-lg"
-                >
-                  <Download size={20} />
-                  Download PDF Now
-                </button>
-            </div>
           </div>
         )}
         
