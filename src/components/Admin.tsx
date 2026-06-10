@@ -34,6 +34,7 @@ import {
   uploadSampleReportPdf,
   verifyAdminSession,
 } from '../data/cms';
+import { extractYouTubeVideoId, videoIdToUrl, isValidYouTubeInput } from '../utils/youtubeUtils';
 
 type AdminProps = {
   data: CmsData;
@@ -153,6 +154,73 @@ function Field({
             : 'border-slate-200 bg-white text-slate-950 placeholder:text-slate-400 focus:border-primary focus:ring-primary/20'
         }`}
       />
+    </label>
+  );
+}
+
+function YouTubeUrlInput({
+  label,
+  value, // This is the stored video ID
+  onChange, // This expects a video ID to be returned
+}: {
+  label: string;
+  value: string;
+  onChange: (videoId: string) => void;
+}) {
+  const [displayValue, setDisplayValue] = useState('');
+  const [error, setError] = useState('');
+
+  // Initialize display value when component mounts or value changes
+  useEffect(() => {
+    if (value) {
+      setDisplayValue(videoIdToUrl(value));
+    } else {
+      setDisplayValue('');
+    }
+  }, [value]);
+
+  const handleChange = (input: string) => {
+    setDisplayValue(input);
+    setError('');
+
+    if (!input.trim()) {
+      onChange('');
+      return;
+    }
+
+    const videoId = extractYouTubeVideoId(input);
+    if (videoId) {
+      onChange(videoId);
+    } else {
+      setError('Please enter a valid YouTube URL.');
+    }
+  };
+
+  const handleBlur = () => {
+    if (displayValue.trim()) {
+      const videoId = extractYouTubeVideoId(displayValue);
+      if (!videoId) {
+        setError('Please enter a valid YouTube URL.');
+      }
+    }
+  };
+
+  return (
+    <label className="block">
+      <span className="text-xs font-bold uppercase tracking-wider text-slate-500">{label}</span>
+      <input
+        type="text"
+        value={displayValue}
+        onChange={(event) => handleChange(event.target.value)}
+        onBlur={handleBlur}
+        placeholder="https://www.youtube.com/watch?v=..."
+        className={`mt-1 w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 ${
+          error
+            ? 'border-red-500 bg-white text-slate-950 placeholder:text-slate-400 focus:border-red-500 focus:ring-red-500/20'
+            : 'border-slate-200 bg-white text-slate-950 placeholder:text-slate-400 focus:border-primary focus:ring-primary/20'
+        }`}
+      />
+      {error && <p className="mt-1 text-xs font-bold text-red-600">{error}</p>}
     </label>
   );
 }
@@ -1103,7 +1171,7 @@ export default function Admin({ data, onDataChange, sampleReports, onSampleRepor
                 <div className="flex items-center justify-between gap-3">
                   <div>
                     <h2 className="text-xl font-extrabold">YouTube Videos</h2>
-                    <p className="text-sm text-slate-500">Use only the YouTube video ID, for example: 2RBDdsniaHw.</p>
+                    <p className="text-sm text-slate-500">Paste the full YouTube video URL. Example: https://www.youtube.com/watch?v=2RBDdsniaHw</p>
                   </div>
                   <button onClick={() => updateDraft({ ...draft, insights: { ...draft.insights, videos: [...draft.insights.videos, emptyInsightVideo()] } })} className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white hover:bg-primary-container">
                     <Plus className="h-4 w-4" />
@@ -1121,7 +1189,7 @@ export default function Admin({ data, onDataChange, sampleReports, onSampleRepor
                     </div>
                     <div className="grid gap-4 md:grid-cols-2">
                       <Field label="Video Title" value={video.title} onChange={(title) => updateDraft({ ...draft, insights: { ...draft.insights, videos: draft.insights.videos.map((item) => item.id === video.id ? { ...item, title } : item) } })} />
-                      <Field label="YouTube ID" value={video.youtubeId} onChange={(youtubeId) => updateDraft({ ...draft, insights: { ...draft.insights, videos: draft.insights.videos.map((item) => item.id === video.id ? { ...item, youtubeId } : item) } })} />
+                      <YouTubeUrlInput label="YouTube URL" value={video.youtubeId} onChange={(youtubeId) => updateDraft({ ...draft, insights: { ...draft.insights, videos: draft.insights.videos.map((item) => item.id === video.id ? { ...item, youtubeId } : item) } })} />
                     </div>
                   </div>
                 ))}
