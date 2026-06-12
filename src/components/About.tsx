@@ -279,7 +279,7 @@ export default function About({ onBack, counsellors }: AboutProps) {
                 <div>
                   <h4 className="text-2xl font-bold">Mr. Gunjan Tewari</h4>
                   <p className="text-primary font-bold text-sm uppercase tracking-widest">Founder & Director</p>
-                  <p className="text-primary/80 font-medium text-xs leading-tight tracking-wide mt-1">Chief Career Strategist & Mentor</p>
+                  <p className="text-primary/80 font-medium text-xs leading-tight tracking-wide mt-1">Lead Career coach and Senior management consultant</p>
                 </div>
               </div>
               <div className="flex flex-col flex-grow">

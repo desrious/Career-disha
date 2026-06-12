@@ -6,7 +6,7 @@ export default function Visionaries() {
     {
       name: "Mr. Gunjan Tewari",
       title: "Founder & Director",
-      subtitle: "Chief Career Strategist & Mentor",
+      subtitle: "Lead Career coach and Senior management consultant",
       image: "/GunjanSir.jpeg",
       color: "primary" as const,
       description: "With over two decades of extensive experience in the IT sector, he has dedicated the last 8 years to comprehensive IT and career counselling. He brings a strategic vision to the platform, mentoring students and professionals to navigate their career paths efficiently.",
