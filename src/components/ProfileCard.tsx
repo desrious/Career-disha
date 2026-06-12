@@ -5,6 +5,7 @@ import { CheckCircle2 } from 'lucide-react';
 interface ProfileCardProps {
   name: string;
   title: string;
+  subtitle?: string;
   image: string;
   color: 'primary' | 'secondary';
   description: string;
@@ -18,6 +19,7 @@ interface ProfileCardProps {
 const ProfileCard = ({
   name,
   title,
+  subtitle,
   image,
   color,
   description,
@@ -53,6 +55,7 @@ const ProfileCard = ({
   };
 
   const primaryClass = color === 'primary' ? 'text-primary' : 'text-secondary';
+  const subtitleClass = color === 'primary' ? 'text-primary/80' : 'text-secondary/80';
   const bgClass = color === 'primary' ? 'bg-primary' : 'bg-secondary';
   const borderClass = color === 'primary' ? 'border-primary' : 'border-secondary';
   const bgLightClass = color === 'primary' ? 'bg-primary/10' : 'bg-secondary/10';
@@ -82,6 +85,7 @@ const ProfileCard = ({
           <div className="pt-2 md:pt-0">
             <h4 className="text-2xl font-bold text-slate-800 drop-shadow-sm">{name}</h4>
             <p className={`${primaryClass} font-bold text-sm uppercase tracking-widest mt-1`}>{title}</p>
+            {subtitle && <p className={`${subtitleClass} font-medium text-xs leading-tight tracking-wide mt-1`}>{subtitle}</p>}
           </div>
         </div>
         

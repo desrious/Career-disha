@@ -6,6 +6,7 @@ export default function Visionaries() {
     {
       name: "Mr. Gunjan Tewari",
       title: "Founder & Director",
+      subtitle: "Chief Career Strategist & Mentor",
       image: "/GunjanSir.jpeg",
       color: "primary" as const,
       description: "With over two decades of extensive experience in the IT sector, he has dedicated the last 8 years to comprehensive IT and career counselling. He brings a strategic vision to the platform, mentoring students and professionals to navigate their career paths efficiently.",
@@ -16,6 +17,7 @@ export default function Visionaries() {
     {
       name: "Mr. Abhijit Vyas",
       title: "Co-founder & Director",
+      subtitle: "Senior Career Strategist & Technical Mentor",
       image: "/AbhijeetSir.jpeg",
       color: "secondary" as const,
       description: "With 18+ years of dedicated expertise in the IT sector and training, he has spent the last 8 years actively mentoring and counselling individuals. He ensures Careerदिशा's guidance remains firmly aligned with the dynamic, real-world needs of the industry.",
@@ -40,6 +42,7 @@ export default function Visionaries() {
                key={idx}
                name={founder.name} 
                title={founder.title} 
+               subtitle={founder.subtitle}
                image={founder.image} 
                color={founder.color} 
                description={founder.description} 
